@@ -86,7 +86,7 @@ test('repository evidence is revision-verified, receipt-backed, searchable, and 
   assert.equal(evidence.repository.shortRevision, data.revision.slice(0, 7));
   assert.equal(evidence.nodes.users.length, 2);
   assert.equal(evidence.nodes.users[0].href, `https://github.com/example/evidence-repo/blob/${data.revision}/src/router.js#L1-L3`);
-  assert.match(html, /Verified source/);
+  assert.match(html, /已验证源/);
   assert.match(html, /Archify\.sourceEvidence = \(function \(\)/);
   assert.match(html, /var sourceSearch = sources\.map/);
   assert.match(html, /renderSourceEvidence\(id\)/);

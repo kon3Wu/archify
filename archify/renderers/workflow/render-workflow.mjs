@@ -67,7 +67,7 @@ function nodeContext(node) {
   const phase = asArray(workflow.phases).find((candidate) => (
     node.col >= candidate.fromCol && node.col <= candidate.toCol
   ));
-  return [laneLabels.get(node.lane), group?.label, phase?.label].filter(Boolean).join(' › ') || 'Workflow node';
+  return [laneLabels.get(node.lane), group?.label, phase?.label].filter(Boolean).join(' › ') || '工作流节点';
 }
 
 function laneTop(id) {
@@ -506,7 +506,7 @@ function renderLane(lane, index) {
     ? `\n        <rect data-graph-role="structural-frame" data-composition-frame-kind="exception-lane" data-composition-frame-id="lane-${index}-exception" x="${layout.laneX + 6}" y="${y + 6}" width="${layout.laneW - 12}" height="${layout.laneH - 12}" rx="8" class="c-security-group" stroke-width="1"/>`
     : '';
   const labelClass = lane.variant === 'exception' ? 't-security' : 't-dim';
-  const prefix = lane.variant === 'exception' ? 'EX' : String(index + 1).padStart(2, '0');
+  const prefix = lane.variant === 'exception' ? '异常' : String(index + 1).padStart(2, '0');
   return `        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-${index}" x="${layout.laneX}" y="${y}" width="${layout.laneW}" height="${layout.laneH}" rx="10" class="c-lane" stroke-width="1"/>${exception}
         <text x="${layout.laneX + 14}" y="${y + 22}" class="${labelClass}" font-size="10" font-weight="600">${prefix} / ${esc(lane.label)}</text>`;
 }
@@ -573,13 +573,13 @@ function renderEdgeLabel(edge, index) {
 }
 
 const LEGEND_CATALOG = [
-  ['frontend', 'User UI'],
-  ['backend', 'Agent logic'],
-  ['security', 'Policy'],
-  ['messagebus', 'Tool action'],
-  ['database', 'Context / trace'],
-  ['cloud', 'Cloud service'],
-  ['external', 'External system'],
+  ['frontend', '用户界面'],
+  ['backend', '智能体逻辑'],
+  ['security', '策略'],
+  ['messagebus', '工具操作'],
+  ['database', '上下文 / 追踪'],
+  ['cloud', '云服务'],
+  ['external', '外部系统'],
 ].map(([kind, label]) => ({ kind, label }));
 
 function renderLegend() {

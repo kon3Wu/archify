@@ -379,9 +379,9 @@ function bandTitles() {
   const terminalLane = lanes.find((lane) => lane.id === 'terminal');
   const eventLanes = lanes.filter((lane) => lane.id !== 'main' && lane.id !== 'terminal');
   return [
-    mainLane?.label || 'Lifecycle phases',
-    eventLanes.length ? eventLanes.map((lane) => lane.label).join(' + ') : 'Interruptions + recovery',
-    terminalLane?.label || 'Outcomes'
+    mainLane?.label || '生命周期阶段',
+    eventLanes.length ? eventLanes.map((lane) => lane.label).join(' + ') : '中断与恢复',
+    terminalLane?.label || '结果'
   ];
 }
 
@@ -409,7 +409,7 @@ function renderState(state) {
   const step = state.step
     ? `\n        <text data-detail="fine" x="${state.x + 10}" y="${state.y + 14}" class="${accent}" font-size="7" font-weight="700">${esc(state.step)}</text>`
     : '';
-  const passport = { kind: state.type, sublabel: state.sublabel, tag: state.tag, context: laneLabels.get(state.lane) || 'Lifecycle state' };
+  const passport = { kind: state.type, sublabel: state.sublabel, tag: state.tag, context: laneLabels.get(state.lane) || '生命周期状态' };
   return `        <g ${focusNodeAttrs(state.id, state.label, passport)}>
           ${focusNodeTitle(state.label, passport)}
           <rect x="${state.x}" y="${state.y}" width="${state.width}" height="${state.height}" rx="7" class="c-mask"/>
@@ -443,14 +443,14 @@ function renderTransitionLabel(transition, index) {
 }
 
 const LEGEND_CATALOG = [
-  ['start', 'start'],
-  ['active', 'active state'],
-  ['waiting', 'waiting'],
-  ['decision', 'decision'],
-  ['success', 'terminal success'],
-  ['failure', 'failure / exit'],
-  ['neutral', 'neutral'],
-  ['external', 'external'],
+  ['start', '开始'],
+  ['active', '活动状态'],
+  ['waiting', '等待'],
+  ['decision', '决策'],
+  ['success', '终态成功'],
+  ['failure', '失败 / 退出'],
+  ['neutral', '中性'],
+  ['external', '外部'],
 ].map(([kind, label]) => ({ kind, label }));
 
 function renderLegend() {

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -10,6 +10,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(skillRoot, '..');
 const cursorCommand = 'npx -y skills add tt-a1i/archify --skill archify --agent cursor --global --copy --yes';
+const unzipProbe = spawnSync(process.platform === 'win32' ? 'where.exe' : 'sh', process.platform === 'win32' ? ['unzip'] : ['-c', 'command -v unzip'], { encoding: 'utf8' });
+const unzipSkipReason = unzipProbe.status === 0 && unzipProbe.stdout.trim()
+  ? false
+  : 'unzip-dependent test skipped: the unzip command is unavailable in this environment';
 
 test('Cursor onboarding stays explicit, bilingual, and backed by the same Skill', () => {
   const english = fs.readFileSync(path.join(repoRoot, 'README.md'), 'utf8');
@@ -38,7 +42,7 @@ test('Cursor onboarding stays explicit, bilingual, and backed by the same Skill'
   assert.doesNotMatch(start, /vendor-specific (?:renderer|schema|skill)/i);
 });
 
-test('the zero-dependency archive works from the canonical Cursor-visible agent path', () => {
+test('the zero-dependency archive works from the canonical Cursor-visible agent path', { skip: unzipSkipReason }, () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'archify-cursor-package-'));
   const agentSkills = path.join(tmp, '.agents', 'skills');
   try {

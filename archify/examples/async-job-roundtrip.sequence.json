@@ -2,47 +2,47 @@
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "Async Job Roundtrip",
+    "title": "异步作业往返",
     "output": "examples/async-job-roundtrip.html",
     "viewBox": [820, 920],
     "animation": "trace",
     "visual_preset": "signal-flow",
     "quality_profile": "showcase",
     "views": [
-      { "id": "accept-and-enqueue", "label": "Accept without blocking", "focus": ["client", "api", "queue"], "note": "The API acknowledges quickly after durable enqueue." },
-      { "id": "work-and-retry", "label": "Background work and retry", "focus": ["queue", "worker", "provider"], "note": "Timeouts re-enter the queue instead of holding the original request open." },
-      { "id": "observe-final-state", "label": "Observe final consistency", "focus": ["worker", "store", "notify", "client", "api"], "note": "Webhook delivery is primary; polling remains a bounded fallback." }
+      { "id": "accept-and-enqueue", "label": "快速接受与入队", "focus": ["client", "api", "queue"], "note": "API 持久入队后会快速确认请求。" },
+      { "id": "work-and-retry", "label": "后台工作与重试", "focus": ["queue", "worker", "provider"], "note": "超时会重新进入队列，而不会让原始请求持续等待。" },
+      { "id": "observe-final-state", "label": "观察最终一致性", "focus": ["worker", "store", "notify", "client", "api"], "note": "Webhook 投递是主路径；轮询只是有边界的备用方案。" }
     ]
   },
   "participants": [
-    { "id": "client", "type": "external", "label": "Client", "sublabel": "mobile app" },
-    { "id": "api", "type": "backend", "label": "Jobs API", "sublabel": "request edge" },
-    { "id": "queue", "type": "messagebus", "label": "Queue", "sublabel": "durable work" },
-    { "id": "worker", "type": "backend", "label": "Worker", "sublabel": "background" },
-    { "id": "provider", "type": "cloud", "label": "Provider", "sublabel": "external API" },
-    { "id": "store", "type": "database", "label": "Job Store", "sublabel": "source of truth" },
-    { "id": "notify", "type": "messagebus", "label": "Notifier", "sublabel": "webhook" }
+    { "id": "client", "type": "external", "label": "客户端", "sublabel": "移动应用" },
+    { "id": "api", "type": "backend", "label": "作业 API", "sublabel": "请求入口" },
+    { "id": "queue", "type": "messagebus", "label": "队列", "sublabel": "持久工作" },
+    { "id": "worker", "type": "backend", "label": "工作进程", "sublabel": "后台执行" },
+    { "id": "provider", "type": "cloud", "label": "服务提供方", "sublabel": "外部 API" },
+    { "id": "store", "type": "database", "label": "作业存储", "sublabel": "事实来源" },
+    { "id": "notify", "type": "messagebus", "label": "通知器", "sublabel": "Webhook" }
   ],
   "segments": [
-    { "from": 150, "to": 288, "label": "Accept" },
-    { "from": 306, "to": 538, "label": "Background work" },
-    { "from": 554, "to": 800, "label": "Notify + reconcile" }
+    { "from": 150, "to": 288, "label": "接受" },
+    { "from": 306, "to": 538, "label": "后台工作" },
+    { "from": 554, "to": 800, "label": "通知 + 对账" }
   ],
   "messages": [
     { "from": "client", "to": "api", "y": 180, "label": "POST /jobs", "variant": "emphasis" },
-    { "from": "api", "to": "queue", "y": 222, "label": "enqueue job", "variant": "emphasis" },
-    { "from": "api", "to": "client", "y": 264, "label": "202 + job id", "variant": "return" },
-    { "from": "queue", "to": "worker", "y": 326, "label": "deliver", "variant": "emphasis" },
-    { "from": "worker", "to": "provider", "y": 368, "label": "perform work", "variant": "default" },
-    { "from": "provider", "to": "worker", "y": 410, "label": "result / timeout", "variant": "return" },
-    { "from": "worker", "to": "queue", "y": 452, "label": "retry if timeout", "variant": "dashed" },
-    { "from": "worker", "to": "store", "y": 494, "label": "persist final state", "variant": "emphasis" },
+    { "from": "api", "to": "queue", "y": 222, "label": "作业入队", "variant": "emphasis" },
+    { "from": "api", "to": "client", "y": 264, "label": "202 + 作业 ID", "variant": "return" },
+    { "from": "queue", "to": "worker", "y": 326, "label": "投递", "variant": "emphasis" },
+    { "from": "worker", "to": "provider", "y": 368, "label": "执行工作", "variant": "default" },
+    { "from": "provider", "to": "worker", "y": 410, "label": "结果 / 超时", "variant": "return" },
+    { "from": "worker", "to": "queue", "y": 452, "label": "超时则重试", "variant": "dashed" },
+    { "from": "worker", "to": "store", "y": 494, "label": "持久化最终状态", "variant": "emphasis" },
     { "from": "worker", "to": "notify", "y": 566, "label": "job.completed", "variant": "dashed" },
-    { "from": "notify", "to": "client", "y": 608, "label": "signed webhook", "variant": "dashed" },
+    { "from": "notify", "to": "client", "y": 608, "label": "签名 Webhook", "variant": "dashed" },
     { "from": "client", "to": "api", "y": 650, "label": "GET /jobs/:id", "variant": "default" },
-    { "from": "api", "to": "store", "y": 692, "label": "read status", "variant": "default" },
-    { "from": "store", "to": "api", "y": 734, "label": "completed", "variant": "return" },
-    { "from": "api", "to": "client", "y": 776, "label": "200 final result", "variant": "return" }
+    { "from": "api", "to": "store", "y": 692, "label": "读取状态", "variant": "default" },
+    { "from": "store", "to": "api", "y": 734, "label": "已完成", "variant": "return" },
+    { "from": "api", "to": "client", "y": 776, "label": "200 最终结果", "variant": "return" }
   ],
   "activations": [
     { "participant": "api", "from": 174, "to": 272, "type": "backend" },
@@ -54,8 +54,8 @@
     { "participant": "api", "from": 644, "to": 784, "type": "backend" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Fast Acknowledgement", "items": ["The caller receives a durable job id before work begins", "Queue ownership is visible in the acceptance contract", "The original connection does not wait for provider latency"] },
-    { "dot": "orange", "title": "Bounded Recovery", "items": ["Timeouts re-enter the queue with a retry policy", "Final state is persisted before notification", "The job store remains the source of truth"] },
-    { "dot": "emerald", "title": "Two Observation Paths", "items": ["A signed webhook announces completion", "Status polling is a fallback, not a second workflow", "Both paths converge on the same final state"] }
+    { "dot": "cyan", "title": "快速确认", "items": ["调用方在工作开始前就会收到持久作业 ID", "接受契约清晰展示队列所有权", "原始连接无需等待服务提供方的延迟"] },
+    { "dot": "orange", "title": "有边界的恢复", "items": ["超时会带着重试策略重新进入队列", "通知前先持久化最终状态", "作业存储始终是事实来源"] },
+    { "dot": "emerald", "title": "两条观察路径", "items": ["签名 Webhook 宣布完成", "状态轮询是备用方案，而不是第二套工作流", "两条路径最终汇聚到同一状态"] }
   ]
 }

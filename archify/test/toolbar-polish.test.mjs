@@ -20,9 +20,9 @@ test('toolbar keeps four independent controls with explicit open states', () => 
 
 test('export menu has grouped, single-column rows and a zoom-safe width', () => {
   const sectionCss = template.match(/\.export-menu-section \{[\s\S]*?\}/)?.[0] || '';
-  assert.match(template, /class="export-menu-section" role="group" aria-label="Share"/);
-  assert.match(template, /class="export-menu-section" role="group" aria-label="Raster images"/);
-  assert.match(template, /class="export-menu-section" role="group" aria-label="Vector and motion"/);
+  assert.match(template, /class="export-menu-section" role="group" aria-label="分享"/);
+  assert.match(template, /class="export-menu-section" role="group" aria-label="位图"/);
+  assert.match(template, /class="export-menu-section" role="group" aria-label="矢量与动态"/);
   assert.match(template, /class="export-menu-header" role="presentation"/);
   assert.match(template, /\.toolbar \.export-menu \{[\s\S]*?width: 19rem;[\s\S]*?max-width: calc\(100vw - 2rem\);/);
   assert.match(template, /\.export-menu-section \{[\s\S]*?grid-template-columns: minmax\(0, 1fr\);/);
@@ -48,9 +48,9 @@ test('diagram view dock stays compact on desktop and touch-safe on narrow screen
 });
 
 test('diagram view reset separates semantic detail from zoom percentage', () => {
-  assert.match(template, /data-view="reset"[\s\S]*?data-view-detail hidden>READ<[\s\S]*?data-view-percent>100%</);
-  assert.match(template, /var resolvedLevel = \(semantic \? 'AUTO ' : levelLabel\)\.trim\(\);/);
-  assert.match(template, /var showDetailLevel = resolvedLevel !== 'READ';/);
+  assert.match(template, /data-view="reset"[\s\S]*?data-view-detail hidden>阅读<[\s\S]*?data-view-percent>100%</);
+  assert.match(template, /var resolvedLevel = \(semantic \? '自动 ' : levelLabel\)\.trim\(\);/);
+  assert.match(template, /var showDetailLevel = resolvedLevel !== '阅读';/);
   assert.match(template, /resetDetailLabel\.hidden = !showDetailLevel/);
   assert.match(template, /resetPercentLabel\.textContent = percent/);
   assert.match(template, /resetBtn\.toggleAttribute\('data-detail-visible', showDetailLevel\)/);

@@ -49,14 +49,14 @@ test('captions derive only authored edge labels and existing node facts', () => 
   assert.match(template, /responsibility: node \? \(node\.getAttribute\('data-node-sublabel'\) \|\| ''\) : ''/);
   assert.match(template, /context: node \? \(node\.getAttribute\('data-node-context'\) \|\| ''\) : ''/);
   assert.match(template, /step\.edgeLabels\.slice\(0, 3\)\.join\(' \+ '\)/);
-  assert.match(template, /Grouped transition · no direct authored link/);
-  assert.match(template, /if \(!facts\.length\) facts\.push\('Authored starting point'\)/);
-  assert.match(template, /authored direction: ' \+ step\.nodeLabel \+ ' → ' \+ step\.previousLabel/);
+  assert.match(template, /分组过渡 · 无直接作者定义连接/);
+  assert.match(template, /if \(!facts\.length\) facts\.push\('作者定义的起点'\)/);
+  assert.match(template, /作者定义方向：' \+ step\.nodeLabel \+ ' → ' \+ step\.previousLabel/);
   assert.doesNotMatch(template, /inferred relationship|likely transition|calls service/);
 });
 
 test('route copy preserves start, forward, reverse, multiple, and grouped semantics', () => {
-  assert.match(template, /step\.relation === 'start'\) return step\.nodeLabel \+ ' · Starting point'/);
+  assert.match(template, /step\.relation === 'start'\) return step\.nodeLabel \+ ' · 起点'/);
   assert.match(template, /step\.relation === 'reverse'\) return step\.previousLabel \+ ' ← ' \+ step\.nodeLabel/);
   assert.match(template, /step\.relation === 'multiple'\) return step\.previousLabel \+ ' ⇄ ' \+ step\.nodeLabel/);
   assert.match(template, /step\.relation === 'group'\) return step\.previousLabel \+ ' · ' \+ step\.nodeLabel/);

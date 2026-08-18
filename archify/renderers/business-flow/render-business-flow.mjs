@@ -102,7 +102,7 @@ const layout = {
 
 const rawLanes = Array.isArray(businessFlow.lanes) && businessFlow.lanes.length
   ? businessFlow.lanes
-  : [{ id: 'main', label: 'Business flow' }];
+  : [{ id: 'main', label: '业务流程' }];
 const laneIds = new Set(rawLanes.map((lane) => lane.id));
 const sourceNodes = asArray(businessFlow.nodes);
 const sourceEdges = asArray(businessFlow.edges);
@@ -147,15 +147,15 @@ function lastLaneBottom() {
 }
 
 const BUSINESS_LEGEND_CATALOG = [
-  ['start', 'Start'],
-  ['end', 'End'],
-  ['process', 'Process'],
-  ['decision', 'Decision'],
-  ['data-store', 'Data store'],
-  ['document', 'Document'],
-  ['manual-input', 'Manual input'],
-  ['subprocess', 'Subprocess'],
-  ['external', 'External'],
+  ['start', '开始'],
+  ['end', '结束'],
+  ['process', '处理'],
+  ['decision', '决策'],
+  ['data-store', '数据存储'],
+  ['document', '文档'],
+  ['manual-input', '手动输入'],
+  ['subprocess', '子流程'],
+  ['external', '外部系统'],
 ].map(([kind, label]) => ({ kind, label, swatchWidth: 20 }));
 
 const legendEntries = resolveLegend(
@@ -244,7 +244,7 @@ function nodeStep(node) {
 }
 
 function nodeContext(node) {
-  return laneMetrics.get(node.lane)?.label || 'Business flow node';
+  return laneMetrics.get(node.lane)?.label || '业务流程节点';
 }
 
 function problem(code, message, subject = {}, evidence = {}, supportedFixes = []) {

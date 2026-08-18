@@ -351,7 +351,7 @@ function renderNode(node) {
     ? `\n        <text data-detail="fine" x="${node.cx}" y="${node.y + node.height - 11}" class="${accent}" font-size="${fittedNodeFontSize(node.tag, node.width, nodeTextFit.tagPreferred, nodeTextFit.tagMinimum)}" text-anchor="middle">${esc(node.tag)}</text>`
     : '';
   const stage = asArray(dataflow.stages)[node.stage];
-  const context = stage ? `${String(node.stage + 1).padStart(2, '0')} / ${stage.label}` : 'Data-flow node';
+  const context = stage ? `${String(node.stage + 1).padStart(2, '0')} / ${stage.label}` : '数据流节点';
   const passport = { kind: node.type, sublabel: node.sublabel, tag: node.tag, context };
   return `        <g ${focusNodeAttrs(node.id, node.label, passport)}>
           ${focusNodeTitle(node.label, passport)}
@@ -383,11 +383,11 @@ function renderFlowLabel(flow, index) {
 }
 
 const LEGEND_CATALOG = [
-  { kind: 'emphasis', label: 'primary data', className: 'a-emphasis', marker: 'arrowhead-emphasis', strokeWidth: 1.8, swatchWidth: 34, swatchGap: 9, interactive: false },
-  { kind: 'security', label: 'policy / PII', className: 'a-security', marker: 'arrowhead-security', swatchWidth: 34, swatchGap: 9, interactive: false },
-  { kind: 'dashed', label: 'async batch', className: 'a-dashed', marker: 'arrowhead-dashed', swatchWidth: 34, swatchGap: 9, interactive: false },
-  { kind: 'database', label: 'data store' },
-  { kind: 'default', label: 'data flow', className: 'a-default', marker: 'arrowhead', swatchWidth: 34, swatchGap: 9, interactive: false },
+  { kind: 'emphasis', label: '主数据', className: 'a-emphasis', marker: 'arrowhead-emphasis', strokeWidth: 1.8, swatchWidth: 34, swatchGap: 9, interactive: false },
+  { kind: 'security', label: '策略 / PII', className: 'a-security', marker: 'arrowhead-security', swatchWidth: 34, swatchGap: 9, interactive: false },
+  { kind: 'dashed', label: '异步批处理', className: 'a-dashed', marker: 'arrowhead-dashed', swatchWidth: 34, swatchGap: 9, interactive: false },
+  { kind: 'database', label: '数据存储' },
+  { kind: 'default', label: '数据流', className: 'a-default', marker: 'arrowhead', swatchWidth: 34, swatchGap: 9, interactive: false },
 ];
 
 function renderLegend() {

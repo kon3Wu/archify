@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,6 +11,28 @@ const skillRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(skillRoot, '..');
 const assetPath = path.join(repoRoot, 'docs', 'assets', 'archify-live-proof.gif');
 const receiptPath = path.join(repoRoot, 'docs', 'assets', 'archify-live-proof.json');
+
+function commandAvailable(command) {
+  const result = spawnSync(process.platform === 'win32' ? 'where.exe' : 'sh', process.platform === 'win32'
+    ? [command]
+    : ['-c', `command -v ${command}`], { encoding: 'utf8' });
+  return result.status === 0 && Boolean(result.stdout?.trim());
+}
+
+function executableAvailable(envName, commands) {
+  const configured = process.env[envName];
+  if (configured && fs.existsSync(configured)) return true;
+  return commands.some((command) => commandAvailable(command));
+}
+
+const missingShowcaseTools = [];
+if (!executableAvailable('ARCHIFY_CHROME', ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome'])) {
+  missingShowcaseTools.push('Chrome/Chromium');
+}
+if (!executableAvailable('ARCHIFY_FFMPEG', ['ffmpeg'])) missingShowcaseTools.push('ffmpeg');
+const showcaseFreshnessSkipReason = missingShowcaseTools.length > 0
+  ? `README showcase freshness skipped: ${missingShowcaseTools.join(' and ')} unavailable in this environment`
+  : false;
 
 function sha256(file) {
   return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
@@ -75,7 +98,7 @@ function inspectGif(buffer) {
   return { width, height, frameCount, durationSeconds: durationCentiseconds / 100 };
 }
 
-test('README motion proof is compact, looping, and backed by current gallery artifacts', () => {
+test('README motion proof is compact, looping, and backed by current gallery artifacts', { skip: showcaseFreshnessSkipReason }, () => {
   const builder = fs.readFileSync(path.join(repoRoot, 'scripts', 'build-readme-showcase.mjs'), 'utf8');
   assert.match(builder, /\?embed=1&play=1&theme=dark#view=/);
   const buffer = fs.readFileSync(assetPath);

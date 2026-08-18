@@ -50,23 +50,23 @@ test('renderer-owned structure supplies truthful Semantic Passport context', () 
   const dataflow = render('dataflow', CASES.dataflow);
   const lifecycle = render('lifecycle', CASES.lifecycle);
 
-  assert.match(architecture, /data-node-id="api"[^>]+data-node-kind="backend"[^>]+data-node-context="AWS Region: us-west-2 › sg-api :443\/:8000"/);
-  assert.match(workflow, /data-node-id="approval"[^>]+data-node-kind="security"[^>]+data-node-context="Policy Boundary › Plan \+ route"/);
-  assert.match(sequence, /data-node-id="redis"[^>]+data-node-kind="database"[^>]+data-node-context="Sequence participant"/);
-  assert.match(dataflow, /data-node-id="warehouse"[^>]+data-node-kind="database"[^>]+data-node-context="04 \/ Store"/);
-  assert.match(lifecycle, /data-node-id="executing"[^>]+data-node-kind="active"[^>]+data-node-context="Lifecycle phases"/);
+  assert.match(architecture, /data-node-id="api"[^>]+data-node-kind="backend"[^>]+data-node-context="AWS 区域：us-west-2 › sg-api :443\/:8000"/);
+  assert.match(workflow, /data-node-id="approval"[^>]+data-node-kind="security"[^>]+data-node-context="策略边界 › 规划 \+ 路由"/);
+  assert.match(sequence, /data-node-id="redis"[^>]+data-node-kind="database"[^>]+data-node-context="时序参与者"/);
+  assert.match(dataflow, /data-node-id="warehouse"[^>]+data-node-kind="database"[^>]+data-node-context="04 \/ 存储"/);
+  assert.match(lifecycle, /data-node-id="executing"[^>]+data-node-kind="active"[^>]+data-node-context="生命周期阶段"/);
 });
 
 test('Relationship Lens renders one Semantic Passport and copyable stable focus link', () => {
   const html = render('workflow', CASES.workflow);
-  assert.match(html, /<span class="relationship-lens-eyebrow">Semantic passport<\/span>/);
+  assert.match(html, /<span class="relationship-lens-eyebrow">语义护照<\/span>/);
   assert.match(html, /id="focus-detail" hidden/);
   assert.match(html, /id="focus-kind" data-passport="kind"/);
   assert.match(html, /id="focus-context" data-passport="context" hidden/);
   assert.match(html, /id="focus-tag" data-passport="tag" hidden/);
   assert.match(html, /id="focus-id" data-passport="id"/);
-  assert.match(html, /id="btn-focus-clear"[^>]+aria-label="Close semantic passport"[^>]+title="Close">&#215;<\/button>/);
-  assert.match(html, /id="btn-focus-copy"[^>]+aria-label="Copy link to focused node"/);
+  assert.match(html, /id="btn-focus-clear"[^>]+aria-label="关闭语义护照"[^>]+title="关闭">&#215;<\/button>/);
+  assert.match(html, /id="btn-focus-copy"[^>]+aria-label="复制聚焦节点链接"/);
   assert.match(html, /id="btn-focus-relations"[^>]+aria-expanded="false"[^>]+aria-controls="relationship-lens-list"/);
   assert.match(html, /function renderPassport\(id, node\)/);
   assert.match(html, /var relationId = record && record\.id/);
@@ -92,8 +92,8 @@ test('Node Finder searches and presents the same passport facts', () => {
   assert.match(html, /var context = node\.getAttribute\('data-node-context'\) \|\| ''/);
   assert.match(html, /var tag = node\.getAttribute\('data-node-tag'\) \|\| ''/);
   assert.match(html, /search: \(id \+ ' ' \+ label \+ ' ' \+ type \+ ' ' \+ sublabel \+ ' ' \+ context \+ ' ' \+ tag \+ ' ' \+ sourceSearch \+ ' ' \+ text\)\.toLowerCase\(\)/);
-  assert.match(html, /\[item\.type, item\.id, item\.sublabel, item\.tag\]\.filter\(Boolean\)\.join\(' \\u00b7 '\)/);
-  assert.match(html, /meta\.title = \[item\.type, item\.id, item\.context, item\.sublabel, item\.tag\]\.filter\(Boolean\)\.join\(' \\u00b7 '\)/);
+  assert.match(html, /\[Archify\.kindLabel\(item\.type\), item\.id, item\.sublabel, item\.tag\]\.filter\(Boolean\)\.join\(' \\u00b7 '\)/);
+  assert.match(html, /meta\.title = \[Archify\.kindLabel\(item\.type\), item\.id, item\.context, item\.sublabel, item\.tag\]\.filter\(Boolean\)\.join\(' \\u00b7 '\)/);
 });
 
 process.on('exit', () => fs.rmSync(tmp, { recursive: true, force: true }));

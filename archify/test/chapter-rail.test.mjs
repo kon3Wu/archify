@@ -35,13 +35,13 @@ function canonicalSvg(html) {
 test('all guided renderers expose one runtime-built named chapter rail', () => {
   for (const mode of Object.keys(CASES)) {
     const html = render(mode);
-    assert.match(html, /<nav class="guided-view-index" id="guided-view-index" aria-label="Story chapters">/, mode);
+    assert.match(html, /<nav class="guided-view-index" id="guided-view-index" aria-label="故事章节">/, mode);
     assert.match(html, /<ol class="guided-view-chapters" id="guided-view-chapters"><\/ol>/, mode);
     assert.match(html, /function buildChapterIndex\(\)/, mode);
     assert.match(html, /views\.forEach\(function \(view, index\)/, mode);
     assert.match(html, /position\.textContent = \(index \+ 1 < 10 \? '0' : ''\) \+ \(index \+ 1\)/, mode);
     assert.match(html, /title\.textContent = view\.label/, mode);
-    assert.match(html, /stops\.textContent = view\.focus\.length \+ ' stop'/, mode);
+    assert.match(html, /stops\.textContent = view\.focus\.length \+ ' 个停靠点'/, mode);
     assert.doesNotMatch(canonicalSvg(html), /guided-view-chapter|data-chapter-position/, mode);
   }
 });

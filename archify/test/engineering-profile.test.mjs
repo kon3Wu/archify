@@ -46,8 +46,8 @@ test('deployment ownership profile reports exact owners, scopes, state, and cros
   delete candidate.components.find((component) => component.id === 'edge').tag;
   candidate.boundaries.find((boundary) => boundary.label.includes('us-east-1')).wraps =
     candidate.boundaries.find((boundary) => boundary.label.includes('us-east-1')).wraps.filter((id) => id !== 'edge');
-  candidate.boundaries.find((boundary) => boundary.label === 'private application network').wraps =
-    candidate.boundaries.find((boundary) => boundary.label === 'private application network').wraps.filter((id) => id !== 'redis');
+  candidate.boundaries.find((boundary) => boundary.label === '私有应用网络').wraps =
+    candidate.boundaries.find((boundary) => boundary.label === '私有应用网络').wraps.filter((id) => id !== 'redis');
   const crossing = candidate.connections.find((connection) => connection.from === 'gateway' && connection.to === 'api_a');
   crossing.label = '';
 

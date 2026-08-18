@@ -2,34 +2,34 @@
   "schema_version": 1,
   "diagram_type": "lifecycle",
   "meta": {
-    "title": "Agent Run Lifecycle",
+    "title": "Agent 运行生命周期",
     "output": "examples/lifecycle-agent-run.html",
     "viewBox": [980, 660],
     "animation": "trace",
     "quality_profile": "showcase",
     "views": [
-      { "id": "main-lifecycle", "label": "Main lifecycle", "focus": ["queued", "planning", "executing", "reviewing", "completed"], "note": "Follow the ordered phases from accepted request to completed response." },
-      { "id": "human-waits", "label": "Human and input waits", "focus": ["executing", "approval", "reviewing", "blocked"], "note": "See where the run pauses without becoming terminal." },
-      { "id": "recovery-and-exits", "label": "Recovery and terminal exits", "focus": ["executing", "failed", "blocked", "cancelled", "expired"], "note": "Separate retryable failure from cancellation and expiry." }
+      { "id": "main-lifecycle", "label": "主生命周期", "focus": ["queued", "planning", "executing", "reviewing", "completed"], "note": "沿着从请求已接受到响应完成的有序阶段浏览。" },
+      { "id": "human-waits", "label": "人工与输入等待", "focus": ["executing", "approval", "reviewing", "blocked"], "note": "查看运行在哪些位置暂停但未进入终态。" },
+      { "id": "recovery-and-exits", "label": "恢复与终态退出", "focus": ["executing", "failed", "blocked", "cancelled", "expired"], "note": "区分可重试失败、取消与过期。" }
     ]
   },
   "lanes": [
-    { "id": "main", "label": "Lifecycle phases" },
-    { "id": "waiting", "label": "Interruptions" },
-    { "id": "exceptions", "label": "Recovery loop" },
-    { "id": "terminal", "label": "Terminal exits" }
+    { "id": "main", "label": "生命周期阶段" },
+    { "id": "waiting", "label": "中断" },
+    { "id": "exceptions", "label": "恢复循环" },
+    { "id": "terminal", "label": "终态退出" }
   ],
   "states": [
-    { "id": "queued", "type": "start", "label": "Queued", "sublabel": "request accepted", "lane": "main", "col": 0, "step": "01", "tag": "entry" },
-    { "id": "planning", "type": "active", "label": "Planning", "sublabel": "build task graph", "lane": "main", "col": 1, "step": "02", "tag": "model" },
-    { "id": "executing", "type": "active", "label": "Executing", "sublabel": "tool calls", "lane": "main", "col": 2, "step": "03", "tag": "work" },
-    { "id": "reviewing", "type": "decision", "label": "Reviewing", "sublabel": "quality gate", "lane": "main", "col": 3, "step": "04", "tag": "check" },
-    { "id": "completed", "type": "success", "label": "Completed", "sublabel": "final response", "lane": "main", "col": 4, "step": "05", "tag": "done" },
-    { "id": "approval", "type": "waiting", "label": "Needs Approval", "sublabel": "human gate", "lane": "waiting", "col": 0, "tag": "pause" },
-    { "id": "blocked", "type": "waiting", "label": "Blocked", "sublabel": "missing input", "lane": "waiting", "col": 1, "tag": "wait" },
-    { "id": "failed", "type": "failure", "label": "Failed", "sublabel": "recoverable error", "lane": "exceptions", "col": 0, "yOffset": 78, "tag": "retryable" },
-    { "id": "cancelled", "type": "failure", "label": "Cancelled", "sublabel": "user stopped", "lane": "terminal", "col": 0, "tag": "terminal" },
-    { "id": "expired", "type": "failure", "label": "Expired", "sublabel": "timeout", "lane": "terminal", "col": 1, "tag": "terminal" }
+    { "id": "queued", "type": "start", "label": "排队中", "sublabel": "请求已接受", "lane": "main", "col": 0, "step": "01", "tag": "入口" },
+    { "id": "planning", "type": "active", "label": "规划中", "sublabel": "构建任务图", "lane": "main", "col": 1, "step": "02", "tag": "模型" },
+    { "id": "executing", "type": "active", "label": "执行中", "sublabel": "工具调用", "lane": "main", "col": 2, "step": "03", "tag": "工作" },
+    { "id": "reviewing", "type": "decision", "label": "审核中", "sublabel": "质量关卡", "lane": "main", "col": 3, "step": "04", "tag": "检查" },
+    { "id": "completed", "type": "success", "label": "已完成", "sublabel": "最终响应", "lane": "main", "col": 4, "step": "05", "tag": "完成" },
+    { "id": "approval", "type": "waiting", "label": "需要审批", "sublabel": "人工关卡", "lane": "waiting", "col": 0, "tag": "暂停" },
+    { "id": "blocked", "type": "waiting", "label": "已阻塞", "sublabel": "缺少输入", "lane": "waiting", "col": 1, "tag": "等待" },
+    { "id": "failed", "type": "failure", "label": "失败", "sublabel": "可恢复错误", "lane": "exceptions", "col": 0, "yOffset": 78, "tag": "可重试" },
+    { "id": "cancelled", "type": "failure", "label": "已取消", "sublabel": "用户停止", "lane": "terminal", "col": 0, "tag": "终态" },
+    { "id": "expired", "type": "failure", "label": "已过期", "sublabel": "超时", "lane": "terminal", "col": 1, "tag": "终态" }
   ],
   "transitions": [
     { "id": "approval-needed", "from": "executing", "to": "approval", "variant": "security", "fromSide": "bottom", "toSide": "top", "route": "straight" },
@@ -42,29 +42,29 @@
   "cards": [
     {
       "dot": "emerald",
-      "title": "Main Path",
+      "title": "主路径",
       "items": [
-        "The run has five ordered phases from queue to completion",
-        "The primary lifecycle is carried by one horizontal rail",
-        "Completion is a phase, not a detached side box"
+        "运行从排队到完成共经历五个有序阶段",
+        "主生命周期由一条水平主线承载",
+        "完成是一个阶段，而不是脱离主线的侧边框"
       ]
     },
     {
       "dot": "amber",
-      "title": "Human + Input Gates",
+      "title": "人工与输入关卡",
       "items": [
-        "Approval pauses execution without ending the run",
-        "Blocked waits for missing user input",
-        "Wait states remain non-terminal until cancellation or expiry"
+        "审批会暂停执行，但不会结束运行",
+        "阻塞状态等待缺少的用户输入",
+        "等待状态在取消或过期前都不是终态"
       ]
     },
     {
       "dot": "rose",
-      "title": "Terminal + Recovery",
+      "title": "终态与恢复",
       "items": [
-        "Failed loops back while retry budget remains",
-        "Cancelled and Expired are exits from the lifecycle",
-        "Terminal exits do not point back into active execution"
+        "在重试额度剩余时，失败会回到执行阶段",
+        "取消与过期都是生命周期的退出",
+        "终态退出不会再指回活动执行"
       ]
     }
   ]

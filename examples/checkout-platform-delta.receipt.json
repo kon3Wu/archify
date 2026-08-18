@@ -8,16 +8,16 @@
   "completeness": "complete",
   "proofLevel": "authored",
   "base": {
-    "title": "Checkout Platform — Baseline",
-    "rawSha256": "c112195e7285e3e4aedaeab3e1f85f5891d30fccc2c260aebe4e1da12c80cf84",
-    "semanticSha256": "5d2f362ed389af82b117a01d36201e27cb83503093b14c50f7cd8dada55f243a",
+    "title": "结算平台 — 基线",
+    "rawSha256": "74b3a9b89667341982dd81885fb0e13c099b7529d32c3d848149695f02bc894b",
+    "semanticSha256": "e36db6a422f7bee3ad8effafdae675934214ccc58c66fd76debaad6065c6105f",
     "bytes": 2234
   },
   "head": {
-    "title": "Checkout Platform — Fraud Gate",
-    "rawSha256": "e3aaf47f77afeadafc81c6ce853dc1df68cc1e6932dec972cf478f4008fdda99",
-    "semanticSha256": "0b378c8f24d23ec63feecacd7ff84a4944534f4306fc2b7e3266dff9ba258852",
-    "bytes": 2368
+    "title": "结算平台 — 欺诈关卡",
+    "rawSha256": "fdbc4a85edd3a6da359031b45e5ae6cc62ee39bcb6bb13b916a4041200a42ca7",
+    "semanticSha256": "b0b44f54ee2dfd26a1131ded259eab00c8ae53cd0e0ecf46c5d9918fd2ad5ae8",
+    "bytes": 2375
   },
   "summary": {
     "components": {
@@ -46,7 +46,7 @@
     "components": [
       {
         "id": "cache",
-        "baseLabel": "Session Cache",
+        "baseLabel": "会话缓存",
         "status": "removed",
         "classifications": [
           "semantic"
@@ -55,8 +55,8 @@
       },
       {
         "id": "checkout",
-        "baseLabel": "Checkout API",
-        "headLabel": "Checkout API",
+        "baseLabel": "结算 API",
+        "headLabel": "结算 API",
         "status": "changed",
         "classifications": [
           "semantic"
@@ -67,7 +67,7 @@
       },
       {
         "id": "fraud",
-        "headLabel": "Fraud Gate",
+        "headLabel": "欺诈关卡",
         "status": "added",
         "classifications": [
           "semantic"
@@ -76,8 +76,8 @@
       },
       {
         "id": "queue",
-        "baseLabel": "Order Events",
-        "headLabel": "Order Events",
+        "baseLabel": "订单事件",
+        "headLabel": "订单事件",
         "status": "moved",
         "classifications": [
           "geometry"
@@ -93,12 +93,12 @@
         "base": {
           "from": "orders",
           "to": "payments",
-          "label": "authorize"
+          "label": "授权"
         },
         "head": {
           "from": "fraud",
           "to": "payments",
-          "label": "authorize"
+          "label": "授权"
         },
         "status": "changed",
         "classifications": [
@@ -117,7 +117,7 @@
         "head": {
           "from": "checkout",
           "to": "fraud",
-          "label": "screen"
+          "label": "筛查"
         },
         "status": "added",
         "classifications": [
@@ -150,12 +150,12 @@
         "base": {
           "from": "checkout",
           "to": "queue",
-          "label": "accepted"
+          "label": "已接受"
         },
         "head": {
           "from": "checkout",
           "to": "queue",
-          "label": "accepted"
+          "label": "已接受"
         },
         "status": "rerouted",
         "classifications": [
@@ -170,7 +170,7 @@
         "base": {
           "from": "checkout",
           "to": "cache",
-          "label": "session"
+          "label": "会话"
         },
         "status": "removed",
         "classifications": [
@@ -181,9 +181,9 @@
     ],
     "boundaries": [
       {
-        "key": "region:Production region",
+        "key": "region:生产区域",
         "kind": "region",
-        "label": "Production region",
+        "label": "生产区域",
         "status": "changed",
         "classifications": [
           "scope"
@@ -193,9 +193,9 @@
         ]
       },
       {
-        "key": "security-group:Checkout trust zone",
+        "key": "security-group:结算信任区",
         "kind": "security-group",
-        "label": "Checkout trust zone",
+        "label": "结算信任区",
         "status": "changed",
         "classifications": [
           "scope"
@@ -219,8 +219,8 @@
     "Boundary identity is conservatively derived from kind + label."
   ],
   "artifact": {
-    "sha256": "b1a96022f0d8396bc9219230b1d41aad1e9ef1841ee69aad004adede7cb7fae3",
-    "bytes": 1836089
+    "sha256": "0b2b91378a8e0586cbfb2b918156c3433b72d7f271e3b21bfb0c8b2eb02d6b44",
+    "bytes": 1874865
   },
   "validation": {
     "checksPassed": 28,

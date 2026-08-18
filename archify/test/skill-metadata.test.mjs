@@ -48,9 +48,10 @@ test('main skill stays a bounded authoring router with progressive references', 
   }
 });
 
-test('authored diagram copy follows the user language without translating technical identity', () => {
-  assert.match(skill, /language of the user's request/);
-  assert.match(skill, /guided-view labels\/notes.*legend label overrides.*card titles\/items/);
+test('Chinese edition keeps reader copy Chinese without translating technical identity', () => {
+  assert.match(skill, /Chinese-only Archify edition/);
+  assert.match(skill, /every reader-facing natural-language string.*must be Chinese/);
+  assert.match(skill, /Do not offer locale switching or claim English output/);
   assert.match(skill, /product names.*code identifiers.*protocols.*API paths.*environment names/);
   assert.match(authoringContract, /non-English diagram[\s\S]*`meta\.legend\.entries`/);
   assert.match(authoringContract, /renderer-owned viewer controls remain separate/);

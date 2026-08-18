@@ -121,7 +121,11 @@ export function verifyRepositoryEvidence(diagramType, diagram, repoRootInput) {
   const requestedRoot = path.resolve(repoRootInput);
   let realRoot;
   try {
-    realRoot = fs.realpathSync(requestedRoot);
+    // On Windows, the non-native resolver can preserve an 8.3 short path
+    // (for example, FLYRAN~1) while Git reports the long spelling. Native
+    // realpath gives both spellings the same canonical form before the
+    // top-level repository comparison.
+    realRoot = fs.realpathSync.native(requestedRoot);
   } catch (error) {
     evidenceFailure('repository-evidence/root-unreadable', `Could not resolve evidence repository root "${requestedRoot}": ${error.message}`, {
       subject: { repoRoot: requestedRoot },
@@ -130,7 +134,7 @@ export function verifyRepositoryEvidence(diagramType, diagram, repoRootInput) {
     });
   }
   const gitRoot = gitValue(realRoot, ['rev-parse', '--show-toplevel'], `Evidence root "${realRoot}" is not a Git repository.`);
-  if (fs.realpathSync(gitRoot) !== realRoot) {
+  if (fs.realpathSync.native(gitRoot) !== realRoot) {
     evidenceFailure('repository-evidence/root-not-top-level', `Evidence root must be the Git top-level directory: ${gitRoot}`, {
       subject: { repoRoot: realRoot },
       evidence: { gitTopLevel: gitRoot },

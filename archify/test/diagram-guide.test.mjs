@@ -36,7 +36,7 @@ test('all typed renderers inherit one viewer-only Diagram Guide', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
     assert.match(html, /id="diagram-guide" hidden role="dialog" aria-modal="false" aria-labelledby="diagram-guide-title"/, mode);
-    assert.match(html, /id="btn-diagram-guide"[^>]+aria-label="Open diagram guide"[^>]+aria-haspopup="dialog"[^>]+aria-expanded="false"/, mode);
+    assert.match(html, /id="btn-diagram-guide"[^>]+aria-label="打开图表指南"[^>]+aria-haspopup="dialog"[^>]+aria-expanded="false"/, mode);
     assert.match(html, /Archify\.guide = \(function \(\)/, mode);
     assert.match(html, /Diagram Guide — a factual command deck over existing interactions/, mode);
     assert.doesNotMatch(canonicalSvg(html), /diagram-guide|Archify\.guide|Explore this system/, mode);
@@ -50,8 +50,8 @@ test('Diagram Guide reports compiled semantic facts and honest story availabilit
   assert.match(html, /edge\.getAttribute\('data-edge-key'\)/);
   assert.match(html, /return Archify\.guidedViews && Number\(Archify\.guidedViews\.count\) \|\| 0/);
   assert.match(html, /storyBtn\.disabled = views === 0/);
-  assert.match(html, /views \+ ' guided view'/);
-  assert.match(html, /No authored guided story in this diagram/);
+  assert.match(html, /views \+ ' 个引导视图'/);
+  assert.match(html, /此图表没有作者定义的引导故事/);
 });
 
 test('Diagram Guide delegates its task rows to existing production interactions', () => {

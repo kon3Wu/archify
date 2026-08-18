@@ -35,12 +35,12 @@ function svg(html) {
 test('all typed renderers ship the same geometry-neutral node finder', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
-    assert.match(html, /id="btn-node-finder"[^>]+aria-label="Find a node"[^>]+aria-haspopup="dialog"/, mode);
+    assert.match(html, /id="btn-node-finder"[^>]+aria-label="查找节点"[^>]+aria-haspopup="dialog"/, mode);
     assert.match(html, /id="node-finder" hidden role="dialog" aria-modal="false"/, mode);
     assert.match(html, /id="node-finder-input" type="search"/, mode);
     assert.match(html, /Archify\.finder = \(function \(\)/, mode);
     assert.match(html, /svg\.querySelectorAll\('\[data-node-id\]'\)/, mode);
-    assert.doesNotMatch(svg(html), /node-finder|Archify\.finder|Find a node/, mode);
+    assert.doesNotMatch(svg(html), /node-finder|Archify\.finder|查找节点/, mode);
   }
 });
 
@@ -58,16 +58,16 @@ test('finder searches semantic ids and labels, then delegates to focus and revea
 
 test('finder presents one focused search control and a structured result list', () => {
   const html = render('architecture', CASES.architecture);
-  assert.match(html, /id="node-finder-input"[^>]+aria-label="Search diagram nodes"/);
+  assert.match(html, /id="node-finder-input"[^>]+aria-label="搜索图表节点"/);
   assert.match(html, /\.node-finder-search:focus-within\s*\{/);
   assert.match(html, /\.node-finder-input:focus-visible\s*\{\s*outline:\s*none;/);
   assert.match(html, /\.node-finder\s*\{[\s\S]*?display:\s*flex;[\s\S]*?max-height:\s*calc\(100% - 2rem\);/);
   assert.match(html, /\.node-finder-results\s*\{[\s\S]*?flex:\s*1 1 auto;[\s\S]*?min-height:\s*0;/);
   assert.match(html, /\.node-finder-result:not\(:last-child\)\s*\{/);
-  assert.match(html, /context\.kind === 'focus'\s*\? item\.links \+ \(item\.links === 1 \? ' link' : ' links'\)/);
-  assert.match(html, /\[item\.type, item\.id, item\.sublabel, item\.tag\]/);
+  assert.match(html, /context\.kind === 'focus'\s*\? item\.links \+ ' 条连接'/);
+  assert.match(html, /\[Archify\.kindLabel\(item\.type\), item\.id, item\.sublabel, item\.tag\]/);
   assert.doesNotMatch(html, /\[item\.type, item\.context, item\.sublabel, item\.tag, item\.id\]/);
-  assert.match(html, /query\s*\? visibleItems\.length \+ ' of ' \+ available\.length/);
+  assert.match(html, /query\s*\? '显示 ' \+ visibleItems\.length \+ ' \/ ' \+ available\.length/);
 });
 
 test('finder becomes a contextual Route Probe endpoint picker without changing semantic focus', () => {
@@ -80,7 +80,7 @@ test('finder becomes a contextual Route Probe endpoint picker without changing s
   assert.match(html, /reason: 'route-pick'/);
   assert.match(html, /data-context="route-source"/);
   assert.match(html, /data-context="route-target"/);
-  assert.match(html, /Choose ' \+ item\.label \+ ' as route destination, ' \+ badge/);
+  assert.match(html, /选择 ' \+ item\.label \+ ' 作为路径终点，' \+ badge/);
   assert.match(html, /available\.length \+ ' ' \+ context\.availableNoun/);
 });
 

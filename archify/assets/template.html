@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-preset="[VISUAL PRESET]">
+<html lang="zh-CN" data-theme="dark" data-preset="[VISUAL PRESET]">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content="archify 2.15.0">
-  <title>[PROJECT NAME] Architecture Diagram</title>
+  <meta name="generator" content="archify 2.16.0">
+  <title>[PROJECT NAME] 图表</title>
   <script>
     // Resolve the theme before first paint so light-preference users don't
     // see a dark flash. The toolbar script below re-applies with UI state.
@@ -655,7 +655,7 @@
     }
 
     html[data-preset="signal-flow"] .header-row::after {
-      content: "SIGNAL FLOW";
+      content: "信号流";
       margin-left: auto;
       color: var(--frontend-stroke);
       border: 1px solid var(--frontend-stroke);
@@ -679,7 +679,7 @@
       animation: none;
     }
     html[data-preset="blueprint"] .header-row::after {
-      content: "BLUEPRINT / REV 01";
+      content: "蓝图版 / 修订 01";
       margin-left: auto;
       padding: 0.28rem 0.55rem;
       border-top: 1px solid var(--frontend-stroke);
@@ -708,7 +708,7 @@
       animation: none;
     }
     html[data-preset="editorial"] .header-row::after {
-      content: "EDITORIAL / FIELD NOTE";
+      content: "编辑版 / 现场笔记";
       margin-left: auto;
       padding: 0.32rem 0 0.24rem;
       border-bottom: 2px solid var(--arrow-emphasis);
@@ -785,7 +785,7 @@
       border: 1px solid var(--panel-border);
       background: var(--panel);
       color: var(--arrow-emphasis);
-      content: "ARCHIFY / PLATE 04";
+      content: "ARCHIFY / 图版 04";
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 0.52rem;
       font-style: italic;
@@ -4736,96 +4736,96 @@
   <!-- Toolbar: theme, live visual style, trace motion, presentation stage, and export.
        Motion appears only for trace-enabled artifacts and has no shortcut;
        Keyboard: T toggles theme, S cycles style, F toggles the stage, E opens export. -->
-  <div class="toolbar" role="toolbar" aria-label="Diagram actions">
+  <div class="toolbar" role="toolbar" aria-label="图表操作">
     <button id="btn-theme" type="button"
-            title="Toggle theme (T)"
-            aria-label="Toggle color theme"
+            title="切换主题（T）"
+            aria-label="切换颜色主题"
             aria-pressed="false">
       <span id="theme-icon" class="toolbar-icon" aria-hidden="true"></span>
-      <span id="theme-label">Dark</span>
+      <span id="theme-label">深色</span>
     </button>
     <div class="preset-wrap">
       <button id="btn-preset" type="button"
-              title="Choose visual style (S cycles)"
-              aria-label="Choose visual style"
+              title="选择视觉样式（S 循环切换）"
+              aria-label="选择视觉样式"
               aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="preset-menu"
               aria-keyshortcuts="S">
         <span class="preset-control-mark" aria-hidden="true"></span>
-        <span id="preset-label">Style</span>
+        <span id="preset-label">样式</span>
         <span class="toolbar-icon toolbar-chevron" aria-hidden="true"></span>
       </button>
-      <div class="preset-menu" id="preset-menu" role="menu" aria-label="Visual style">
-        <div class="preset-menu-heading" role="presentation"><span>Visual identity</span><span>S cycles</span></div>
+      <div class="preset-menu" id="preset-menu" role="menu" aria-label="视觉样式">
+        <div class="preset-menu-heading" role="presentation"><span>视觉风格</span><span>S 循环</span></div>
         <button class="preset-option" data-preset-value="classic" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch classic" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Classic</strong><small>Stable technical default</small></span>
+          <span class="preset-option-copy"><strong>经典</strong><small>稳定的技术默认样式</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
         <button class="preset-option" data-preset-value="signal-flow" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch signal-flow" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Signal Flow</strong><small>Motion-forward presentation</small></span>
+          <span class="preset-option-copy"><strong>信号流</strong><small>突出动态的演示样式</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
         <button class="preset-option" data-preset-value="blueprint" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch blueprint" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Blueprint</strong><small>Engineering review</small></span>
+          <span class="preset-option-copy"><strong>蓝图</strong><small>工程评审样式</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
         <button class="preset-option" data-preset-value="editorial" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch editorial" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Editorial</strong><small>Publication and launch notes</small></span>
+          <span class="preset-option-copy"><strong>编辑版</strong><small>发布与上线说明样式</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
       </div>
     </div>
     <button id="btn-motion" type="button" hidden
-            title="Pause motion"
-            aria-label="Pause motion"
+            title="暂停动态"
+            aria-label="暂停动态"
             aria-pressed="true">
       <span class="motion-control-dot" aria-hidden="true"></span>
-      <span id="motion-label">Live</span>
+      <span id="motion-label">动态</span>
     </button>
     <button id="btn-present" type="button"
-            title="Presentation stage (F)"
-            aria-label="Enter presentation stage"
+            title="演示舞台（F）"
+            aria-label="进入演示舞台"
             aria-pressed="false">
       <span id="present-icon" class="toolbar-icon" aria-hidden="true"></span>
-      <span id="present-label">Present</span>
+      <span id="present-label">演示</span>
     </button>
     <div class="export-wrap">
       <button id="btn-export" type="button"
-              title="Export diagram (E)"
-              aria-label="Export diagram"
+              title="导出图表（E）"
+              aria-label="导出图表"
               aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="export-menu">
-        Export <span class="toolbar-icon toolbar-chevron" aria-hidden="true"></span>
+        导出 <span class="toolbar-icon toolbar-chevron" aria-hidden="true"></span>
       </button>
-      <div class="export-menu" id="export-menu" role="menu" aria-label="Export">
+      <div class="export-menu" id="export-menu" role="menu" aria-label="导出">
         <div class="export-menu-header" role="presentation">
-          <div><strong>Export diagram</strong><span>Portable, clean outputs</span></div>
+          <div><strong>导出图表</strong><span>便携、干净的成品</span></div>
           <kbd>E</kbd>
         </div>
-        <div class="export-menu-section" role="group" aria-label="Share">
-          <span class="export-menu-heading" aria-hidden="true">Share</span>
-          <button data-format="share-card" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>Share Card</strong><small class="hint">1200&times;630 PNG</small></span></button>
-          <button data-action="route-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>Route Share Card</strong><small class="hint">1200&times;630 PNG</small></span></button>
-          <button data-action="reach-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>Reach Share Card</strong><small class="hint">1200&times;630 PNG</small></span></button>
-          <button data-action="copy-share-card" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>Copy Share Card</strong><small class="hint">PNG to clipboard</small></span></button>
-          <button data-action="copy" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>Copy diagram</strong><small class="hint">PNG to clipboard</small></span></button>
+        <div class="export-menu-section" role="group" aria-label="分享">
+          <span class="export-menu-heading" aria-hidden="true">分享</span>
+          <button data-format="share-card" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>分享卡片</strong><small class="hint">1200&times;630 PNG</small></span></button>
+          <button data-action="route-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>路径分享卡片</strong><small class="hint">1200&times;630 PNG</small></span></button>
+          <button data-action="reach-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>可达性分享卡片</strong><small class="hint">1200&times;630 PNG</small></span></button>
+          <button data-action="copy-share-card" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>复制分享卡片</strong><small class="hint">复制 PNG 到剪贴板</small></span></button>
+          <button data-action="copy" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>复制图表</strong><small class="hint">复制 PNG 到剪贴板</small></span></button>
         </div>
-        <div class="export-menu-section" role="group" aria-label="Raster images">
-          <span class="export-menu-heading" aria-hidden="true">Image</span>
-          <button data-format="png" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>PNG</strong><small class="hint">Lossless image</small></span></button>
-          <button data-format="jpeg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>JPEG</strong><small class="hint">Compact image</small></span></button>
-          <button data-format="webp" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebP</strong><small class="hint">Modern image</small></span></button>
+        <div class="export-menu-section" role="group" aria-label="位图">
+          <span class="export-menu-heading" aria-hidden="true">图像</span>
+          <button data-format="png" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>PNG</strong><small class="hint">无损图像</small></span></button>
+          <button data-format="jpeg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>JPEG</strong><small class="hint">紧凑图像</small></span></button>
+          <button data-format="webp" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebP</strong><small class="hint">现代图像</small></span></button>
         </div>
-        <div class="export-menu-section" role="group" aria-label="Vector and motion">
-          <span class="export-menu-heading" aria-hidden="true">Vector &amp; motion</span>
-          <button data-format="svg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>SVG</strong><small class="hint">Editable vector</small></span></button>
-          <button data-format="webm" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebM</strong><small class="hint">6s motion</small></span></button>
+        <div class="export-menu-section" role="group" aria-label="矢量与动态">
+          <span class="export-menu-heading" aria-hidden="true">矢量与动态</span>
+          <button data-format="svg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>SVG</strong><small class="hint">可编辑矢量图</small></span></button>
+          <button data-format="webm" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebM</strong><small class="hint">6 秒动态</small></span></button>
         </div>
       </div>
     </div>
@@ -4836,48 +4836,48 @@
     <div class="header">
       <div class="header-row">
         <div class="pulse-dot"></div>
-        <h1>[PROJECT NAME] Architecture</h1>
+        <h1>[PROJECT NAME] 架构图</h1>
       </div>
-      <p class="subtitle">[Subtitle description]</p>
+      <p class="subtitle">[副标题描述]</p>
     </div>
 
     <!-- ARCHIFY:GUIDED_VIEWS_DATA -->
     <!-- ARCHIFY:SOURCE_EVIDENCE_DATA -->
-    <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
-      <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
+    <div class="guided-views no-print" id="guided-views" hidden aria-label="引导式图表视图">
+      <button id="guided-view-prev" type="button" aria-label="上一个引导视图" title="上一个引导视图（[）">&#8592;</button>
       <div class="guided-view-copy">
         <div class="guided-view-meta">
-          <span>Guided views</span>
+          <span>引导视图</span>
           <span id="guided-view-count"></span>
           <span class="guided-view-progress" aria-hidden="true"><span id="guided-view-progress-bar"></span></span>
           <span class="guided-view-handoff" id="guided-view-handoff" hidden aria-hidden="true"></span>
         </div>
-        <strong id="guided-view-label">Explore this system</strong>
-        <small id="guided-view-note" aria-live="polite" aria-atomic="true">Step through curated paths without changing the source diagram.</small>
-        <div class="guided-view-trail" id="guided-view-trail" hidden role="group" aria-label="Story trail"></div>
+        <strong id="guided-view-label">探索这个系统</strong>
+        <small id="guided-view-note" aria-live="polite" aria-atomic="true">按精选路径浏览，不改变源图表。</small>
+        <div class="guided-view-trail" id="guided-view-trail" hidden role="group" aria-label="故事路径"></div>
         <div class="guided-story-caption" id="guided-story-caption" hidden aria-live="polite" aria-atomic="true">
-          <span class="guided-story-caption-index" id="guided-story-caption-index">Beat</span>
+          <span class="guided-story-caption-index" id="guided-story-caption-index">节拍</span>
           <strong id="guided-story-caption-route"></strong>
           <small id="guided-story-caption-detail"></small>
           <span class="guided-story-caption-next" id="guided-story-caption-next" hidden aria-hidden="true">
-            <small>Next</small>
+            <small>下一步</small>
             <strong id="guided-story-caption-next-label"></strong>
           </span>
         </div>
       </div>
-      <button id="guided-view-next" type="button" aria-label="Next guided view" title="Next guided view (])">&#8594;</button>
+      <button id="guided-view-next" type="button" aria-label="下一个引导视图" title="下一个引导视图（]）">&#8594;</button>
       <div class="guided-view-actions">
-        <button class="guided-view-play" id="guided-view-play" type="button" aria-label="Play guided story" aria-pressed="false" title="Play guided story (P)">
+        <button class="guided-view-play" id="guided-view-play" type="button" aria-label="播放引导故事" aria-pressed="false" title="播放引导故事（P）">
           <span id="guided-view-play-icon" aria-hidden="true">&#9654;</span>
-          <span id="guided-view-play-label">Play story</span>
+          <span id="guided-view-play-label">播放故事</span>
         </button>
-        <button class="guided-view-beat-link" id="guided-view-beat-link" type="button" aria-label="Select a Story Beat to copy its exact link" title="Select a Story Beat to copy its exact link" disabled>
+        <button class="guided-view-beat-link" id="guided-view-beat-link" type="button" aria-label="选择故事节拍以复制精确链接" title="选择故事节拍以复制精确链接" disabled>
           <span aria-hidden="true">&#35;</span>
-          <span id="guided-view-beat-link-label">Copy moment</span>
+          <span id="guided-view-beat-link-label">复制节拍</span>
         </button>
-        <button class="guided-view-all" id="guided-view-all" type="button" aria-label="Show entire diagram">Show all</button>
+        <button class="guided-view-all" id="guided-view-all" type="button" aria-label="显示完整图表">显示全部</button>
       </div>
-      <nav class="guided-view-index" id="guided-view-index" aria-label="Story chapters">
+      <nav class="guided-view-index" id="guided-view-index" aria-label="故事章节">
         <ol class="guided-view-chapters" id="guided-view-chapters"></ol>
       </nav>
     </div>
@@ -4885,7 +4885,7 @@
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read">
       <!-- ARCHIFY:SVG_SLOT_START -->
-      <svg viewBox="0 0 1000 680" role="img" aria-label="[PROJECT NAME] architecture diagram">
+      <svg viewBox="0 0 1000 680" role="img" aria-label="[PROJECT NAME] 架构图">
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -4919,18 +4919,18 @@
         <!-- External/Generic Component -->
         <rect x="30" y="280" width="100" height="50" rx="6" class="c-mask"/>
         <rect x="30" y="280" width="100" height="50" rx="6" class="c-external" stroke-width="1.5"/>
-        <text x="80" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Users</text>
-        <text x="80" y="316" class="t-muted" font-size="9" text-anchor="middle">Browser/Mobile</text>
+        <text x="80" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">用户</text>
+        <text x="80" y="316" class="t-muted" font-size="9" text-anchor="middle">浏览器 / 移动端</text>
 
         <!-- Security Component -->
         <rect x="30" y="80" width="100" height="60" rx="6" class="c-mask"/>
         <rect x="30" y="80" width="100" height="60" rx="6" class="c-security" stroke-width="1.5"/>
-        <text x="80" y="105" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Auth Provider</text>
+        <text x="80" y="105" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">身份认证服务</text>
         <text x="80" y="121" class="t-muted" font-size="9" text-anchor="middle">OAuth 2.0</text>
 
         <!-- Region/Cloud Boundary -->
         <rect x="160" y="40" width="820" height="620" rx="12" class="c-region" stroke-width="1"/>
-        <text x="172" y="58" class="t-cloud" font-size="10" font-weight="600">AWS Region: us-west-2</text>
+        <text x="172" y="58" class="t-cloud" font-size="10" font-weight="600">AWS 区域：us-west-2</text>
 
         <!-- AWS/Cloud Service -->
         <rect x="200" y="280" width="110" height="50" rx="6" class="c-mask"/>
@@ -4941,11 +4941,11 @@
         <!-- Multi-line AWS Component (S3 Buckets example) -->
         <rect x="200" y="380" width="110" height="100" rx="6" class="c-mask"/>
         <rect x="200" y="380" width="110" height="100" rx="6" class="c-cloud" stroke-width="1.5"/>
-        <text x="255" y="400" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">S3 Buckets</text>
+        <text x="255" y="400" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">S3 存储桶</text>
         <text x="255" y="420" class="t-muted" font-size="8" text-anchor="middle">&bull; bucket-one</text>
         <text x="255" y="434" class="t-muted" font-size="8" text-anchor="middle">&bull; bucket-two</text>
         <text x="255" y="448" class="t-muted" font-size="8" text-anchor="middle">&bull; bucket-three</text>
-        <text x="255" y="466" class="t-cloud" font-size="7" text-anchor="middle">OAI Protected</text>
+        <text x="255" y="466" class="t-cloud" font-size="7" text-anchor="middle">OAI 保护</text>
 
         <!-- Security Group (dashed boundary). NOTE: extra vertical headroom
              so the sg-name label has ~12px breathing room above the inner
@@ -4956,28 +4956,28 @@
         <!-- Component inside security group -->
         <rect x="360" y="280" width="100" height="50" rx="6" class="c-mask"/>
         <rect x="360" y="280" width="100" height="50" rx="6" class="c-cloud" stroke-width="1.5"/>
-        <text x="410" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Load Balancer</text>
+        <text x="410" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">负载均衡器</text>
         <text x="410" y="316" class="t-muted" font-size="9" text-anchor="middle">HTTPS :443</text>
 
         <!-- Backend Component -->
         <rect x="510" y="280" width="110" height="50" rx="6" class="c-mask"/>
         <rect x="510" y="280" width="110" height="50" rx="6" class="c-backend" stroke-width="1.5"/>
-        <text x="565" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">API Server</text>
+        <text x="565" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">API 服务器</text>
         <text x="565" y="316" class="t-muted" font-size="9" text-anchor="middle">FastAPI :8000</text>
 
         <!-- Database Component -->
         <rect x="700" y="280" width="120" height="50" rx="6" class="c-mask"/>
         <rect x="700" y="280" width="120" height="50" rx="6" class="c-database" stroke-width="1.5"/>
-        <text x="760" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Database</text>
+        <text x="760" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">数据库</text>
         <text x="760" y="316" class="t-muted" font-size="9" text-anchor="middle">PostgreSQL</text>
 
         <!-- Frontend Component -->
         <rect x="200" y="520" width="200" height="110" rx="8" class="c-mask"/>
         <rect x="200" y="520" width="200" height="110" rx="8" class="c-frontend" stroke-width="1.5"/>
-        <text x="300" y="545" class="t-primary" font-size="12" font-weight="600" text-anchor="middle">Frontend</text>
+        <text x="300" y="545" class="t-primary" font-size="12" font-weight="600" text-anchor="middle">前端</text>
         <text x="300" y="565" class="t-muted" font-size="9" text-anchor="middle">React + TypeScript</text>
-        <text x="300" y="580" class="t-muted" font-size="9" text-anchor="middle">Additional detail</text>
-        <text x="300" y="595" class="t-muted" font-size="9" text-anchor="middle">More info</text>
+        <text x="300" y="580" class="t-muted" font-size="9" text-anchor="middle">补充详情</text>
+        <text x="300" y="595" class="t-muted" font-size="9" text-anchor="middle">更多信息</text>
         <text x="300" y="615" class="t-frontend" font-size="8" text-anchor="middle">domain.example.com</text>
 
         <!-- =================================================================
@@ -5008,38 +5008,38 @@
         <!-- =================================================================
              LEGEND
              ================================================================= -->
-        <text x="720" y="70" class="t-primary" font-size="10" font-weight="600">Legend</text>
+        <text x="720" y="70" class="t-primary" font-size="10" font-weight="600">图例</text>
 
         <rect x="720" y="82" width="16" height="10" rx="2" class="c-frontend" stroke-width="1"/>
-        <text x="742" y="90" class="t-muted" font-size="8">Frontend</text>
+        <text x="742" y="90" class="t-muted" font-size="8">前端</text>
 
         <rect x="720" y="98" width="16" height="10" rx="2" class="c-backend" stroke-width="1"/>
-        <text x="742" y="106" class="t-muted" font-size="8">Backend</text>
+        <text x="742" y="106" class="t-muted" font-size="8">后端</text>
 
         <rect x="720" y="114" width="16" height="10" rx="2" class="c-cloud" stroke-width="1"/>
-        <text x="742" y="122" class="t-muted" font-size="8">Cloud Service</text>
+        <text x="742" y="122" class="t-muted" font-size="8">云服务</text>
 
         <rect x="720" y="130" width="16" height="10" rx="2" class="c-database" stroke-width="1"/>
-        <text x="742" y="138" class="t-muted" font-size="8">Database</text>
+        <text x="742" y="138" class="t-muted" font-size="8">数据库</text>
 
         <rect x="720" y="146" width="16" height="10" rx="2" class="c-security" stroke-width="1"/>
-        <text x="742" y="154" class="t-muted" font-size="8">Security</text>
+        <text x="742" y="154" class="t-muted" font-size="8">安全</text>
 
         <line x1="720" y1="168" x2="736" y2="168" class="a-security" stroke-width="1"/>
-        <text x="742" y="171" class="t-muted" font-size="8">Auth Flow</text>
+        <text x="742" y="171" class="t-muted" font-size="8">认证流程</text>
 
         <rect x="720" y="178" width="16" height="10" rx="2" class="c-security-group" stroke-width="1"/>
-        <text x="742" y="186" class="t-muted" font-size="8">Security Group</text>
+        <text x="742" y="186" class="t-muted" font-size="8">安全组</text>
       </svg>
       <!-- ARCHIFY:SVG_SLOT_END -->
       <p class="intent-trace-status no-print" id="intent-trace-status" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="share-chapter-cue no-print" id="share-chapter-cue" hidden role="status" aria-live="polite">
         <div class="share-chapter-index">
-          <span class="share-chapter-state" id="share-chapter-state">Ready</span>
-          <span class="share-chapter-count" id="share-chapter-count">Chapter 01 / 01</span>
+          <span class="share-chapter-state" id="share-chapter-state">就绪</span>
+          <span class="share-chapter-count" id="share-chapter-count">章节 01 / 01</span>
         </div>
         <div class="share-chapter-copy">
-          <strong id="share-chapter-label">Guided chapter</strong>
+          <strong id="share-chapter-label">引导章节</strong>
           <small id="share-chapter-note"></small>
         </div>
         <span class="share-chapter-route" id="share-chapter-route"></span>
@@ -5048,167 +5048,167 @@
       <div class="diagram-guide no-print" id="diagram-guide" hidden role="dialog" aria-modal="false" aria-labelledby="diagram-guide-title">
         <div class="diagram-guide-head">
           <span>
-            <span class="diagram-guide-eyebrow">Diagram guide</span>
-            <strong class="diagram-guide-title" id="diagram-guide-title">Explore this system</strong>
+            <span class="diagram-guide-eyebrow">图表指南</span>
+            <strong class="diagram-guide-title" id="diagram-guide-title">探索这个系统</strong>
           </span>
-          <button class="diagram-guide-close" id="diagram-guide-close" type="button" aria-label="Close diagram guide">&#215;</button>
+          <button class="diagram-guide-close" id="diagram-guide-close" type="button" aria-label="关闭图表指南">&#215;</button>
         </div>
-        <p class="diagram-guide-stats" id="diagram-guide-stats">Inspecting compiled semantics</p>
-        <div class="diagram-guide-actions" id="diagram-guide-actions" role="group" aria-label="Diagram exploration actions">
-          <button class="diagram-guide-action" type="button" data-guide-action="find" aria-label="Find any node">
+        <p class="diagram-guide-stats" id="diagram-guide-stats">正在检查已编译语义</p>
+        <div class="diagram-guide-actions" id="diagram-guide-actions" role="group" aria-label="图表探索操作">
+          <button class="diagram-guide-action" type="button" data-guide-action="find" aria-label="查找任意节点">
             <span class="diagram-guide-index" aria-hidden="true">01</span>
-            <span class="diagram-guide-action-copy"><strong>Find any node</strong><small>Search labels, responsibilities, kinds, and stable IDs.</small></span>
+            <span class="diagram-guide-action-copy"><strong>查找任意节点</strong><small>搜索标签、职责、类型和稳定 ID。</small></span>
             <kbd aria-hidden="true">/</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="route" aria-label="Trace a directed route">
+          <button class="diagram-guide-action" type="button" data-guide-action="route" aria-label="追踪有向路径">
             <span class="diagram-guide-index" aria-hidden="true">02</span>
-            <span class="diagram-guide-action-copy"><strong>Trace a route</strong><small>Ask how two semantic nodes connect in authored direction.</small></span>
+            <span class="diagram-guide-action-copy"><strong>追踪路径</strong><small>查看两个语义节点如何按作者定义的方向连接。</small></span>
             <kbd aria-hidden="true">R</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="map" aria-label="See the whole system">
+          <button class="diagram-guide-action" type="button" data-guide-action="map" aria-label="查看完整系统">
             <span class="diagram-guide-index" aria-hidden="true">03</span>
-            <span class="diagram-guide-action-copy"><strong>See the whole system</strong><small>Open Semantic Radar with a live viewport and stable nodes.</small></span>
+            <span class="diagram-guide-action-copy"><strong>查看完整系统</strong><small>打开语义雷达，查看实时视口和稳定节点。</small></span>
             <kbd aria-hidden="true">M</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="lens" aria-label="Compare semantic kinds">
+          <button class="diagram-guide-action" type="button" data-guide-action="lens" aria-label="比较语义类型">
             <span class="diagram-guide-index" aria-hidden="true">04</span>
-            <span class="diagram-guide-action-copy"><strong>Compare semantic kinds</strong><small>Count roles, reveal their traffic, and compare direct authored links.</small></span>
+            <span class="diagram-guide-action-copy"><strong>比较语义类型</strong><small>统计角色、显示其流量，并比较作者定义的直接连接。</small></span>
             <kbd aria-hidden="true">L</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="story" aria-label="Play the guided story">
+          <button class="diagram-guide-action" type="button" data-guide-action="story" aria-label="播放引导故事">
             <span class="diagram-guide-index" aria-hidden="true">05</span>
-            <span class="diagram-guide-action-copy"><strong>Play the guided story</strong><small id="diagram-guide-story-copy">Walk the authored chapters and real relationships.</small></span>
+            <span class="diagram-guide-action-copy"><strong>播放引导故事</strong><small id="diagram-guide-story-copy">浏览作者定义的章节和真实关系。</small></span>
             <kbd aria-hidden="true">P</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="present" aria-label="Enter presentation stage">
+          <button class="diagram-guide-action" type="button" data-guide-action="present" aria-label="进入演示舞台">
             <span class="diagram-guide-index" aria-hidden="true">06</span>
-            <span class="diagram-guide-action-copy"><strong>Enter Presentation Stage</strong><small>Give the live diagram the viewport without changing export.</small></span>
+            <span class="diagram-guide-action-copy"><strong>进入演示舞台</strong><small>让动态图表占据视口，不改变导出结果。</small></span>
             <kbd aria-hidden="true">F</kbd>
           </button>
         </div>
-        <div class="diagram-guide-shortcuts" aria-label="Additional keyboard shortcuts">
-          <span><kbd>E</kbd> Export</span><span><kbd>T</kbd> Theme</span><span><kbd>S</kbd> Style</span><span><kbd>0</kbd> Reset</span><span><kbd>+</kbd> Zoom in</span><span><kbd>-</kbd> Zoom out</span><span><kbd>Esc</kbd> Close</span>
+        <div class="diagram-guide-shortcuts" aria-label="其他键盘快捷键">
+          <span><kbd>E</kbd> 导出</span><span><kbd>T</kbd> 主题</span><span><kbd>S</kbd> 样式</span><span><kbd>0</kbd> 重置</span><span><kbd>+</kbd> 放大</span><span><kbd>-</kbd> 缩小</span><span><kbd>Esc</kbd> 关闭</span>
         </div>
         <p class="diagram-guide-feedback" id="diagram-guide-feedback" aria-live="polite"></p>
       </div>
       <div class="node-finder no-print" id="node-finder" hidden role="dialog" aria-modal="false" aria-labelledby="node-finder-title">
         <div class="node-finder-head">
-          <strong id="node-finder-title">Find a node</strong>
-          <button class="node-finder-close" id="node-finder-close" type="button" aria-label="Close node finder">&#215;</button>
+          <strong id="node-finder-title">查找节点</strong>
+          <button class="node-finder-close" id="node-finder-close" type="button" aria-label="关闭节点查找">&#215;</button>
         </div>
         <div class="node-finder-search">
           <span aria-hidden="true">&#8981;</span>
-          <input class="node-finder-input" id="node-finder-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search labels or IDs" aria-label="Search diagram nodes" aria-describedby="node-finder-status">
+          <input class="node-finder-input" id="node-finder-input" type="search" autocomplete="off" spellcheck="false" placeholder="搜索标签或 ID" aria-label="搜索图表节点" aria-describedby="node-finder-status">
           <kbd aria-hidden="true">/</kbd>
         </div>
-        <div class="node-finder-results" id="node-finder-results" role="group" aria-label="Diagram nodes"></div>
-        <p class="node-finder-empty" id="node-finder-empty" hidden>No matching nodes</p>
+        <div class="node-finder-results" id="node-finder-results" role="group" aria-label="图表节点"></div>
+        <p class="node-finder-empty" id="node-finder-empty" hidden>没有匹配的节点</p>
         <p class="node-finder-status" id="node-finder-status" aria-live="polite"></p>
       </div>
       <div class="focus-chip relationship-lens no-print" id="focus-chip" hidden role="region" aria-labelledby="relationship-lens-title">
         <div class="relationship-lens-head">
           <div class="relationship-lens-copy">
-            <span class="relationship-lens-eyebrow">Semantic passport</span>
+            <span class="relationship-lens-eyebrow">语义护照</span>
             <strong class="relationship-lens-title" id="relationship-lens-title"><span id="focus-label"></span></strong>
             <span class="semantic-passport-detail" id="focus-detail" hidden></span>
-            <div class="semantic-passport-meta" id="focus-passport-meta" aria-label="Node metadata">
+            <div class="semantic-passport-meta" id="focus-passport-meta" aria-label="节点元数据">
               <span id="focus-kind" data-passport="kind"></span>
               <span id="focus-context" data-passport="context" hidden></span>
               <span id="focus-tag" data-passport="tag" hidden></span>
               <code id="focus-id" data-passport="id"></code>
             </div>
-            <div class="semantic-passport-evidence" id="focus-evidence" hidden aria-label="Verified source evidence">
+            <div class="semantic-passport-evidence" id="focus-evidence" hidden aria-label="已验证的源证据">
               <div class="semantic-passport-evidence-head">
-                <span class="semantic-passport-evidence-status">Verified source</span>
+                <span class="semantic-passport-evidence-status">已验证源</span>
                 <a class="semantic-passport-repository" id="focus-repository" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"></a>
               </div>
               <div class="semantic-passport-evidence-links" id="focus-evidence-links"></div>
             </div>
             <span class="relationship-lens-summary" id="focus-summary" aria-live="polite"></span>
             <div class="semantic-passport-reach" id="focus-reach" hidden>
-              <span class="semantic-passport-reach-label">Authored reach</span>
-              <div class="semantic-passport-reach-actions" role="group" aria-label="Trace authored reachability">
-                <button id="btn-reach-upstream" type="button" aria-label="Trace upstream authored reachability" aria-pressed="false">
-                  <span>Upstream</span><strong id="focus-reach-upstream-count">0</strong>
+              <span class="semantic-passport-reach-label">作者定义的可达性</span>
+              <div class="semantic-passport-reach-actions" role="group" aria-label="追踪作者定义的可达性">
+                <button id="btn-reach-upstream" type="button" aria-label="追踪上游作者定义的可达性" aria-pressed="false">
+                  <span>上游</span><strong id="focus-reach-upstream-count">0</strong>
                 </button>
-                <button id="btn-reach-downstream" type="button" aria-label="Trace downstream authored reachability" aria-pressed="false">
-                  <span>Downstream</span><strong id="focus-reach-downstream-count">0</strong>
+                <button id="btn-reach-downstream" type="button" aria-label="追踪下游作者定义的可达性" aria-pressed="false">
+                  <span>下游</span><strong id="focus-reach-downstream-count">0</strong>
                 </button>
               </div>
               <small class="semantic-passport-reach-status" id="focus-reach-status" hidden aria-live="polite"></small>
             </div>
           </div>
           <div class="relationship-lens-actions">
-            <button id="btn-focus-clear" type="button" aria-label="Close semantic passport" title="Close">&#215;</button>
-            <button id="btn-focus-copy" type="button" aria-label="Copy link to focused node">Copy link</button>
-            <button id="btn-focus-relations" type="button" aria-label="Show connected relationships" aria-expanded="false" aria-controls="relationship-lens-list">Relations</button>
+            <button id="btn-focus-clear" type="button" aria-label="关闭语义护照" title="关闭">&#215;</button>
+            <button id="btn-focus-copy" type="button" aria-label="复制聚焦节点链接">复制链接</button>
+            <button id="btn-focus-relations" type="button" aria-label="显示相连关系" aria-expanded="false" aria-controls="relationship-lens-list">关系</button>
           </div>
         </div>
-        <div class="relationship-lens-list" id="relationship-lens-list" aria-label="Connected relationships"></div>
+        <div class="relationship-lens-list" id="relationship-lens-list" aria-label="相连关系"></div>
       </div>
       <div class="route-probe no-print" id="route-probe" hidden role="region" aria-labelledby="route-probe-title" data-state="idle">
         <div class="route-probe-head">
           <span class="route-probe-copy">
-            <span class="route-probe-eyebrow">Route probe</span>
-            <strong class="route-probe-title" id="route-probe-title">Choose a start node</strong>
+            <span class="route-probe-eyebrow">路径探针</span>
+            <strong class="route-probe-title" id="route-probe-title">选择起点节点</strong>
           </span>
           <span class="route-probe-actions">
-            <button class="route-probe-find" id="route-probe-find" type="button" aria-label="Find a route start" data-node-finder-trigger>Find start</button>
-            <button class="route-probe-copy-link" id="route-probe-copy" type="button" aria-label="Copy link to traced route" hidden>Copy link</button>
-            <button id="route-probe-clear" type="button" aria-label="Clear route probe">Clear</button>
+            <button class="route-probe-find" id="route-probe-find" type="button" aria-label="查找路径起点" data-node-finder-trigger>查找起点</button>
+            <button class="route-probe-copy-link" id="route-probe-copy" type="button" aria-label="复制追踪路径链接" hidden>复制链接</button>
+            <button id="route-probe-clear" type="button" aria-label="清除路径探针">清除</button>
           </span>
         </div>
-        <div class="route-probe-path" id="route-probe-path" aria-label="Traced route">
-          <span class="route-probe-placeholder">Pick two semantic nodes on the diagram</span>
+        <div class="route-probe-path" id="route-probe-path" aria-label="追踪路径">
+          <span class="route-probe-placeholder">在图表上选择两个语义节点</span>
         </div>
-        <div class="route-journey-controls" id="route-journey-controls" hidden role="group" aria-label="Route journey controls" data-playing="false">
-          <button id="route-journey-prev" type="button" aria-label="Previous route position" title="Previous route position">&#8592;</button>
-          <button class="route-journey-play" id="route-journey-play" type="button" aria-label="Play route journey" aria-pressed="false" title="Play route journey">
+        <div class="route-journey-controls" id="route-journey-controls" hidden role="group" aria-label="路径旅程控制" data-playing="false">
+          <button id="route-journey-prev" type="button" aria-label="上一个路径位置" title="上一个路径位置">&#8592;</button>
+          <button class="route-journey-play" id="route-journey-play" type="button" aria-label="播放路径旅程" aria-pressed="false" title="播放路径旅程">
             <span id="route-journey-play-icon" aria-hidden="true">&#9654;</span>
-            <span id="route-journey-play-label">Journey</span>
+            <span id="route-journey-play-label">旅程</span>
           </button>
-          <button id="route-journey-next" type="button" aria-label="Next route position" title="Next route position">&#8594;</button>
-          <button class="route-journey-overview" id="route-journey-overview" type="button" aria-label="Show complete route overview" title="Show complete route overview">Overview</button>
+          <button id="route-journey-next" type="button" aria-label="下一个路径位置" title="下一个路径位置">&#8594;</button>
+          <button class="route-journey-overview" id="route-journey-overview" type="button" aria-label="显示完整路径概览" title="显示完整路径概览">概览</button>
         </div>
-        <small class="route-probe-status" id="route-probe-status" aria-live="polite">Choose the source, then the destination. Direction matters.</small>
+        <small class="route-probe-status" id="route-probe-status" aria-live="polite">先选择源节点，再选择目标节点。方向很重要。</small>
       </div>
       <div class="semantic-lens no-print" id="semantic-lens" hidden role="dialog" aria-modal="false" aria-labelledby="semantic-lens-title">
         <div class="semantic-lens-head">
           <span>
-            <span class="semantic-lens-eyebrow">Semantic lens</span>
-            <strong class="semantic-lens-title" id="semantic-lens-title">Compare system roles</strong>
+            <span class="semantic-lens-eyebrow">语义透镜</span>
+            <strong class="semantic-lens-title" id="semantic-lens-title">比较系统角色</strong>
           </span>
-          <button class="semantic-lens-close" id="semantic-lens-close" type="button" aria-label="Close semantic lens">&#215;</button>
+          <button class="semantic-lens-close" id="semantic-lens-close" type="button" aria-label="关闭语义透镜">&#215;</button>
         </div>
-        <p class="semantic-lens-instruction">Choose up to two semantic kinds. One reveals its real traffic; two compare only direct authored relationships.</p>
-        <div class="semantic-lens-kinds" id="semantic-lens-kinds" role="group" aria-label="Semantic kinds"></div>
-        <p class="semantic-lens-status" id="semantic-lens-status" aria-live="polite">Choose a kind to inspect its nodes and touching relationships.</p>
+        <p class="semantic-lens-instruction">最多选择两种语义类型。选择一种显示其真实流量；选择两种仅比较作者定义的直接关系。</p>
+        <div class="semantic-lens-kinds" id="semantic-lens-kinds" role="group" aria-label="语义类型"></div>
+        <p class="semantic-lens-status" id="semantic-lens-status" aria-live="polite">选择一种类型以检查其节点和相连关系。</p>
         <div class="semantic-lens-actions">
-          <button id="semantic-lens-copy" type="button" aria-label="Copy link to semantic lens" hidden>Copy link</button>
-          <button id="semantic-lens-clear" type="button" aria-label="Clear semantic lens">Clear</button>
+          <button id="semantic-lens-copy" type="button" aria-label="复制语义透镜链接" hidden>复制链接</button>
+          <button id="semantic-lens-clear" type="button" aria-label="清除语义透镜">清除</button>
         </div>
       </div>
       <div class="overview-map no-print" id="overview-map" hidden role="region" aria-labelledby="overview-map-title">
         <div class="overview-map-head">
           <span class="overview-map-live" aria-hidden="true"></span>
           <span class="overview-map-copy">
-            <strong id="overview-map-title">Semantic radar</strong>
-            <small id="overview-map-status" aria-live="polite">Building overview</small>
+            <strong id="overview-map-title">语义雷达</strong>
+            <small id="overview-map-status" aria-live="polite">正在构建概览</small>
           </span>
-          <button class="overview-map-close" id="overview-map-close" type="button" aria-label="Close semantic radar">&#215;</button>
+          <button class="overview-map-close" id="overview-map-close" type="button" aria-label="关闭语义雷达">&#215;</button>
         </div>
-        <div class="overview-map-surface" id="overview-map-surface" tabindex="0" role="group" aria-label="Diagram overview. Click a node to focus it, or use arrow keys to pan."></div>
-        <div class="overview-map-hint" aria-hidden="true"><span>Click node</span><span>Drag to pan</span></div>
+        <div class="overview-map-surface" id="overview-map-surface" tabindex="0" role="group" aria-label="图表概览。点击节点以聚焦，或使用方向键平移。"></div>
+        <div class="overview-map-hint" aria-hidden="true"><span>点击节点</span><span>拖动平移</span></div>
       </div>
-      <div class="diagram-nav no-print" role="toolbar" aria-label="Diagram view controls">
-        <button id="btn-route-probe" type="button" aria-label="Trace a directed route" aria-pressed="false" aria-controls="route-probe" title="Trace route (R)">PATH</button>
-        <button id="btn-overview-map" type="button" aria-label="Open semantic radar" aria-expanded="false" aria-controls="overview-map" title="Semantic radar (M)">MAP</button>
-        <button id="btn-semantic-lens" type="button" aria-label="Open semantic lens" aria-haspopup="dialog" aria-expanded="false" aria-pressed="false" aria-controls="semantic-lens" title="Semantic lens (L)">LENS</button>
-        <button id="btn-node-finder" type="button" aria-label="Find a node" aria-haspopup="dialog" aria-expanded="false" aria-controls="node-finder" title="Find a node (/)" data-node-finder-trigger><span class="diagram-nav-icon find" aria-hidden="true"></span></button>
-        <button id="btn-diagram-guide" type="button" aria-label="Open diagram guide" aria-haspopup="dialog" aria-expanded="false" aria-controls="diagram-guide" title="Diagram guide (?)"><span class="diagram-nav-icon guide" aria-hidden="true"></span></button>
-        <button data-view="out" type="button" aria-label="Zoom out" title="Zoom out (-)"><span class="diagram-nav-icon minus" aria-hidden="true"></span></button>
-        <button data-view="reset" type="button" aria-label="Reset diagram view" title="Reset view (0)"><span class="diagram-nav-detail" data-view-detail hidden>READ</span><span class="diagram-nav-percent" data-view-percent>100%</span></button>
-        <button data-view="in" type="button" aria-label="Zoom in" title="Zoom in (+)"><span class="diagram-nav-icon plus" aria-hidden="true"></span></button>
+      <div class="diagram-nav no-print" role="toolbar" aria-label="图表视图控制">
+        <button id="btn-route-probe" type="button" aria-label="追踪有向路径" aria-pressed="false" aria-controls="route-probe" title="路径探针（R）">路径</button>
+        <button id="btn-overview-map" type="button" aria-label="打开语义雷达" aria-expanded="false" aria-controls="overview-map" title="语义雷达（M）">雷达</button>
+        <button id="btn-semantic-lens" type="button" aria-label="打开语义透镜" aria-haspopup="dialog" aria-expanded="false" aria-pressed="false" aria-controls="semantic-lens" title="语义透镜（L）">透镜</button>
+        <button id="btn-node-finder" type="button" aria-label="查找节点" aria-haspopup="dialog" aria-expanded="false" aria-controls="node-finder" title="查找节点（/）" data-node-finder-trigger><span class="diagram-nav-icon find" aria-hidden="true"></span></button>
+        <button id="btn-diagram-guide" type="button" aria-label="打开图表指南" aria-haspopup="dialog" aria-expanded="false" aria-controls="diagram-guide" title="图表指南（？）"><span class="diagram-nav-icon guide" aria-hidden="true"></span></button>
+        <button data-view="out" type="button" aria-label="缩小" title="缩小（-）"><span class="diagram-nav-icon minus" aria-hidden="true"></span></button>
+        <button data-view="reset" type="button" aria-label="重置图表视图" title="重置视图（0）"><span class="diagram-nav-detail" data-view-detail hidden>阅读</span><span class="diagram-nav-percent" data-view-percent>100%</span></button>
+        <button data-view="in" type="button" aria-label="放大" title="放大（+）"><span class="diagram-nav-icon plus" aria-hidden="true"></span></button>
       </div>
     </div>
 
@@ -5217,39 +5217,39 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot rose"></div>
-          <h3>Card Title 1</h3>
+          <h3>卡片标题 1</h3>
         </div>
         <ul>
-          <li>&bull; Item one</li>
-          <li>&bull; Item two</li>
-          <li>&bull; Item three</li>
-          <li>&bull; Item four</li>
+          <li>&bull; 项目一</li>
+          <li>&bull; 项目二</li>
+          <li>&bull; 项目三</li>
+          <li>&bull; 项目四</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot amber"></div>
-          <h3>Card Title 2</h3>
+          <h3>卡片标题 2</h3>
         </div>
         <ul>
-          <li>&bull; Item one</li>
-          <li>&bull; Item two</li>
-          <li>&bull; Item three</li>
-          <li>&bull; Item four</li>
+          <li>&bull; 项目一</li>
+          <li>&bull; 项目二</li>
+          <li>&bull; 项目三</li>
+          <li>&bull; 项目四</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot violet"></div>
-          <h3>Card Title 3</h3>
+          <h3>卡片标题 3</h3>
         </div>
         <ul>
-          <li>&bull; Item one</li>
-          <li>&bull; Item two</li>
-          <li>&bull; Item three</li>
-          <li>&bull; Item four</li>
+          <li>&bull; 项目一</li>
+          <li>&bull; 项目二</li>
+          <li>&bull; 项目三</li>
+          <li>&bull; 项目四</li>
         </ul>
       </div>
     </div>
@@ -5259,6 +5259,15 @@
 
   <script>
     var Archify = {};
+    var KIND_LABELS = {
+      frontend: '前端', backend: '后端', database: '数据库', cloud: '云服务',
+      security: '安全', messagebus: '消息总线', external: '外部系统',
+      start: '开始', end: '结束', process: '处理', decision: '决策',
+      'data-store': '数据存储', document: '文档', 'manual-input': '手动输入',
+      subprocess: '子流程', active: '活动状态', waiting: '等待', success: '成功',
+      failure: '失败', neutral: '中性', node: '节点'
+    };
+    Archify.kindLabel = function (value) { return KIND_LABELS[value] || value || '节点'; };
 
     function hasDrawableGeometry(element) {
       if (!element) return false;
@@ -5289,7 +5298,7 @@
        ============================================================ */
     Archify.preset = (function () {
       var PRESETS = ['classic', 'signal-flow', 'blueprint', 'editorial'];
-      var LABELS = { classic: 'Classic', 'signal-flow': 'Flow', blueprint: 'Blueprint', editorial: 'Editorial' };
+      var LABELS = { classic: '经典', 'signal-flow': '信号流', blueprint: '蓝图', editorial: '编辑版' };
       var html = document.documentElement;
       var svg = document.querySelector('.diagram-container svg');
       var btn = document.getElementById('btn-preset');
@@ -5316,8 +5325,8 @@
         svg.setAttribute('data-preset', preset);
         btn.setAttribute('data-preset-option', preset);
         label.textContent = LABELS[preset];
-        btn.setAttribute('aria-label', 'Visual style: ' + LABELS[preset] + '. Choose visual style');
-        btn.title = 'Choose visual style (S cycles)';
+        btn.setAttribute('aria-label', '视觉样式：' + LABELS[preset] + '。选择视觉样式');
+        btn.title = '选择视觉样式（S 循环切换）';
         options().forEach(function (option) {
           var selected = option.getAttribute('data-preset-value') === preset;
           option.setAttribute('aria-checked', String(selected));
@@ -5429,7 +5438,7 @@
 
       function apply(theme) {
         html.setAttribute('data-theme', theme);
-        label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+        label.textContent = theme === 'dark' ? '深色' : '浅色';
         btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
       }
 
@@ -6073,7 +6082,7 @@
                          format === 'webp' ? 'image/webp' : 'image/png';
               var quality = format === 'png' ? undefined : 0.95;
               canvas.toBlob(function (blob) {
-                if (!blob) reject(new Error('toBlob returned null for ' + format));
+                if (!blob) reject(new Error(format + ' 导出失败：浏览器没有返回图像数据'));
                 else resolve(blob);
               }, mime, quality);
             } catch (error) {
@@ -6109,11 +6118,11 @@
 
       function canvas2dOrThrow(canvas, label) {
         if (!canvas || typeof canvas.getContext !== 'function') {
-          throw new Error('Canvas unavailable for ' + label);
+          throw new Error(label + '不可用：当前浏览器没有 Canvas 支持');
         }
         var ctx = canvas.getContext('2d');
-        if (!ctx) throw new Error('2D canvas context unavailable for ' + label);
-        if (typeof canvas.toBlob !== 'function') throw new Error('canvas.toBlob unavailable for ' + label);
+        if (!ctx) throw new Error(label + '不可用：无法创建 2D Canvas 上下文');
+        if (typeof canvas.toBlob !== 'function') throw new Error(label + '不可用：当前浏览器不支持 Canvas 导出');
         return ctx;
       }
 
@@ -6121,14 +6130,14 @@
         options = options || {};
         var routeSnapshot = options.routeSnapshot || null;
         var reachSnapshot = options.reachSnapshot || null;
-        if (routeSnapshot && reachSnapshot) return Promise.reject(new Error('Share Card variants cannot be combined'));
+        if (routeSnapshot && reachSnapshot) return Promise.reject(new Error('路径分享卡片与可达性分享卡片不能同时导出'));
         var svg = document.querySelector('.diagram-container svg');
         var vb = svg.viewBox.baseVal;
         var sourceScale = Math.min(2, pickSafeScale(vb.width, vb.height));
         var data = serializeSvg(sourceScale, { routeSnapshot: routeSnapshot, reachSnapshot: reachSnapshot });
-        if (!data.canonicalStateClean) return Promise.reject(new Error('Share Card export could not remove temporary viewer state'));
-        if (routeSnapshot && !data.routeStateClean) return Promise.reject(new Error('Route Card export could not preserve the resolved route safely'));
-        if (reachSnapshot && !data.reachStateClean) return Promise.reject(new Error('Reach Card export could not preserve authored reach safely'));
+        if (!data.canonicalStateClean) return Promise.reject(new Error('分享卡片导出无法移除临时查看器状态'));
+        if (routeSnapshot && !data.routeStateClean) return Promise.reject(new Error('路径分享卡片导出无法安全保留已解析路径'));
+        if (reachSnapshot && !data.reachStateClean) return Promise.reject(new Error('可达性分享卡片导出无法安全保留作者定义的可达性'));
         var svgBlob = new Blob([data.svgString], { type: 'image/svg+xml;charset=utf-8' });
         var svgUrl = URL.createObjectURL(svgBlob);
 
@@ -6139,7 +6148,7 @@
               var canvas = document.createElement('canvas');
               canvas.width = SHARE_CARD_WIDTH;
               canvas.height = SHARE_CARD_HEIGHT;
-              var ctx = canvas2dOrThrow(canvas, 'Share Card');
+              var ctx = canvas2dOrThrow(canvas, '分享卡片');
               var computed = getComputedStyle(document.documentElement);
               var bg = computed.getPropertyValue('--bg').trim() || currentBg();
               var text = computed.getPropertyValue('--text').trim() || '#ffffff';
@@ -6153,20 +6162,20 @@
               var subtitleNode = document.querySelector('.header .subtitle');
               var title = titleNode ? titleNode.textContent : document.title;
               var subtitle = routeSnapshot
-                ? 'Route: ' + routeSnapshot.source.label + ' → ' + routeSnapshot.target.label + ' · ' + routeSnapshot.hops + ' directed hops'
+                ? '路径：' + routeSnapshot.source.label + ' → ' + routeSnapshot.target.label + ' · ' + routeSnapshot.hops + ' 跳有向路径'
                 : reachSnapshot
-                  ? 'Authored ' + reachSnapshot.direction + ' from ' + reachSnapshot.origin.label + ' · ' +
-                    (reachSnapshot.nodeIds.length - 1) + ' nodes · ' + reachSnapshot.edges.length +
-                    ' links · max ' + reachSnapshot.maxDepth + ' hops'
+                  ? '作者定义的' + (reachSnapshot.direction === 'upstream' ? '上游' : '下游') + '可达性，起点：' + reachSnapshot.origin.label + ' · ' +
+                    (reachSnapshot.nodeIds.length - 1) + ' 个节点 · ' + reachSnapshot.edges.length +
+                    ' 条连接 · 最多 ' + reachSnapshot.maxDepth + ' 跳'
                   : subtitleNode ? subtitleNode.textContent : '';
               var preset = document.documentElement.getAttribute('data-preset') || 'classic';
               var theme = document.documentElement.getAttribute('data-theme') || 'dark';
-              var presetLabel = preset === 'signal-flow' ? 'FLOW' : preset.toUpperCase();
+              var presetLabel = { classic: '经典', 'signal-flow': '信号流', blueprint: '蓝图', editorial: '编辑版' }[preset] || '经典';
               var cardLabel = routeSnapshot
-                ? 'ARCHIFY · ROUTE · ' + routeSnapshot.hops + ' HOPS'
+                ? 'ARCHIFY · 路径 · ' + routeSnapshot.hops + ' 跳'
                 : reachSnapshot
-                  ? 'ARCHIFY · ' + reachSnapshot.direction.toUpperCase() + ' REACH'
-                  : 'ARCHIFY · ' + presetLabel + ' · ' + theme.toUpperCase();
+                  ? 'ARCHIFY · ' + (reachSnapshot.direction === 'upstream' ? '上游可达性' : '下游可达性')
+                  : 'ARCHIFY · ' + presetLabel + ' · ' + (theme === 'dark' ? '深色' : '浅色');
 
               ctx.fillStyle = bg;
               ctx.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
@@ -6204,7 +6213,7 @@
               URL.revokeObjectURL(svgUrl);
 
               canvas.toBlob(function (blob) {
-                if (!blob) reject(new Error('toBlob returned null for Share Card'));
+                if (!blob) reject(new Error('分享卡片导出失败：浏览器没有返回图像数据'));
                 else resolve(blob);
               }, 'image/png');
             } catch (error) {
@@ -6224,17 +6233,17 @@
         options = options || {};
         if (!options.variant) return renderShareCard();
         if (options.variant !== 'route' && options.variant !== 'reach') {
-          return Promise.reject(new Error('Unknown Share Card variant: ' + options.variant));
+          return Promise.reject(new Error('未知的分享卡片类型：' + options.variant));
         }
         if (options.variant === 'route') {
           var routeSnapshot = Archify.routeProbe && Archify.routeProbe.exportSnapshot();
-          if (!routeSnapshot) return Promise.reject(new Error('Trace a route before exporting a Route Share Card'));
+          if (!routeSnapshot) return Promise.reject(new Error('请先追踪一条路径，再导出路径分享卡片'));
           return renderShareCard({ routeSnapshot: routeSnapshot });
         }
         var snapshot = Archify.focus && typeof Archify.focus.reachabilitySnapshot === 'function'
           ? Archify.focus.reachabilitySnapshot()
           : null;
-        if (!snapshot) return Promise.reject(new Error('Trace authored reach before exporting a Reach Share Card'));
+        if (!snapshot) return Promise.reject(new Error('请先追踪作者定义的可达性，再导出可达性分享卡片'));
         return renderShareCard({ reachSnapshot: snapshot });
       }
 
@@ -6268,7 +6277,7 @@
       function recordWebm(options) {
         options = options || {};
         if (!canRecordMotion()) {
-          return Promise.reject(new Error('WebM motion export requires a trace animation and browser MediaRecorder support'));
+          return Promise.reject(new Error('WebM 动态导出需要轨迹动画和浏览器 MediaRecorder 支持'));
         }
         var duration = Math.max(250, Number(options.duration) || MOTION_DURATION);
         var fps = Math.max(1, Number(options.fps) || MOTION_FPS);
@@ -6466,12 +6475,12 @@
             };
             recorder.onerror = function (event) {
               cleanup();
-              reject(event.error || new Error('MediaRecorder failed'));
+              reject(event.error || new Error('MediaRecorder 录制失败'));
             };
             recorder.onstop = function () {
               cleanup();
               var blob = new Blob(chunks, { type: recorder.mimeType || mime });
-              if (!blob.size) reject(new Error('MediaRecorder produced an empty WebM'));
+              if (!blob.size) reject(new Error('MediaRecorder 生成了空的 WebM 文件'));
               else resolve(blob);
             };
             drawMotionFrame(ctx, backgroundImage, motionScene, 0);
@@ -6492,7 +6501,7 @@
           };
           backgroundImage.onerror = function () {
             URL.revokeObjectURL(sourceUrl);
-            reject(new Error('SVG background could not be loaded for WebM export'));
+            reject(new Error('WebM 导出无法加载 SVG 背景'));
           };
           backgroundImage.src = sourceUrl;
         });
@@ -6550,11 +6559,11 @@
       items().forEach(function (it) {
         if (it.dataset.format && !supports(it.dataset.format)) {
           it.disabled = true;
-          it.title = 'Not supported by this browser';
+          it.title = '当前浏览器不支持';
         }
         if ((it.dataset.action === 'copy' || it.dataset.action === 'copy-share-card') && !canCopyImage()) {
           it.disabled = true;
-          it.title = 'Clipboard image write not supported by this browser';
+          it.title = '当前浏览器不支持写入剪贴板图像';
         }
       });
 
@@ -6645,12 +6654,12 @@
         var base = diagramFilename();
         close(true);
         clearExportReceipt();
-        if (format === 'webm') toast('Recording 6 seconds of motion…');
+        if (format === 'webm') toast('正在录制 6 秒动态……');
         return (format === 'share-card'
           ? rasterizeShareCard().then(function (blob) {
               recordExportReceipt('share-card', blob, true, { width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT });
               download(blob, base + '-share-card.png');
-              toast('Downloaded Share Card');
+              toast('已下载分享卡片');
             })
           : format === 'svg'
           ? Promise.resolve(serializeSvg(1, { autoTheme: true })).then(function (d) {
@@ -6663,7 +6672,7 @@
                 document.documentElement.setAttribute('data-last-motion-bytes', String(blob.size));
                 recordExportReceipt('webm', blob, true);
                 download(blob, base + '.webm');
-                toast('Downloaded WebM');
+                toast('已下载 WebM');
               })
           : rasterize(format).then(function (blob) {
               recordExportReceipt(format, blob, true);
@@ -6678,13 +6687,13 @@
             var motionItem = menu.querySelector('button[data-format="webm"]');
             if (motionItem) {
               motionItem.disabled = true;
-              motionItem.title = 'Motion capture unavailable in this browser';
+              motionItem.title = '当前浏览器无法捕获动态';
               motionItem.style.opacity = '0.5';
             }
-            toast('WebM unavailable in this browser');
+            toast('当前浏览器无法导出 WebM');
             return;
           }
-          alert('Export failed: ' + message);
+          alert('导出失败：' + message);
         });
       }
 
@@ -6694,18 +6703,18 @@
         var snapshot = Archify.routeProbe && Archify.routeProbe.exportSnapshot();
         var blobPromise = snapshot
           ? renderShareCard({ routeSnapshot: snapshot })
-          : Promise.reject(new Error('Trace a route before exporting a Route Share Card'));
+          : Promise.reject(new Error('导出路径分享卡片前请先追踪一条路径'));
         return blobPromise.then(function (blob) {
           recordExportReceipt('share-card', blob, false, { width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT }, 'route', true);
           download(blob, diagramFilename() + '-route-share-card.png');
-          toast('Downloaded Route Share Card');
+          toast('已下载路径分享卡片');
           return blob;
         }).catch(function (err) {
           console.error(err);
           var message = err && err.message ? err.message : 'share-card';
           document.documentElement.setAttribute('data-last-export-error-format', 'share-card');
           document.documentElement.setAttribute('data-last-export-error', message);
-          alert('Route Share Card export failed: ' + message);
+          alert('路径分享卡片导出失败：' + message);
         });
       }
 
@@ -6717,18 +6726,18 @@
           : null;
         var blobPromise = snapshot
           ? renderShareCard({ reachSnapshot: snapshot })
-          : Promise.reject(new Error('Trace authored reach before exporting a Reach Share Card'));
+          : Promise.reject(new Error('导出可达性分享卡片前请先追踪作者定义的可达性'));
         return blobPromise.then(function (blob) {
           recordExportReceipt('share-card', blob, false, { width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT }, 'reach', false, true);
           download(blob, diagramFilename() + '-' + snapshot.direction + '-reach-share-card.png');
-          toast('Downloaded Reach Share Card');
+          toast('已下载可达性分享卡片');
           return blob;
         }).catch(function (err) {
           console.error(err);
           var message = err && err.message ? err.message : 'share-card';
           document.documentElement.setAttribute('data-last-export-error-format', 'share-card');
           document.documentElement.setAttribute('data-last-export-error', message);
-          alert('Reach Share Card export failed: ' + message);
+          alert('可达性分享卡片导出失败：' + message);
         });
       }
 
@@ -6793,21 +6802,21 @@
         close(true);
         clearExportReceipt();
         if (!canCopyImage()) {
-          alert('Clipboard image write not supported by this browser.');
+          alert('当前浏览器不支持写入剪贴板图像。');
           return;
         }
         var blobPromise = rasterizeShareCard();
         return writePngToClipboard(blobPromise).then(function () {
           return blobPromise.then(function (blob) {
             recordExportReceipt('share-card', blob, true, { width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT });
-            toast('Copied Share Card');
+            toast('已复制分享卡片');
           });
         }).catch(function (err) {
           console.error(err);
           var message = err && err.message ? err.message : 'unknown';
           document.documentElement.setAttribute('data-last-export-error-format', 'share-card');
           document.documentElement.setAttribute('data-last-export-error', message);
-          alert('Copy failed: ' + message);
+          alert('复制失败：' + message);
         });
       }
 
@@ -6815,15 +6824,15 @@
         close(true);
         clearExportReceipt();
         if (!canCopyImage()) {
-          alert('Clipboard image write not supported in this browser.');
+          alert('当前浏览器不支持写入剪贴板图像。');
           return;
         }
         var blobPromise = rasterize('png');
         return writePngToClipboard(blobPromise).then(function () {
-          toast('Copied PNG to clipboard');
+          toast('已将 PNG 复制到剪贴板');
         }).catch(function (err) {
           console.error(err);
-          alert('Copy failed: ' + (err && err.message ? err.message : 'unknown'));
+          alert('复制失败：' + (err && err.message ? err.message : '未知错误'));
         });
       }
 
@@ -6949,17 +6958,17 @@
         return readerPaused || reducedMotion() || hasSuspension();
       }
       function ownerLabel(value) {
-        if (value === 'story') return 'the guided story';
-        if (value === 'chapter') return 'the active chapter';
-        if (value === 'chapter-preview') return 'the chapter delta preview';
-        if (value === 'handoff') return 'the chapter handoff';
-        if (value === 'route') return 'Route Probe';
-        if (value === 'lens') return 'Semantic Lens';
-        if (value === 'relationship') return 'Relationship Preview';
-        if (value === 'intent') return 'Intent Trace';
-        if (value === 'focus') return 'semantic focus';
-        if (value === 'legend') return 'legend preview';
-        return 'reader interaction';
+        if (value === 'story') return '引导故事';
+        if (value === 'chapter') return '当前章节';
+        if (value === 'chapter-preview') return '章节差异预览';
+        if (value === 'handoff') return '章节交接';
+        if (value === 'route') return '路径探针';
+        if (value === 'lens') return '语义透镜';
+        if (value === 'relationship') return '关系预览';
+        if (value === 'intent') return '意图追踪';
+        if (value === 'focus') return '语义聚焦';
+        if (value === 'legend') return '图例预览';
+        return '读者交互';
       }
       function render() {
         if (!capable) return;
@@ -6973,7 +6982,7 @@
         }
         btn.setAttribute('aria-pressed', paused ? 'false' : 'true');
         btn.disabled = systemPaused;
-        label.textContent = paused ? 'Still' : 'Live';
+        label.textContent = paused ? '静止' : '动态';
         if (paused && lastEffectivePaused !== true && Archify.guidedViews && Archify.guidedViews.isPlaying()) {
           Archify.guidedViews.pause();
         }
@@ -6986,20 +6995,20 @@
         lastEffectivePaused = paused;
         if (Archify.routeProbe && typeof Archify.routeProbe.syncMotion === 'function') Archify.routeProbe.syncMotion();
         if (systemPaused) {
-          btn.setAttribute('aria-label', 'Motion paused by reduced-motion preference');
-          btn.title = 'Motion paused by reduced-motion preference';
+          btn.setAttribute('aria-label', '因减少动态偏好而暂停');
+          btn.title = '因减少动态偏好而暂停';
         } else if (hasSuspension()) {
-          btn.setAttribute('aria-label', 'Motion paused while this page is hidden');
-          btn.title = 'Motion paused while this page is hidden';
+          btn.setAttribute('aria-label', '页面隐藏时暂停动态');
+          btn.title = '页面隐藏时暂停动态';
         } else if (paused) {
-          btn.setAttribute('aria-label', 'Resume motion');
-          btn.title = 'Resume motion';
+          btn.setAttribute('aria-label', '恢复动态');
+          btn.title = '恢复动态';
         } else if (owner) {
-          btn.setAttribute('aria-label', 'Pause motion; currently yielding to ' + ownerLabel(owner));
-          btn.title = 'Live preview enabled · yielding to ' + ownerLabel(owner);
+          btn.setAttribute('aria-label', '暂停动态；当前让位于' + ownerLabel(owner));
+          btn.title = '动态预览已启用 · 当前让位于' + ownerLabel(owner);
         } else {
-          btn.setAttribute('aria-label', 'Pause motion');
-          btn.title = 'Pause motion';
+          btn.setAttribute('aria-label', '暂停动态');
+          btn.title = '暂停动态';
         }
       }
       function setPaused(next, options) {
@@ -7170,7 +7179,7 @@
           if (!box || !Number.isFinite(box.x) || !Number.isFinite(box.y) || !Number.isFinite(box.width) || box.width < 36) return;
 
           var count = sources.length;
-          var label = count + ' verified source' + (count === 1 ? '' : 's') + '; focus this node to inspect';
+          var label = count + ' 个已验证源；聚焦此节点查看';
           var beacon = document.createElementNS(svgNamespace, 'g');
           beacon.classList.add('source-evidence-beacon');
           beacon.setAttribute('data-source-evidence-beacon', '');
@@ -7194,7 +7203,7 @@
           var originalLabel = node.getAttribute('aria-label') || '';
           node.setAttribute('data-source-evidence-count', String(count));
           node.setAttribute('data-source-evidence-original-label', originalLabel);
-          node.setAttribute('aria-label', (originalLabel ? originalLabel + ', ' : '') + count + ' verified source reference' + (count === 1 ? '' : 's'));
+          node.setAttribute('aria-label', (originalLabel ? originalLabel + '，' : '') + count + ' 个已验证源引用');
           installed += 1;
         });
         return installed;
@@ -7263,7 +7272,7 @@
         return Array.prototype.slice.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'));
       }
       function nodeLabel(node, fallback) {
-        return node.getAttribute('data-node-label') || (node.getAttribute('aria-label') || fallback).replace(/^Focus\s+/, '');
+        return node.getAttribute('data-node-label') || (node.getAttribute('aria-label') || fallback).replace(/^聚焦\s+/, '');
       }
       function reachabilityRelationships() {
         var seen = Object.create(null);
@@ -7372,11 +7381,11 @@
         upstreamBtn.disabled = upstreamReach === 0;
         downstreamBtn.disabled = downstreamReach === 0;
         upstreamBtn.setAttribute('aria-label', upstreamReach
-          ? 'Trace ' + upstreamReach + ' upstream authored node' + (upstreamReach === 1 ? '' : 's')
-          : 'No upstream authored nodes');
+          ? '追踪 ' + upstreamReach + ' 个上游作者定义节点'
+          : '没有上游作者定义节点');
         downstreamBtn.setAttribute('aria-label', downstreamReach
-          ? 'Trace ' + downstreamReach + ' downstream authored node' + (downstreamReach === 1 ? '' : 's')
-          : 'No downstream authored nodes');
+          ? '追踪 ' + downstreamReach + ' 个下游作者定义节点'
+          : '没有下游作者定义节点');
         reachSection.hidden = false;
       }
       function applyReachability(direction, options) {
@@ -7422,11 +7431,8 @@
         var activeButton = direction === 'upstream' ? upstreamBtn : downstreamBtn;
         activeButton.setAttribute('aria-pressed', 'true');
         var reachableCount = result.nodeIds.length - 1;
-        var directionLabel = direction === 'upstream' ? 'Upstream' : 'Downstream';
-        reachStatus.textContent = directionLabel + ' · ' + reachableCount + ' node' +
-          (reachableCount === 1 ? '' : 's') + ' · ' + result.edgeKeys.length + ' link' +
-          (result.edgeKeys.length === 1 ? '' : 's') + ' · max ' + result.maxDepth + ' hop' +
-          (result.maxDepth === 1 ? '' : 's');
+        var directionLabel = direction === 'upstream' ? '上游' : '下游';
+        reachStatus.textContent = directionLabel + ' · ' + reachableCount + ' 个节点 · ' + result.edgeKeys.length + ' 条连接 · 最大 ' + result.maxDepth + ' 跳';
         reachStatus.hidden = false;
         if (Archify.exportMenu && typeof Archify.exportMenu.syncReachShare === 'function') {
           Archify.exportMenu.syncReachShare();
@@ -7553,7 +7559,7 @@
         var slug = repository.url.replace(/^https:\/\/github\.com\//, '').replace(/\/$/, '');
         repositoryLink.href = repository.url + '/tree/' + repository.revision;
         repositoryLink.textContent = slug + ' @ ' + repository.shortRevision;
-        repositoryLink.setAttribute('aria-label', 'Open verified repository revision ' + repository.revision);
+        repositoryLink.setAttribute('aria-label', '打开已验证的仓库修订版本 ' + repository.revision);
         sources.forEach(function (source) {
           var link = document.createElement('a');
           link.className = 'semantic-passport-source';
@@ -7561,13 +7567,13 @@
           link.target = '_blank';
           link.rel = 'noopener noreferrer';
           link.referrerPolicy = 'no-referrer';
-          link.setAttribute('aria-label', 'Open verified source ' + source.path + ' at revision ' + repository.shortRevision);
+          link.setAttribute('aria-label', '打开已验证源文件 ' + source.path + '（修订版本 ' + repository.shortRevision + '）');
           var name = document.createElement('strong');
           name.textContent = source.label || source.path.split('/').pop() || source.path;
           var location = document.createElement('code');
           location.textContent = source.line
             ? 'L' + source.line + (source.endLine && source.endLine !== source.line ? '–' + source.endLine : '') + ' ↗'
-            : 'Open ↗';
+            : '打开 ↗';
           var sourcePath = document.createElement('small');
           sourcePath.textContent = source.path;
           link.appendChild(name);
@@ -7579,7 +7585,7 @@
       }
       function renderPassport(id, node) {
         setPassportValue(detail, node.getAttribute('data-node-sublabel'));
-        setPassportValue(kind, node.getAttribute('data-node-kind') || 'node');
+        setPassportValue(kind, Archify.kindLabel(node.getAttribute('data-node-kind') || 'node'));
         setPassportValue(context, node.getAttribute('data-node-context'));
         setPassportValue(tag, node.getAttribute('data-node-tag'));
         semanticId.textContent = id;
@@ -7609,7 +7615,7 @@
             direction: direction,
             neighborId: neighborId,
             neighborLabel: neighbor ? nodeLabel(neighbor, neighborId) : neighborId,
-            label: edgeLabel || (direction === 'loop' ? 'loops back' : direction === 'out' ? 'connects to' : 'connects from')
+            label: edgeLabel || (direction === 'loop' ? '回到自身' : direction === 'out' ? '连接到' : '连接自')
           });
         });
         return relationships;
@@ -7652,7 +7658,7 @@
             fromLabel: byId[from] ? nodeLabel(byId[from], from) : from,
             toLabel: byId[to] ? nodeLabel(byId[to], to) : to,
             labelValue: labelValue,
-            label: labelValue || (from === to ? 'loops back' : 'connects to'),
+            label: labelValue || (from === to ? '回到自身' : '连接到'),
             edge: edge,
             shapes: shapes,
             invalid: false
@@ -7679,14 +7685,14 @@
       function renderRelationshipCopyAction() {
         var record = pinnedRelationshipRecord();
         if (record && record.id) {
-          copyBtn.textContent = 'Copy relation';
-          copyBtn.setAttribute('aria-label', 'Copy link to pinned relationship');
+          copyBtn.textContent = '复制关系';
+          copyBtn.setAttribute('aria-label', '复制已固定关系链接');
         } else if (pinnedRelationshipKey) {
-          copyBtn.textContent = 'Copy node';
-          copyBtn.setAttribute('aria-label', 'Copy link to source node');
+          copyBtn.textContent = '复制节点';
+          copyBtn.setAttribute('aria-label', '复制源节点链接');
         } else {
-          copyBtn.textContent = 'Copy link';
-          copyBtn.setAttribute('aria-label', 'Copy link to focused node');
+          copyBtn.textContent = '复制链接';
+          copyBtn.setAttribute('aria-label', '复制聚焦节点链接');
         }
       }
       function relationshipHitGeometry(shape, className) {
@@ -8005,7 +8011,7 @@
         var target = relationshipHitTarget(key);
         if (target) target.setAttribute('aria-pressed', 'true');
         renderRelationshipCopyAction();
-        summary.textContent = 'Pinned relationship · ' + record.fromLabel + ' → ' + record.toLabel + ' · ' + record.label;
+        summary.textContent = '已固定关系 · ' + record.fromLabel + ' → ' + record.toLabel + ' · ' + record.label;
         revealPinnedRelationship(record);
         if (options.updateUrl !== false && record.id) {
           try { history.replaceState(null, '', location.pathname + location.search + '#relation=' + encodeURIComponent(record.id)); } catch (_) {}
@@ -8024,10 +8030,10 @@
         relationshipHitOverlay.setAttribute('class', 'relationship-hit-overlay');
         relationshipHitOverlay.setAttribute('data-relationship-hit-overlay', '');
         relationshipHitOverlay.setAttribute('role', 'group');
-        relationshipHitOverlay.setAttribute('aria-label', 'Direct relationship explorer');
+        relationshipHitOverlay.setAttribute('aria-label', '直接关系探索器');
         var relationshipHelp = document.createElementNS(svgNamespace, 'desc');
         relationshipHelp.id = 'archify-relationship-help';
-        relationshipHelp.textContent = 'Use arrow keys to explore relationships. Press Enter or Space to pin details; Escape clears.';
+        relationshipHelp.textContent = '使用方向键探索关系。按 Enter 或空格固定详情；按 Esc 清除。';
         relationshipHitOverlay.appendChild(relationshipHelp);
         records.forEach(function (record, index) {
           var target = document.createElementNS(svgNamespace, 'g');
@@ -8041,7 +8047,7 @@
           target.setAttribute('tabindex', index === 0 ? '0' : '-1');
           target.setAttribute('aria-pressed', 'false');
           target.setAttribute('aria-describedby', relationshipHelp.id);
-          var description = 'Inspect relationship ' + (index + 1) + ' of ' + records.length + ': ' + record.fromLabel + ' to ' + record.toLabel + ', ' + record.label + '. Press Enter for details.';
+          var description = '检查第 ' + (index + 1) + ' / ' + records.length + ' 条关系：' + record.fromLabel + ' 到 ' + record.toLabel + '，' + record.label + '。按 Enter 查看详情。';
           target.setAttribute('aria-label', description);
           var title = document.createElementNS(svgNamespace, 'title');
           title.textContent = record.fromLabel + ' \u2192 ' + record.toLabel + ' \u00b7 ' + record.label;
@@ -8137,25 +8143,25 @@
         var relationships = relationshipsFor(id, byId);
         chip.removeAttribute('data-relations-expanded');
         relationsBtn.setAttribute('aria-expanded', 'false');
-        relationsBtn.textContent = relationships.length + ' relation' + (relationships.length === 1 ? '' : 's');
-        relationsBtn.setAttribute('aria-label', 'Show ' + relationships.length + ' connected relationship' + (relationships.length === 1 ? '' : 's'));
+        relationsBtn.textContent = relationships.length + ' 条关系';
+        relationsBtn.setAttribute('aria-label', '显示 ' + relationships.length + ' 条相连关系');
         var counts = { out: 0, in: 0, loop: 0 };
         relationships.forEach(function (relationship) { counts[relationship.direction] += 1; });
-        summary.textContent = counts.out + ' outgoing · ' + counts.in + ' incoming' + (counts.loop ? ' · ' + counts.loop + ' loop' : '');
+        summary.textContent = counts.out + ' 条出向 · ' + counts.in + ' 条入向' + (counts.loop ? ' · ' + counts.loop + ' 条自环' : '');
         renderReachabilityControls(id);
         relationshipList.textContent = '';
         if (!relationships.length) {
           var empty = document.createElement('p');
           empty.className = 'relationship-lens-empty';
-          empty.textContent = 'No connected relationships';
+          empty.textContent = '没有相连关系';
           relationshipList.appendChild(empty);
           return;
         }
 
         [
-          { id: 'out', label: 'Outgoing' },
-          { id: 'in', label: 'Incoming' },
-          { id: 'loop', label: 'Self loops' }
+          { id: 'out', label: '出向' },
+          { id: 'in', label: '入向' },
+          { id: 'loop', label: '自环' }
         ].forEach(function (group) {
           var items = relationships.filter(function (relationship) { return relationship.direction === group.id; });
           if (!items.length) return;
@@ -8179,7 +8185,7 @@
             var direction = document.createElement('span');
             direction.className = 'relationship-lens-direction';
             direction.setAttribute('aria-hidden', 'true');
-            direction.textContent = relationship.direction === 'out' ? 'OUT →' : relationship.direction === 'in' ? '← IN' : 'LOOP';
+            direction.textContent = relationship.direction === 'out' ? '出 →' : relationship.direction === 'in' ? '← 入' : '自环';
             var target = document.createElement('strong');
             target.textContent = relationship.neighborLabel;
             var relation = document.createElement('small');
@@ -8280,10 +8286,10 @@
         upstreamBtn.disabled = true;
         downstreamBtn.disabled = true;
         relationshipList.textContent = '';
-        copyBtn.textContent = 'Copy link';
-        copyBtn.setAttribute('aria-label', 'Copy link to focused node');
-        relationsBtn.textContent = 'Relations';
-        relationsBtn.setAttribute('aria-label', 'Show connected relationships');
+        copyBtn.textContent = '复制链接';
+        copyBtn.setAttribute('aria-label', '复制聚焦节点链接');
+        relationsBtn.textContent = '关系';
+        relationsBtn.setAttribute('aria-label', '显示相连关系');
         relationsBtn.setAttribute('aria-expanded', 'false');
         chip.removeAttribute('data-relations-expanded');
         chip.style.removeProperty('top');
@@ -8351,7 +8357,7 @@
         svg.setAttribute('data-focus-active', normalized.join(' '));
         var defaultLabel = normalized.length === 1
           ? nodeLabel(byId[normalized[0]], normalized[0])
-          : normalized.length + ' selected nodes';
+          : normalized.length + ' 个已选节点';
         label.textContent = options.label || defaultLabel;
         chip.hidden = options.hideChip === true || normalized.length !== 1 || selectionMode;
         if (!chip.hidden) {
@@ -8397,10 +8403,10 @@
           ? navigator.clipboard.writeText(value).then(function () { return true; }).catch(function () { return fallbackCopy(value); })
           : Promise.resolve(fallbackCopy(value));
         return copy.then(function (copied) {
-          copyBtn.textContent = copied ? 'Copied' : 'Copy failed';
+          copyBtn.textContent = copied ? '已复制' : '复制失败';
           copyBtn.setAttribute('aria-label', copied
-            ? (relationId ? 'Pinned relationship link copied' : 'Focused node link copied')
-            : (relationId ? 'Could not copy pinned relationship link' : 'Could not copy focused node link'));
+            ? (relationId ? '已复制已固定关系链接' : '已复制聚焦节点链接')
+            : (relationId ? '无法复制已固定关系链接' : '无法复制聚焦节点链接'));
           window.setTimeout(function () {
             renderRelationshipCopyAction();
           }, 1600);
@@ -8439,7 +8445,7 @@
         if (expanded) chip.removeAttribute('data-relations-expanded');
         else chip.setAttribute('data-relations-expanded', 'true');
         relationsBtn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-        relationsBtn.setAttribute('aria-label', expanded ? 'Show connected relationships' : 'Hide connected relationships');
+        relationsBtn.setAttribute('aria-label', expanded ? '显示相连关系' : '隐藏相连关系');
         requestLensPlacement();
       });
       relationshipList.addEventListener('click', function (event) {
@@ -8598,7 +8604,7 @@
       }
       function nodeLabel(node, fallback) {
         return node.getAttribute('data-node-label') ||
-          (node.getAttribute('aria-label') || fallback).replace(/^Focus\s+/, '').split(',')[0];
+          (node.getAttribute('aria-label') || fallback).replace(/^聚焦\s+/, '').split('，')[0];
       }
       function finePointer() {
         return !window.matchMedia || window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -8725,9 +8731,9 @@
         svg.setAttribute('data-intent-trace-active', id);
         if (options.announce === true) {
           var total = counts.out + counts.in + counts.loop;
-          status.textContent = nodeLabel(selected, id) + '. ' + counts.out + ' outgoing, ' +
-            counts.in + ' incoming' + (counts.loop ? ', ' + counts.loop + ' self loop' : '') +
-            '. ' + total + ' connection' + (total === 1 ? '' : 's') + '. Press Enter for details.';
+          status.textContent = nodeLabel(selected, id) + '：' + counts.out + ' 条出向、' +
+            counts.in + ' 条入向' + (counts.loop ? '、' + counts.loop + ' 条自环' : '') +
+            '。共 ' + total + ' 条连接。按 Enter 查看详情。';
         }
         return true;
       }
@@ -9031,7 +9037,7 @@
           var node = findNode(anchor);
           var nodeLabel = node ? (node.getAttribute('data-node-label') || anchor) : anchor;
           handoffReceipt.textContent = (previousIndex + 1 < 10 ? '0' : '') + (previousIndex + 1) +
-            ' \u2192 ' + (nextIndex + 1 < 10 ? '0' : '') + (nextIndex + 1) + ' \u00b7 via ' + nodeLabel;
+            ' \u2192 ' + (nextIndex + 1 < 10 ? '0' : '') + (nextIndex + 1) + ' · 经由 ' + nodeLabel;
           handoffReceipt.hidden = false;
         }
         if (Archify.motionGovernor) {
@@ -9088,8 +9094,8 @@
           button.setAttribute('data-guided-view-id', view.id);
           button.setAttribute('aria-pressed', 'false');
           button.setAttribute('tabindex', index === 0 ? '0' : '-1');
-          button.setAttribute('aria-label', 'Open chapter ' + (index + 1) + ' of ' + views.length + ': ' + view.label + ', ' + view.focus.length + ' stops');
-          button.title = view.label + ' — ' + (view.note || view.focus.length + ' selected nodes');
+          button.setAttribute('aria-label', '打开第 ' + (index + 1) + ' / ' + views.length + ' 章节：' + view.label + '，包含 ' + view.focus.length + ' 个停靠点');
+          button.title = view.label + ' — ' + (view.note || view.focus.length + ' 个已选节点');
           var position = document.createElement('span');
           position.className = 'guided-view-chapter-index';
           position.setAttribute('aria-hidden', 'true');
@@ -9099,7 +9105,7 @@
           title.textContent = view.label;
           var stops = document.createElement('em');
           stops.className = 'guided-view-chapter-count';
-          stops.textContent = view.focus.length + ' stop' + (view.focus.length === 1 ? '' : 's');
+          stops.textContent = view.focus.length + ' 个停靠点';
           var delta = document.createElement('span');
           delta.className = 'guided-view-chapter-delta';
           delta.hidden = true;
@@ -9132,20 +9138,20 @@
             stops.hidden = false;
             deltaLabel.hidden = true;
             button.removeAttribute('data-chapter-delta');
-            button.setAttribute('aria-label', 'Current chapter ' + (index + 1) + ' of ' + views.length + ': ' + views[index].label + ', ' + views[index].focus.length + ' stops');
-            button.title = views[index].label + ' — current chapter, ' + views[index].focus.length + ' stops';
+            button.setAttribute('aria-label', '当前为第 ' + (index + 1) + ' / ' + views.length + ' 章节：' + views[index].label + '，包含 ' + views[index].focus.length + ' 个停靠点');
+            button.title = views[index].label + ' — 当前章节，' + views[index].focus.length + ' 个停靠点';
           } else {
             var delta = chapterDelta(activeIndex >= 0 ? views[activeIndex] : null, views[index]);
             var compact = '=' + delta.stay.length + ' +' + delta.enter.length + ' \u2212' + delta.leave.length;
-            var expanded = delta.stay.length + ' stay, ' + delta.enter.length + ' enter, ' + delta.leave.length + ' leave';
+            var expanded = delta.stay.length + ' 个保留、' + delta.enter.length + ' 个进入、' + delta.leave.length + ' 个离开';
             stops.hidden = true;
             deltaLabel.hidden = false;
             deltaLabel.querySelector('[data-delta-kind="stay"]').textContent = '=' + delta.stay.length;
             deltaLabel.querySelector('[data-delta-kind="enter"]').textContent = '+' + delta.enter.length;
             deltaLabel.querySelector('[data-delta-kind="leave"]').textContent = '\u2212' + delta.leave.length;
             button.setAttribute('data-chapter-delta', compact);
-            button.setAttribute('aria-label', 'Open chapter ' + (index + 1) + ' of ' + views.length + ': ' + views[index].label + '. Chapter focus delta: ' + expanded);
-            button.title = views[index].label + ' — ' + compact + ' chapter focus';
+            button.setAttribute('aria-label', '打开第 ' + (index + 1) + ' / ' + views.length + ' 章节：' + views[index].label + '。章节聚焦变化：' + expanded);
+            button.title = views[index].label + ' — ' + compact + ' 章节聚焦';
           }
           if (current) button.setAttribute('aria-current', 'step');
           else button.removeAttribute('aria-current');
@@ -9273,33 +9279,33 @@
 
       function shareCueStatus(state) {
         return {
-          pending: 'Ready',
-          playing: 'Playing',
-          complete: 'Settled',
-          interrupted: 'Paused',
-          pinned: 'Pinned',
-          'reduced-motion': 'Still'
-        }[state] || 'Ready';
+          pending: '就绪',
+          playing: '播放中',
+          complete: '已完成',
+          interrupted: '已暂停',
+          pinned: '已固定',
+          'reduced-motion': '静止'
+        }[state] || '就绪';
       }
 
       function shareCueBeatCopy(state, view, stops) {
         var total = stops.length;
         var activeStop = storyBeatIndex >= 0 ? stops[storyBeatIndex] : null;
         if ((state === 'playing' || state === 'interrupted') && activeStop) {
-          return 'Step ' + (storyBeatIndex + 1 < 10 ? '0' : '') + (storyBeatIndex + 1) + ' / ' +
+          return '步骤 ' + (storyBeatIndex + 1 < 10 ? '0' : '') + (storyBeatIndex + 1) + ' / ' +
             (total < 10 ? '0' : '') + total + ' · ' + activeStop.textContent;
         }
         if (state === 'pinned' && activeStop) {
           return storyBeatCopy(storySteps[storyBeatIndex], total);
         }
         if (state === 'reduced-motion' && activeStop && hashBeatMatchesCurrent()) {
-          return 'Step ' + (storyBeatIndex + 1 < 10 ? '0' : '') + (storyBeatIndex + 1) + ' / ' +
-            (total < 10 ? '0' : '') + total + ' · ' + activeStop.textContent + ' · Static moment';
+          return '步骤 ' + (storyBeatIndex + 1 < 10 ? '0' : '') + (storyBeatIndex + 1) + ' / ' +
+            (total < 10 ? '0' : '') + total + ' · ' + activeStop.textContent + ' · 静态节拍';
         }
-        if (state === 'complete') return total + ' steps complete · ' + (view.note || 'Path settled for reading.');
-        if (state === 'reduced-motion') return total + ' steps · Static path';
-        if (state === 'pending') return total + ' steps · Ready';
-        return view.note || view.focus.length + ' selected nodes';
+        if (state === 'complete') return total + ' 个步骤已完成 · ' + (view.note || '路径已稳定，可供阅读。');
+        if (state === 'reduced-motion') return total + ' 个步骤 · 静态路径';
+        if (state === 'pending') return total + ' 个步骤 · 就绪';
+        return view.note || view.focus.length + ' 个已选节点';
       }
 
       function renderShareCue() {
@@ -9324,11 +9330,11 @@
         shareCue.setAttribute('data-state', state);
         shareCue.setAttribute('aria-live', state === 'playing' ? 'off' : 'polite');
         shareCueState.textContent = shareCueStatus(state);
-        shareCueCount.textContent = 'Chapter ' + (activeIndex + 1 < 10 ? '0' : '') + (activeIndex + 1) + ' / ' + (views.length < 10 ? '0' : '') + views.length;
+        shareCueCount.textContent = '章节 ' + (activeIndex + 1 < 10 ? '0' : '') + (activeIndex + 1) + ' / ' + (views.length < 10 ? '0' : '') + views.length;
         shareCueLabel.textContent = view.label;
         shareCueNote.textContent = beatCopy;
         shareCueRoute.textContent = route;
-        shareCue.setAttribute('aria-label', shareCueStatus(state) + ' chapter ' + (activeIndex + 1) + ' of ' + views.length + ': ' + view.label + '. ' + beatCopy + '. ' + route);
+        shareCue.setAttribute('aria-label', shareCueStatus(state) + '，第 ' + (activeIndex + 1) + ' / ' + views.length + ' 章节：' + view.label + '。' + beatCopy + '。' + route);
       }
 
       function setShareCueProgress(fraction) {
@@ -9348,7 +9354,7 @@
       function storyNodeLabel(node, fallback) {
         if (!node) return fallback;
         return node.getAttribute('data-node-label') ||
-          (node.getAttribute('aria-label') || fallback).replace(/^Focus\s+/, '');
+          (node.getAttribute('aria-label') || fallback).replace(/^聚焦\s+/, '');
       }
 
       function storyEdgeKey(edge) {
@@ -9419,24 +9425,24 @@
         if (!step) return '';
         var position = (step.index + 1 < 10 ? '0' : '') + (step.index + 1);
         var countValue = (total < 10 ? '0' : '') + total;
-        if (step.relation === 'start') return 'Beat ' + position + ' / ' + countValue + ' \u00b7 ' + step.nodeLabel + ' \u00b7 starting point';
-        if (step.relation === 'forward') return 'Beat ' + position + ' / ' + countValue + ' \u00b7 ' + step.previousLabel + ' \u2192 ' + step.nodeLabel;
-        if (step.relation === 'reverse') return 'Beat ' + position + ' / ' + countValue + ' \u00b7 ' + step.nodeLabel + ' \u2192 ' + step.previousLabel + ' \u00b7 reverse authored link';
-        if (step.relation === 'multiple') return 'Beat ' + position + ' / ' + countValue + ' \u00b7 ' + step.previousLabel + ' \u21c4 ' + step.nodeLabel + ' \u00b7 ' + step.edges.length + ' authored links';
-        return 'Beat ' + position + ' / ' + countValue + ' \u00b7 ' + step.previousLabel + ' \u00b7 ' + step.nodeLabel + ' \u00b7 grouped \u00b7 no direct link';
+        if (step.relation === 'start') return '节拍 ' + position + ' / ' + countValue + ' · ' + step.nodeLabel + ' · 起点';
+        if (step.relation === 'forward') return '节拍 ' + position + ' / ' + countValue + ' · ' + step.previousLabel + ' → ' + step.nodeLabel;
+        if (step.relation === 'reverse') return '节拍 ' + position + ' / ' + countValue + ' · ' + step.nodeLabel + ' → ' + step.previousLabel + ' · 作者定义的反向连接';
+        if (step.relation === 'multiple') return '节拍 ' + position + ' / ' + countValue + ' · ' + step.previousLabel + ' ⇄ ' + step.nodeLabel + ' · ' + step.edges.length + ' 条作者定义连接';
+        return '节拍 ' + position + ' / ' + countValue + ' · ' + step.previousLabel + ' · ' + step.nodeLabel + ' · 分组 · 无直接连接';
       }
 
       function storyBeatAria(step, total) {
-        var prefix = 'Story beat ' + (step.index + 1) + ' of ' + total + ': ' + step.nodeLabel + '. ';
-        if (step.relation === 'start') return prefix + 'Starting point.';
-        if (step.relation === 'forward') return prefix + 'From ' + step.previousLabel + ' through one authored forward relationship.';
-        if (step.relation === 'reverse') return prefix + 'From ' + step.previousLabel + '; the authored relationship points from ' + step.nodeLabel + ' to ' + step.previousLabel + '.';
-        if (step.relation === 'multiple') return prefix + 'From ' + step.previousLabel + ' through ' + step.edges.length + ' authored relationships; shown without arbitrary motion.';
-        return prefix + 'Grouped from ' + step.previousLabel + ' with no direct authored relationship.';
+        var prefix = '故事节拍 ' + (step.index + 1) + ' / ' + total + '：' + step.nodeLabel + '。';
+        if (step.relation === 'start') return prefix + '起点。';
+        if (step.relation === 'forward') return prefix + '从 ' + step.previousLabel + ' 经由一条作者定义的正向关系到达。';
+        if (step.relation === 'reverse') return prefix + '来自 ' + step.previousLabel + '；作者定义的关系从 ' + step.nodeLabel + ' 指向 ' + step.previousLabel + '。';
+        if (step.relation === 'multiple') return prefix + '来自 ' + step.previousLabel + '，经过 ' + step.edges.length + ' 条作者定义关系；不添加任意动态。';
+        return prefix + '从 ' + step.previousLabel + ' 分组到达，无直接作者定义关系。';
       }
 
       function storyCaptionRouteCopy(step) {
-        if (step.relation === 'start') return step.nodeLabel + ' · Starting point';
+        if (step.relation === 'start') return step.nodeLabel + ' · 起点';
         if (step.relation === 'reverse') return step.previousLabel + ' ← ' + step.nodeLabel;
         if (step.relation === 'multiple') return step.previousLabel + ' ⇄ ' + step.nodeLabel;
         if (step.relation === 'group') return step.previousLabel + ' · ' + step.nodeLabel;
@@ -9445,15 +9451,15 @@
 
       function storyCaptionDetailCopy(step) {
         var facts = [];
-        if (step.relation === 'group') facts.push('Grouped transition · no direct authored link');
-        else if (step.edgeLabels.length) facts.push(step.edgeLabels.slice(0, 3).join(' + ') + (step.edgeLabels.length > 3 ? ' +' + (step.edgeLabels.length - 3) + ' more' : ''));
-        else if (step.relation === 'reverse') facts.push('Reverse authored relationship');
-        else if (step.relation === 'multiple') facts.push(step.edges.length + ' authored relationships');
-        else if (step.relation !== 'start') facts.push('Authored relationship');
-        if (step.relation === 'reverse') facts.push('authored direction: ' + step.nodeLabel + ' → ' + step.previousLabel);
+        if (step.relation === 'group') facts.push('分组过渡 · 无直接作者定义连接');
+        else if (step.edgeLabels.length) facts.push(step.edgeLabels.slice(0, 3).join(' + ') + (step.edgeLabels.length > 3 ? ' +' + (step.edgeLabels.length - 3) + ' 更多' : ''));
+        else if (step.relation === 'reverse') facts.push('作者定义的反向关系');
+        else if (step.relation === 'multiple') facts.push(step.edges.length + ' 条作者定义关系');
+        else if (step.relation !== 'start') facts.push('作者定义的关系');
+        if (step.relation === 'reverse') facts.push('作者定义方向：' + step.nodeLabel + ' → ' + step.previousLabel);
         if (step.responsibility) facts.push(step.responsibility);
         if (step.context) facts.push(step.context);
-        if (!facts.length) facts.push('Authored starting point');
+        if (!facts.length) facts.push('作者定义的起点');
         return facts.join(' · ');
       }
 
@@ -9509,17 +9515,17 @@
         if (beatLinkFeedbackTimer) clearTimeout(beatLinkFeedbackTimer);
         beatLinkFeedbackTimer = null;
         beatLink.removeAttribute('data-copy-state');
-        beatLinkLabel.textContent = 'Copy moment';
+        beatLinkLabel.textContent = '复制节拍';
       }
 
       function syncBeatLink() {
         var step = storyBeatIndex >= 0 ? storySteps[storyBeatIndex] : null;
         var available = !!(activeIndex >= 0 && step && !currentHandoff);
         beatLink.disabled = !available;
-        if (!beatLink.hasAttribute('data-copy-state')) beatLinkLabel.textContent = 'Copy moment';
+        if (!beatLink.hasAttribute('data-copy-state')) beatLinkLabel.textContent = '复制节拍';
         var description = available
-          ? 'Copy link to current story moment: Beat ' + (step.index + 1) + ' of ' + storySteps.length + ': ' + step.nodeLabel
-          : 'Select a Story Beat to copy its exact link';
+          ? '复制当前故事节拍链接：第 ' + (step.index + 1) + ' / ' + storySteps.length + ' 节拍：' + step.nodeLabel
+          : '选择故事节拍以复制精确链接';
         beatLink.setAttribute('aria-label', description);
         beatLink.title = description;
       }
@@ -9527,8 +9533,8 @@
       function setBeatLinkFeedback(copied) {
         resetBeatLinkFeedback();
         beatLink.setAttribute('data-copy-state', copied ? 'copied' : 'failed');
-        beatLinkLabel.textContent = copied ? 'Copied' : 'Copy failed';
-        beatLink.setAttribute('aria-label', copied ? 'Moment link copied' : 'Could not copy story moment link');
+        beatLinkLabel.textContent = copied ? '已复制' : '复制失败';
+        beatLink.setAttribute('aria-label', copied ? '已复制节拍链接' : '无法复制故事节拍链接');
         beatLinkFeedbackTimer = setTimeout(function () {
           resetBeatLinkFeedback();
           syncBeatLink();
@@ -9782,7 +9788,7 @@
           stop.removeAttribute('aria-current');
         });
         note.setAttribute('aria-live', 'polite');
-        if (activeIndex >= 0) note.textContent = views[activeIndex].note || views[activeIndex].focus.length + ' selected nodes';
+        if (activeIndex >= 0) note.textContent = views[activeIndex].note || views[activeIndex].focus.length + ' 个已选节点';
         renderStoryCaption(null, 0);
         renderShareCue();
         syncBeatLink();
@@ -9861,7 +9867,7 @@
           trail.appendChild(stop);
         });
         trail.hidden = labels.length === 0;
-        trail.setAttribute('aria-label', 'Story trail for ' + view.label + ': ' + labels.length + ' beats');
+        trail.setAttribute('aria-label', view.label + ' 的故事路径：' + labels.length + ' 个节拍');
         trail.scrollLeft = 0;
         svg.setAttribute('data-story-active', view.id);
 
@@ -9940,21 +9946,21 @@
         syncStoryPlayback();
         play.disabled = !playing && !automaticPlaybackAllowed;
         play.setAttribute('aria-pressed', playing ? 'true' : 'false');
-        play.setAttribute('aria-label', playing ? 'Pause guided story' : (!automaticPlaybackAllowed ? 'Story playback unavailable while motion is Still' : (storyPlaybackComplete ? 'Replay guided story' : 'Play guided story')));
-        play.title = playing ? 'Pause guided story (P)' : (!automaticPlaybackAllowed ? 'Switch motion to Live to play the guided story' : (storyPlaybackComplete ? 'Replay guided story (P)' : 'Play guided story (P)'));
+        play.setAttribute('aria-label', playing ? '暂停引导故事' : (!automaticPlaybackAllowed ? '动态处于静止状态，无法播放故事' : (storyPlaybackComplete ? '重播引导故事' : '播放引导故事')));
+        play.title = playing ? '暂停引导故事（P）' : (!automaticPlaybackAllowed ? '切换为动态后才能播放引导故事' : (storyPlaybackComplete ? '重播引导故事（P）' : '播放引导故事（P）'));
         playIcon.textContent = playing ? '\u2016' : '\u25b6';
-        playLabel.textContent = playing ? 'Pause' : (storyPlaybackComplete ? 'Replay story' : 'Play story');
+        playLabel.textContent = playing ? '暂停' : (storyPlaybackComplete ? '重播故事' : '播放故事');
         if (storyCaption && !storyCaption.hidden) storyCaption.setAttribute('aria-live', playing ? 'off' : 'polite');
       }
 
       function render() {
         var view = views[activeIndex];
         count.textContent = activeIndex < 0 ? '0 / ' + views.length : (activeIndex + 1) + ' / ' + views.length;
-        label.textContent = view ? view.label : 'Explore this system';
+        label.textContent = view ? view.label : '探索这个系统';
         note.setAttribute('aria-live', storyBeatIndex >= 0 ? 'off' : 'polite');
         note.textContent = storyBeatIndex >= 0
           ? storyBeatCopy(storySteps[storyBeatIndex], storySteps.length)
-          : (view ? (view.note || view.focus.length + ' selected nodes') : 'Step through curated paths without changing the source diagram.');
+          : (view ? (view.note || view.focus.length + ' 个已选节点') : '按精选路径浏览，不改变源图表。');
         prev.disabled = activeIndex < 0;
         next.disabled = activeIndex >= views.length - 1;
         all.disabled = activeIndex < 0;
@@ -10656,22 +10662,22 @@
         var semantic = state.mode === 'semantic' && state.scale > 1.01;
         var detail = detailLevel();
         var percent = Math.round(state.scale * 100) + '%';
-        var levelLabel = detail === 'map' ? 'MAP ' : detail === 'read' ? 'READ ' : 'FULL ';
+        var levelLabel = detail === 'map' ? '概览 ' : detail === 'read' ? '阅读 ' : '完整 ';
         var detailHint = detail === 'map'
-          ? 'Zoom in to reveal relationship labels and node context'
+          ? '放大以显示关系标签和节点上下文'
           : detail === 'read'
-            ? 'Zoom in again to reveal tags and annotations'
-            : 'Full diagram detail';
-        var resolvedLevel = (semantic ? 'AUTO ' : levelLabel).trim();
-        var showDetailLevel = resolvedLevel !== 'READ';
+            ? '再次放大以显示标签和注释'
+            : '完整图表详情';
+        var resolvedLevel = (semantic ? '自动 ' : levelLabel).trim();
+        var showDetailLevel = resolvedLevel !== '阅读';
         if (resetDetailLabel) {
           resetDetailLabel.textContent = resolvedLevel;
           resetDetailLabel.hidden = !showDetailLevel;
         }
         if (resetPercentLabel) resetPercentLabel.textContent = percent;
         resetBtn.toggleAttribute('data-detail-visible', showDetailLevel);
-        resetBtn.title = (semantic ? 'Semantic camera active · ' : '') + detailHint + ' · reset view (0)';
-        resetBtn.setAttribute('aria-label', detailHint + '. Reset diagram view');
+        resetBtn.title = (semantic ? '语义镜头已启用 · ' : '') + detailHint + ' · 重置视图（0）';
+        resetBtn.setAttribute('aria-label', detailHint + '。重置图表视图');
         resetBtn.setAttribute('data-detail-level', detail);
         container.setAttribute('data-detail-level', detail);
         container.setAttribute('data-camera-mode', state.mode);
@@ -11090,7 +11096,7 @@
       var syncFrame = 0;
 
       mapSvg.setAttribute('role', 'group');
-      mapSvg.setAttribute('aria-label', 'Semantic diagram radar nodes');
+      mapSvg.setAttribute('aria-label', '语义图表雷达节点');
       mapSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
       nodeLayer.setAttribute('class', 'overview-map-nodes');
       viewport.setAttribute('class', 'overview-map-viewport');
@@ -11102,7 +11108,7 @@
 
       function nodeLabel(node, fallback) {
         return node.getAttribute('data-node-label') ||
-          (node.getAttribute('aria-label') || fallback).replace(/^Focus\s+/, '').split(',')[0];
+          (node.getAttribute('aria-label') || fallback).replace(/^聚焦\s+/, '').split('，')[0];
       }
       function build() {
         if (!viewBox || viewBox.width <= 0 || viewBox.height <= 0) return false;
@@ -11125,11 +11131,11 @@
           rect.setAttribute('data-kind', node.getAttribute('data-node-kind') || 'neutral');
           rect.setAttribute('tabindex', '0');
           rect.setAttribute('role', 'button');
-          rect.setAttribute('aria-label', 'Focus ' + nodeLabel(node, id) + ' from Semantic Radar');
+          rect.setAttribute('aria-label', '从语义雷达聚焦 ' + nodeLabel(node, id));
           nodeLayer.appendChild(rect);
           nodes.push({ id: id, node: node, rect: rect });
         });
-        status.textContent = nodes.length + ' nodes · full map';
+        status.textContent = nodes.length + ' 个节点 · 完整地图';
         return true;
       }
       function updateDocking() {
@@ -11191,9 +11197,9 @@
         var full = visible.width >= viewBox.width * 0.98 && visible.height >= viewBox.height * 0.98;
         var mobileWide = window.innerWidth <= 720 && container.hasAttribute('data-wide-diagram');
         var viewportCopy = full
-          ? 'full map'
-          : (mobileWide ? Math.round(visible.width / viewBox.width * 100) + '% width' : Math.round(visible.scale * 100) + '% viewport');
-        status.textContent = nodes.length + ' nodes · ' + viewportCopy;
+          ? '完整地图'
+          : (mobileWide ? Math.round(visible.width / viewBox.width * 100) + '% 宽度' : Math.round(visible.scale * 100) + '% 视口');
+        status.textContent = nodes.length + ' 个节点 · ' + viewportCopy;
         nodes.forEach(function (item) {
           var active = item.node.hasAttribute('data-focus-selected') ||
             item.node.getAttribute('data-story-beat-state') === 'active';
@@ -11214,7 +11220,7 @@
         }
         panel.hidden = !next;
         trigger.setAttribute('aria-expanded', next ? 'true' : 'false');
-        trigger.setAttribute('aria-label', next ? 'Close semantic radar' : 'Open semantic radar');
+        trigger.setAttribute('aria-label', next ? '关闭语义雷达' : '打开语义雷达');
         if (next) {
           build();
           updateDocking();
@@ -11372,9 +11378,9 @@
 
       function render(next) {
         btn.setAttribute('aria-pressed', next ? 'true' : 'false');
-        btn.setAttribute('aria-label', next ? 'Exit presentation stage' : 'Enter presentation stage');
-        btn.title = next ? 'Exit presentation stage (F or Escape)' : 'Presentation stage (F)';
-        label.textContent = next ? 'Exit' : 'Present';
+        btn.setAttribute('aria-label', next ? '退出演示舞台' : '进入演示舞台');
+        btn.title = next ? '退出演示舞台（F 或 Esc）' : '演示舞台（F）';
+        label.textContent = next ? '退出' : '演示';
       }
 
       function setActive(next, options) {
@@ -11443,11 +11449,11 @@
       function defaultContext() {
         return {
           kind: 'focus',
-          title: 'Find a node',
-          placeholder: 'Search labels or IDs',
-          empty: 'No matching nodes',
-          resultsLabel: 'Diagram nodes',
-          availableNoun: 'nodes',
+          title: '查找节点',
+          placeholder: '搜索标签或 ID',
+          empty: '没有匹配的节点',
+          resultsLabel: '图表节点',
+          availableNoun: '个节点',
           allowedIds: null,
           badges: null
         };
@@ -11479,7 +11485,7 @@
 
       var items = Array.prototype.map.call(svg.querySelectorAll('[data-node-id]'), function (node) {
         var id = node.getAttribute('data-node-id');
-        var label = node.getAttribute('data-node-label') || (node.getAttribute('aria-label') || id).replace(/^Focus\s+/, '');
+        var label = node.getAttribute('data-node-label') || (node.getAttribute('aria-label') || id).replace(/^聚焦\s+/, '');
         var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
         var sublabel = node.getAttribute('data-node-sublabel') || '';
         var context = node.getAttribute('data-node-context') || '';
@@ -11570,13 +11576,13 @@
           var badge = context.badges && context.badges[item.id]
             ? context.badges[item.id]
             : context.kind === 'focus'
-              ? item.links + (item.links === 1 ? ' link' : ' links')
+              ? item.links + ' 条连接'
               : String(item.links);
           var action = context.kind === 'route-source'
-            ? 'Choose ' + item.label + ' as route start'
+            ? '选择 ' + item.label + ' 作为路径起点'
             : context.kind === 'route-target'
-              ? 'Choose ' + item.label + ' as route destination, ' + badge
-              : 'Focus ' + item.label + ', ' + item.links + ' related connection' + (item.links === 1 ? '' : 's');
+              ? '选择 ' + item.label + ' 作为路径终点，' + badge
+              : '聚焦 ' + item.label + '，' + item.links + ' 条相关连接';
           button.setAttribute('aria-label', action);
 
           var name = document.createElement('strong');
@@ -11585,8 +11591,8 @@
           links.textContent = badge;
           links.title = context.kind === 'focus' ? badge : action;
           var meta = document.createElement('small');
-          meta.textContent = [item.type, item.id, item.sublabel, item.tag].filter(Boolean).join(' \u00b7 ');
-          meta.title = [item.type, item.id, item.context, item.sublabel, item.tag].filter(Boolean).join(' \u00b7 ');
+          meta.textContent = [Archify.kindLabel(item.type), item.id, item.sublabel, item.tag].filter(Boolean).join(' \u00b7 ');
+          meta.title = [Archify.kindLabel(item.type), item.id, item.context, item.sublabel, item.tag].filter(Boolean).join(' \u00b7 ');
           button.appendChild(name);
           button.appendChild(links);
           button.appendChild(meta);
@@ -11595,7 +11601,7 @@
         });
         empty.hidden = visibleItems.length !== 0;
         status.textContent = query
-          ? visibleItems.length + ' of ' + available.length + ' ' + context.availableNoun
+          ? '显示 ' + visibleItems.length + ' / ' + available.length + ' ' + context.availableNoun
           : available.length + ' ' + context.availableNoun;
       }
 
@@ -11735,7 +11741,7 @@
       }
       function nodeLabel(node, fallback) {
         return node.getAttribute('data-node-label') ||
-          (node.getAttribute('aria-label') || fallback).replace(/^Focus\s+/, '').split(',')[0];
+          (node.getAttribute('aria-label') || fallback).replace(/^聚焦\s+/, '').split('，')[0];
       }
       function exportSnapshot() {
         if (mode !== 'result' || activeNodeIds.length < 2 || activeEdges.length !== activeNodeIds.length - 1) return null;
@@ -11896,7 +11902,7 @@
             item.setAttribute('data-route-journey-index', String(index));
             item.setAttribute('data-route-node-id', id);
             item.setAttribute('tabindex', index === 0 ? '0' : '-1');
-            item.setAttribute('aria-label', 'Route position ' + (index + 1) + ' of ' + ids.length + ': ' + nodeLabel(byId[id], id));
+            item.setAttribute('aria-label', '路径第 ' + (index + 1) + ' 个位置，共 ' + ids.length + ' 个：' + nodeLabel(byId[id], id));
           }
           item.className = 'route-probe-node';
           item.textContent = nodeLabel(byId[id], id);
@@ -11908,7 +11914,7 @@
       }
       function setTrigger(active) {
         trigger.setAttribute('aria-pressed', active ? 'true' : 'false');
-        trigger.setAttribute('aria-label', active ? 'Clear traced route' : 'Trace a directed route');
+        trigger.setAttribute('aria-label', active ? '清除已追踪路径' : '追踪有向路径');
       }
       function clear(options) {
         options = options || {};
@@ -11925,14 +11931,14 @@
         panel.hidden = true;
         panel.setAttribute('data-state', 'idle');
         panel.removeAttribute('data-finder-open');
-        title.textContent = 'Choose a start node';
-        renderPlaceholder('Pick two semantic nodes on the diagram');
-        status.textContent = 'Choose the source, then the destination. Direction matters.';
+        title.textContent = '选择起点节点';
+        renderPlaceholder('请在图表上选择两个语义节点');
+        status.textContent = '请先选择起点，再选择终点；路径方向会影响结果。';
         findBtn.hidden = true;
-        findBtn.textContent = 'Find start';
-        findBtn.setAttribute('aria-label', 'Find a route start');
+        findBtn.textContent = '查找起点';
+        findBtn.setAttribute('aria-label', '查找路径起点');
         copyBtn.hidden = true;
-        copyBtn.textContent = 'Copy link';
+        copyBtn.textContent = '复制链接';
         if (Archify.exportMenu && typeof Archify.exportMenu.syncRouteShare === 'function') Archify.exportMenu.syncRouteShare();
         setTrigger(false);
         if (wasActive && options.preserveView !== true && Archify.view && typeof Archify.view.reset === 'function') {
@@ -12063,7 +12069,7 @@
           !Archify.motionGovernor.isPaused();
       }
       function routeOverviewStatus() {
-        return activeNodeIds.length + ' nodes · ' + activeEdges.length + ' directed hop' + (activeEdges.length === 1 ? '' : 's') + ' · shortest authored route';
+        return activeNodeIds.length + ' 个节点 · ' + activeEdges.length + ' 跳有向路径 · 作者定义的最短路径';
       }
       function centerJourneyButton(button) {
         if (!button) return;
@@ -12093,19 +12099,19 @@
         journeyPlayBtn.setAttribute('aria-pressed', journeyPlaying ? 'true' : 'false');
         if (journeyPlaying) {
           journeyPlayIcon.textContent = '\u275a\u275a';
-          journeyPlayLabel.textContent = 'Pause';
-          journeyPlayBtn.setAttribute('aria-label', 'Pause route journey');
-          journeyPlayBtn.title = 'Pause route journey';
+          journeyPlayLabel.textContent = '暂停';
+          journeyPlayBtn.setAttribute('aria-label', '暂停路径旅程');
+          journeyPlayBtn.title = '暂停路径旅程';
         } else if (journeyComplete || journeyIndex === activeNodeIds.length - 1) {
           journeyPlayIcon.textContent = '\u21bb';
-          journeyPlayLabel.textContent = 'Replay';
-          journeyPlayBtn.setAttribute('aria-label', 'Replay route journey');
-          journeyPlayBtn.title = canPlay ? 'Replay route journey' : 'Automatic journey requires Live motion';
+          journeyPlayLabel.textContent = '重播';
+          journeyPlayBtn.setAttribute('aria-label', '重播路径旅程');
+          journeyPlayBtn.title = canPlay ? '重播路径旅程' : '自动旅程需要开启动态';
         } else {
           journeyPlayIcon.textContent = '\u25b6';
-          journeyPlayLabel.textContent = 'Journey';
-          journeyPlayBtn.setAttribute('aria-label', 'Play route journey');
-          journeyPlayBtn.title = canPlay ? 'Play route journey' : 'Automatic journey requires Live motion';
+          journeyPlayLabel.textContent = '旅程';
+          journeyPlayBtn.setAttribute('aria-label', '播放路径旅程');
+          journeyPlayBtn.title = canPlay ? '播放路径旅程' : '自动旅程需要开启动态';
         }
       }
       function journeyGeometry(shape) {
@@ -12196,8 +12202,8 @@
           else button.removeAttribute('aria-current');
         });
         if (options.center !== false) centerJourneyButton(buttons[journeyIndex]);
-        var phase = journeyPlaying ? 'Playing' : (journeyComplete ? 'Complete' : 'Inspecting');
-        status.textContent = 'Step ' + (journeyIndex + 1) + ' of ' + activeNodeIds.length + ' · ' + phase + ' · ' + nodeLabel(byId[activeNodeIds[journeyIndex]], activeNodeIds[journeyIndex]);
+        var phase = journeyPlaying ? '播放中' : (journeyComplete ? '已完成' : '查看中');
+        status.textContent = '第 ' + (journeyIndex + 1) + ' 步，共 ' + activeNodeIds.length + ' 步 · ' + phase + ' · ' + nodeLabel(byId[activeNodeIds[journeyIndex]], activeNodeIds[journeyIndex]);
         if (options.pulse === true && journeyIndex > 0) renderJourneyPulse(activeEdges[journeyIndex - 1]);
         if (options.reveal !== false && Archify.view && typeof Archify.view.reveal === 'function') {
           Archify.view.reveal(activeNodeIds.slice(Math.max(0, journeyIndex - 1), Math.min(activeNodeIds.length, journeyIndex + 2)), {
@@ -12369,15 +12375,15 @@
         });
         svg.setAttribute('data-route-picking', 'target');
         panel.setAttribute('data-state', 'target');
-        title.textContent = 'Choose a destination from ' + nodeLabel(byId[id], id);
+        title.textContent = '从 ' + nodeLabel(byId[id], id) + ' 选择终点';
         renderPath([id]);
         var count = Math.max(0, Object.keys(reached).length - 1);
         status.textContent = count
-          ? count + ' directed destination' + (count === 1 ? '' : 's') + ' available. Pick a highlighted node.'
-          : 'No outgoing route starts here. Clear and choose another source.';
+          ? '有 ' + count + ' 个有向终点可选，请选择高亮节点。'
+          : '此处没有向外路径，请清除后选择其他起点。';
         findBtn.hidden = false;
-        findBtn.textContent = 'Find target';
-        findBtn.setAttribute('aria-label', 'Find a reachable route destination');
+        findBtn.textContent = '查找终点';
+        findBtn.setAttribute('aria-label', '查找可达的路径终点');
         requestDocking();
         return true;
       }
@@ -12409,7 +12415,7 @@
         renderPath(result.nodes, { interactive: true });
         panel.setAttribute('data-state', 'result');
         panel.hidden = false;
-        title.textContent = nodeLabel(byId[startId], startId) + ' to ' + nodeLabel(byId[endId], endId);
+        title.textContent = nodeLabel(byId[startId], startId) + ' → ' + nodeLabel(byId[endId], endId);
         findBtn.hidden = true;
         copyBtn.hidden = false;
         setTrigger(true);
@@ -12431,15 +12437,15 @@
         if (mode !== 'target') return false;
         if (id === startId) {
           panel.setAttribute('data-state', 'error');
-          title.textContent = 'Choose a different destination';
-          status.textContent = 'A route needs two distinct semantic nodes.';
+          title.textContent = '请选择其他终点';
+          status.textContent = '路径需要两个不同的语义节点。';
           return false;
         }
         var result = shortestDirectedPath(startId, id);
         if (!result) {
           panel.setAttribute('data-state', 'error');
-          title.textContent = 'No directed route to ' + nodeLabel(byId[id], id);
-          status.textContent = nodeLabel(byId[id], id) + ' is not reachable from ' + nodeLabel(byId[startId], startId) + '. Pick a highlighted destination.';
+          title.textContent = '没有通往 ' + nodeLabel(byId[id], id) + ' 的有向路径';
+          status.textContent = nodeLabel(byId[id], id) + ' 从 ' + nodeLabel(byId[startId], startId) + ' 不可达，请选择高亮的终点。';
           return false;
         }
         return showResult(result, options);
@@ -12467,12 +12473,12 @@
         panel.hidden = false;
         panel.setAttribute('data-state', 'source');
         svg.setAttribute('data-route-picking', 'source');
-        title.textContent = 'Choose a start node';
-        renderPlaceholder('Pick a semantic node on the diagram');
-        status.textContent = 'Select the source. The next step will reveal only directed destinations.';
+        title.textContent = '选择起点节点';
+        renderPlaceholder('请在图表上选择一个语义节点');
+        status.textContent = '选择起点；下一步只会显示有向可达终点。';
         findBtn.hidden = false;
-        findBtn.textContent = 'Find start';
-        findBtn.setAttribute('aria-label', 'Find a route start');
+        findBtn.textContent = '查找起点';
+        findBtn.setAttribute('aria-label', '查找路径起点');
         copyBtn.hidden = true;
         setTrigger(true);
         if (focused && nodesById()[focused]) chooseStart(focused);
@@ -12502,11 +12508,11 @@
           sourceIds.forEach(function (id) { sourceBadges[id] = 'start'; });
           return {
             kind: 'route-source',
-            title: 'Choose route start',
-            placeholder: 'Search route sources',
-            empty: 'No matching route sources',
-            resultsLabel: 'Nodes that can start a route',
-            availableNoun: 'route sources',
+            title: '选择路径起点',
+            placeholder: '搜索路径起点',
+            empty: '没有匹配的路径起点',
+            resultsLabel: '可以作为路径起点的节点',
+            availableNoun: '个路径起点',
             allowedIds: sourceIds,
             badges: sourceBadges
           };
@@ -12516,15 +12522,15 @@
           var targetIds = Object.keys(distances).filter(function (id) { return id !== startId && byId[id]; });
           var targetBadges = {};
           targetIds.forEach(function (id) {
-            targetBadges[id] = distances[id] + ' hop' + (distances[id] === 1 ? '' : 's');
+            targetBadges[id] = distances[id] + ' 跳';
           });
           return {
             kind: 'route-target',
-            title: 'Destination from ' + nodeLabel(byId[startId], startId),
-            placeholder: 'Search reachable destinations',
-            empty: 'No matching reachable destinations',
-            resultsLabel: 'Reachable route destinations',
-            availableNoun: 'reachable destinations',
+            title: '从 ' + nodeLabel(byId[startId], startId) + ' 选择终点',
+            placeholder: '搜索可达终点',
+            empty: '没有匹配的可达终点',
+            resultsLabel: '可达的路径终点',
+            availableNoun: '个可达终点',
             allowedIds: targetIds,
             badges: targetBadges
           };
@@ -12565,11 +12571,11 @@
           ? navigator.clipboard.writeText(value).then(function () { return true; }).catch(function () { return fallbackCopy(value); })
           : Promise.resolve(fallbackCopy(value));
         return copy.then(function (copied) {
-          copyBtn.textContent = copied ? 'Copied' : 'Copy failed';
-          copyBtn.setAttribute('aria-label', copied ? 'Traced route link copied' : 'Could not copy traced route link');
+          copyBtn.textContent = copied ? '已复制' : '复制失败';
+          copyBtn.setAttribute('aria-label', copied ? '已复制追踪路径链接' : '无法复制追踪路径链接');
           window.setTimeout(function () {
-            copyBtn.textContent = 'Copy link';
-            copyBtn.setAttribute('aria-label', 'Copy link to traced route');
+            copyBtn.textContent = '复制链接';
+            copyBtn.setAttribute('aria-label', '复制追踪路径链接');
           }, 1600);
           return copied;
         });
@@ -12723,10 +12729,7 @@
       var MAX_LENS_FLOW_EDGES = 24;
 
       function kindLabel(value) {
-        return String(value || 'neutral')
-          .replace(/messagebus/gi, 'message bus')
-          .replace(/[-_]+/g, ' ')
-          .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+        return Archify.kindLabel(value || 'neutral');
       }
       function nodesById() {
         var byId = {};
@@ -12846,7 +12849,7 @@
           entry.setAttribute('role', 'button');
           entry.setAttribute('tabindex', legendEntries.length ? '-1' : '0');
           var visibleLabel = entry.getAttribute('data-legend-label') || fact.label;
-          entry.setAttribute('aria-label', 'Inspect ' + visibleLabel + ', ' + count + ' node' + (count === 1 ? '' : 's'));
+          entry.setAttribute('aria-label', '查看' + visibleLabel + '，共 ' + count + ' 个节点');
           entry.setAttribute('aria-pressed', 'false');
           entry.setAttribute('aria-haspopup', 'dialog');
           entry.setAttribute('aria-controls', 'semantic-lens');
@@ -12855,7 +12858,7 @@
         });
         if (!legendEntries.length) return false;
         legendBridge.setAttribute('role', legendEntries.length >= 3 ? 'toolbar' : 'group');
-        legendBridge.setAttribute('aria-label', 'Semantic legend');
+        legendBridge.setAttribute('aria-label', '语义图例');
         syncLegendBridge();
         layoutLegendBridge();
         try {
@@ -13003,7 +13006,7 @@
           button.className = 'semantic-lens-kind';
           button.setAttribute('data-kind', kind.id);
           button.setAttribute('aria-pressed', selectedKinds.indexOf(kind.id) >= 0 ? 'true' : 'false');
-          button.setAttribute('aria-label', kind.label + ', ' + kind.nodes.length + ' node' + (kind.nodes.length === 1 ? '' : 's'));
+          button.setAttribute('aria-label', kind.label + '，共 ' + kind.nodes.length + ' 个节点');
           button.disabled = selectedKinds.length >= 2 && selectedKinds.indexOf(kind.id) === -1;
           var swatch = document.createElement('span');
           swatch.className = 'semantic-lens-swatch';
@@ -13029,7 +13032,7 @@
       function updateTrigger() {
         var active = selectedKinds.length > 0;
         trigger.setAttribute('aria-pressed', active ? 'true' : 'false');
-        trigger.setAttribute('aria-label', active ? 'Open active semantic lens' : 'Open semantic lens');
+        trigger.setAttribute('aria-label', active ? '打开已启用的语义透镜' : '打开语义透镜');
         copyBtn.hidden = !active;
         syncLegendBridge();
       }
@@ -13064,7 +13067,7 @@
         var nodeKind = {};
         Object.keys(byId).forEach(function (id) { nodeKind[id] = byId[id].getAttribute('data-node-kind') || 'neutral'; });
         if (!selectedKinds.length) {
-          status.textContent = 'Choose a kind to inspect its nodes and touching relationships.';
+          status.textContent = '选择一种类型，查看其节点及相连关系。';
           updateTrigger();
           renderKinds();
           dockPanel(byId);
@@ -13119,13 +13122,13 @@
         renderFlowOverlay(matchedFlow);
         if (crossKind) {
           var total = forward + reverse;
-          status.textContent = kindLabel(selectedKinds[0]) + ' → ' + kindLabel(selectedKinds[1]) + ': ' + forward + ' · ' +
-            kindLabel(selectedKinds[1]) + ' → ' + kindLabel(selectedKinds[0]) + ': ' + reverse + ' · ' +
-            total + ' direct relationship' + (total === 1 ? '' : 's');
+          status.textContent = kindLabel(selectedKinds[0]) + ' → ' + kindLabel(selectedKinds[1]) + '：' + forward + ' 条 · ' +
+            kindLabel(selectedKinds[1]) + ' → ' + kindLabel(selectedKinds[0]) + '：' + reverse + ' 条 · ' +
+            total + ' 条直接关系';
         } else {
           var nodeCount = collectKinds().filter(function (kind) { return kind.id === selectedKinds[0]; })[0].nodes.length;
-          status.textContent = nodeCount + ' ' + kindLabel(selectedKinds[0]) + ' node' + (nodeCount === 1 ? '' : 's') + ' · ' +
-            touching + ' touching relationship' + (touching === 1 ? '' : 's') + ' · connected peers remain visible';
+          status.textContent = nodeCount + ' 个' + kindLabel(selectedKinds[0]) + '节点 · ' +
+            touching + ' 条相连关系 · 相连的其他节点仍会显示';
         }
         updateTrigger();
         renderKinds();
@@ -13198,7 +13201,7 @@
         panel.removeAttribute('data-dock-side');
         updateTrigger();
         renderKinds();
-        status.textContent = 'Choose a kind to inspect its nodes and touching relationships.';
+        status.textContent = '选择一种类型，查看其节点及相连关系。';
         if (options.updateUrl !== false) updateHash();
         if (options.preserveView !== true && Archify.view && typeof Archify.view.reset === 'function') {
           Archify.view.reset({ automatic: true });
@@ -13226,8 +13229,8 @@
           ? navigator.clipboard.writeText(value).then(function () { return true; }).catch(function () { return fallbackCopy(value); })
           : Promise.resolve(fallbackCopy(value));
         return copy.then(function (copied) {
-          copyBtn.textContent = copied ? 'Copied' : 'Copy failed';
-          window.setTimeout(function () { copyBtn.textContent = 'Copy link'; }, 1600);
+          copyBtn.textContent = copied ? '已复制' : '复制失败';
+          window.setTimeout(function () { copyBtn.textContent = '复制链接'; }, 1600);
           return copied;
         });
       }
@@ -13399,14 +13402,12 @@
         var nodes = svg.querySelectorAll('[data-node-id]').length;
         var relationships = relationshipCount();
         var views = viewCount();
-        stats.textContent = nodes + ' semantic node' + (nodes === 1 ? '' : 's') + ' · ' +
-          relationships + ' relationship' + (relationships === 1 ? '' : 's') + ' · ' +
-          views + ' guided view' + (views === 1 ? '' : 's');
+        stats.textContent = nodes + ' 个语义节点 · ' + relationships + ' 条关系 · ' + views + ' 个引导视图';
         storyBtn.disabled = views === 0;
         storyBtn.setAttribute('aria-disabled', views === 0 ? 'true' : 'false');
         storyCopy.textContent = views
-          ? 'Walk ' + views + ' authored chapter' + (views === 1 ? '' : 's') + ' and their real relationships.'
-          : 'No authored guided story in this diagram.';
+          ? '浏览 ' + views + ' 个作者定义的章节及其真实关系。'
+          : '此图表没有作者定义的引导故事。';
       }
       function actionButtons() {
         return Array.prototype.slice.call(actions.querySelectorAll('.diagram-guide-action:not(:disabled)'));
@@ -13417,7 +13418,7 @@
         html.removeAttribute('data-guide-open');
         routePanel.removeAttribute('data-guide-open');
         trigger.setAttribute('aria-expanded', 'false');
-        trigger.setAttribute('aria-label', 'Open diagram guide');
+        trigger.setAttribute('aria-label', '打开图表指南');
         feedback.textContent = '';
         if (options.restoreFocus !== false) trigger.focus();
         return false;
@@ -13440,7 +13441,7 @@
         html.setAttribute('data-guide-open', 'true');
         routePanel.setAttribute('data-guide-open', 'true');
         trigger.setAttribute('aria-expanded', 'true');
-        trigger.setAttribute('aria-label', 'Close diagram guide');
+        trigger.setAttribute('aria-label', '关闭图表指南');
         feedback.textContent = '';
         requestAnimationFrame(function () {
           var first = actionButtons()[0];
@@ -13452,7 +13453,7 @@
       function execute(action) {
         feedback.textContent = '';
         if (action === 'story' && !viewCount()) {
-          feedback.textContent = 'This diagram has no authored guided story.';
+          feedback.textContent = '此图表没有作者定义的引导故事。';
           return false;
         }
         close({ restoreFocus: false });

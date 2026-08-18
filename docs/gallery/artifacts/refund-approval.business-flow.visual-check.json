@@ -5,9 +5,9 @@
   "status": "pass",
   "visualReview": "pending",
   "artifact": {
-    "path": "C:\\Users\\flyranking\\Documents\\Codex\\2026-08-17\\https-github-com-tt-a1i-archify\\work\\archify\\docs\\gallery\\artifacts\\refund-approval.business-flow.html",
-    "sha256": "583f5dba6b0eb279790c2e70e2b430467b2893c61854cdd2ea80db774e82d5d3",
-    "bytes": 650700
+    "path": "C:/Users/flyranking/Documents/Codex/2026-08-17/https-github-com-tt-a1i-archify/work/archify/docs/gallery/artifacts/refund-approval.business-flow.html",
+    "sha256": "7fa80da2780e8653d3127b384f95f4b91bc90f4b426b7680ba0ee918a2e6dc83",
+    "bytes": 650108
   },
   "state": {
     "detail": "read",
@@ -15,7 +15,7 @@
   },
   "chrome": {
     "status": "available",
-    "executable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    "executable": "Codex In-app Browser"
   },
   "containment": {
     "status": "pass",
@@ -31,7 +31,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "resolvedTheme": "light"
+        "resolvedTheme": "light",
+        "unknownEnglish": []
       },
       {
         "width": 1600,
@@ -44,7 +45,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "resolvedTheme": "light"
+        "resolvedTheme": "light",
+        "unknownEnglish": []
       },
       {
         "width": 1920,
@@ -57,7 +59,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "resolvedTheme": "light"
+        "resolvedTheme": "light",
+        "unknownEnglish": []
       },
       {
         "width": 2048,
@@ -70,7 +73,8 @@
         "overflowX": false,
         "overflowY": false,
         "ok": true,
-        "resolvedTheme": "light"
+        "resolvedTheme": "light",
+        "unknownEnglish": []
       }
     ]
   },
@@ -89,7 +93,9 @@
         "overflowY": false,
         "ok": true,
         "resolvedTheme": "light",
-        "file": "refund-approval.business-flow.visual-check.1440x900.light.png"
+        "file": "refund-approval.business-flow.visual-check.1440x900.light.png",
+        "sha256": "bd133ad73a94bb388c4bdcbbc6a04f4037124b12ac81f2afb48e0ef57ac07665",
+        "bytes": 88290
       },
       {
         "width": 1440,
@@ -103,7 +109,9 @@
         "overflowY": false,
         "ok": true,
         "resolvedTheme": "dark",
-        "file": "refund-approval.business-flow.visual-check.1440x900.dark.png"
+        "file": "refund-approval.business-flow.visual-check.1440x900.dark.png",
+        "sha256": "45b2abeeee3e5ea19153539957b598524a97592951ac031d7c2a18f37cb44b47",
+        "bytes": 85686
       },
       {
         "width": 2048,
@@ -117,7 +125,9 @@
         "overflowY": false,
         "ok": true,
         "resolvedTheme": "light",
-        "file": "refund-approval.business-flow.visual-check.2048x1320.light.png"
+        "file": "refund-approval.business-flow.visual-check.2048x1320.light.png",
+        "sha256": "ce06772fb78af50a7af8463b4b469465920eb66a0388b6bb29d67c63ef20b6ca",
+        "bytes": 138961
       },
       {
         "width": 2048,
@@ -131,7 +141,9 @@
         "overflowY": false,
         "ok": true,
         "resolvedTheme": "dark",
-        "file": "refund-approval.business-flow.visual-check.2048x1320.dark.png"
+        "file": "refund-approval.business-flow.visual-check.2048x1320.dark.png",
+        "sha256": "85fe14ea82c272aa2493f62ed671a11acf64db644759f3a87ecb453270c09532",
+        "bytes": 133443
       }
     ],
     "contactSheet": "refund-approval.business-flow.visual-check.html"

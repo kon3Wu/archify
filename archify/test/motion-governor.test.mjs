@@ -39,7 +39,7 @@ function svgBlock(html) {
 test('all renderers inherit one viewer-only Live/Still Motion Governor', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
-    assert.match(html, /id="btn-motion"[^>]+hidden[^>]+aria-label="Pause motion"/, mode);
+    assert.match(html, /id="btn-motion"[^>]+hidden[^>]+aria-label="暂停动态"/, mode);
     assert.match(html, /Archify\.motionGovernor = \(function \(\)/, mode);
     assert.match(html, /var capable = !!\(svg && svg\.getAttribute\('data-animation'\) === 'trace'\)/, mode);
     assert.match(svgBlock(html), /data-animation="trace"/, mode);
@@ -65,12 +65,12 @@ test('reader pause is persistent, explicit, and reduced-motion aware', () => {
   assert.match(html, /localStorage\.removeItem\(STORAGE_KEY\)/);
   assert.match(html, /html\.setAttribute\('data-motion', paused \? 'still' : 'live'\)/);
   assert.match(html, /btn\.setAttribute\('aria-pressed', paused \? 'false' : 'true'\)/);
-  assert.match(html, /Motion paused by reduced-motion preference/);
+  assert.match(html, /因减少动态偏好而暂停/);
   assert.match(html, /motionQuery\.addEventListener\('change', render\)/);
   assert.match(html, /document\.addEventListener\('visibilitychange', syncVisibility\)/);
   assert.match(html, /Archify\.guidedViews\.isPlaying\(\)[\s\S]*?Archify\.guidedViews\.pause\(\)/);
   assert.match(html, /play\.disabled = !playing && !automaticPlaybackAllowed/);
-  assert.match(html, /Story playback unavailable while motion is Still/);
+  assert.match(html, /动态处于静止状态，无法播放故事/);
   assert.match(html, /\.pulse-dot \{ animation: none !important; \}/);
   assert.match(html, /html\[data-motion="still"\] \.story-trail-flow/);
 });

@@ -2,19 +2,19 @@
   "schema_version": 1,
   "diagram_type": "business-flow",
   "meta": {
-    "title": "Customer request fulfillment",
-    "subtitle": "A standard business process with a decision branch and an exception return",
+    "title": "客户请求履行",
+    "subtitle": "包含决策分支和异常回退的标准业务流程",
     "visual_preset": "signal-flow",
     "quality_profile": "showcase",
     "views": [
       {
         "id": "happy-path",
-        "label": "Happy path",
+        "label": "成功路径",
         "focus": ["start", "capture", "request", "check", "fulfill", "ledger", "package", "finish"]
       },
       {
         "id": "exception-path",
-        "label": "Exception path",
+        "label": "异常路径",
         "focus": ["check", "exception", "exception-finish"]
       }
     ],
@@ -24,36 +24,36 @@
   },
   "mainPath": ["start", "request", "capture", "check", "fulfill", "ledger", "package", "finish"],
   "nodes": [
-    { "id": "start", "kind": "start", "label": "Start", "row": 0, "col": 0 },
-    { "id": "request", "kind": "manual-input", "label": "Submit request", "sublabel": "Customer action", "row": 0, "col": 1 },
-    { "id": "capture", "kind": "document", "label": "Capture details", "sublabel": "Request record", "row": 0, "col": 2 },
-    { "id": "check", "kind": "decision", "label": "Eligible?", "sublabel": "Policy check", "row": 0, "col": 3 },
-    { "id": "fulfill", "kind": "process", "label": "Fulfill request", "sublabel": "Operations", "row": 0, "col": 4 },
-    { "id": "ledger", "kind": "data-store", "label": "Update ledger", "sublabel": "System of record", "row": 0, "col": 5 },
-    { "id": "package", "kind": "subprocess", "label": "Prepare delivery", "sublabel": "Fulfillment", "row": 0, "col": 6 },
-    { "id": "finish", "kind": "end", "label": "Complete", "row": 0, "col": 7 },
-    { "id": "exception", "kind": "external", "label": "Manual review", "sublabel": "Exception queue", "row": 1, "col": 4 },
-    { "id": "exception-finish", "kind": "end", "label": "Needs review", "row": 1, "col": 7 }
+    { "id": "start", "kind": "start", "label": "开始", "row": 0, "col": 0 },
+    { "id": "request", "kind": "manual-input", "label": "提交请求", "sublabel": "客户操作", "row": 0, "col": 1 },
+    { "id": "capture", "kind": "document", "label": "记录详情", "sublabel": "请求记录", "row": 0, "col": 2 },
+    { "id": "check", "kind": "decision", "label": "符合条件？", "sublabel": "策略检查", "row": 0, "col": 3 },
+    { "id": "fulfill", "kind": "process", "label": "履行请求", "sublabel": "运营处理", "row": 0, "col": 4 },
+    { "id": "ledger", "kind": "data-store", "label": "更新台账", "sublabel": "记录系统", "row": 0, "col": 5 },
+    { "id": "package", "kind": "subprocess", "label": "准备交付", "sublabel": "履约处理", "row": 0, "col": 6 },
+    { "id": "finish", "kind": "end", "label": "完成", "row": 0, "col": 7 },
+    { "id": "exception", "kind": "external", "label": "人工审核", "sublabel": "异常队列", "row": 1, "col": 4 },
+    { "id": "exception-finish", "kind": "end", "label": "需要审核", "row": 1, "col": 7 }
   ],
   "edges": [
     { "id": "e-start-request", "from": "start", "to": "request", "role": "main" },
     { "id": "e-request-capture", "from": "request", "to": "capture", "role": "main" },
     { "id": "e-capture-check", "from": "capture", "to": "check", "role": "main" },
-    { "id": "e-check-fulfill", "from": "check", "to": "fulfill", "label": "Eligible", "labelAt": [640, 216], "role": "yes" },
+    { "id": "e-check-fulfill", "from": "check", "to": "fulfill", "label": "符合条件", "labelAt": [640, 216], "role": "yes" },
     { "id": "e-fulfill-ledger", "from": "fulfill", "to": "ledger", "role": "main" },
     { "id": "e-ledger-package", "from": "ledger", "to": "package", "role": "main" },
     { "id": "e-package-finish", "from": "package", "to": "finish", "role": "main" },
-    { "id": "e-check-exception", "from": "check", "to": "exception", "label": "Needs review", "labelAt": [684, 112], "role": "no" },
+    { "id": "e-check-exception", "from": "check", "to": "exception", "label": "需要审核", "labelAt": [684, 112], "role": "no" },
     { "id": "e-exception-finish", "from": "exception", "to": "exception-finish", "role": "error" }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Business reading",
+      "title": "业务阅读",
       "items": [
-        "Read left to right from the customer request.",
-        "The decision labels are explicit business outcomes.",
-        "Manual review remains visible as an exception path."
+        "从客户请求开始由左向右阅读。",
+        "决策标签明确表达业务结果。",
+        "人工审核作为异常路径保持可见。"
       ]
     }
   ]

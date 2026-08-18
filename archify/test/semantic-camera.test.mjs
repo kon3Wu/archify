@@ -44,10 +44,10 @@ test('all typed renderers ship the same geometry-neutral semantic camera', () =>
     assert.match(html, /visibleBottom - visibleTop >= 240/, mode);
     assert.match(html, /data-camera-mode/, mode);
     assert.match(html, /data-camera-indicator/, mode);
-    assert.match(html, /semantic \? 'AUTO ' : levelLabel/, mode);
+    assert.match(html, /semantic \? '自动 ' : levelLabel/, mode);
     assert.match(html, /is-camera-moving/, mode);
     assert.match(html, /cubic-bezier\(0\.22, 1, 0\.36, 1\)/, mode);
-    assert.doesNotMatch(svg(html), /data-camera-mode|is-camera-moving|AUTO /, mode);
+    assert.doesNotMatch(svg(html), /data-camera-mode|is-camera-moving|自动 /, mode);
   }
 });
 

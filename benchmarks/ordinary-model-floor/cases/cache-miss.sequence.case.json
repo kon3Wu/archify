@@ -12,11 +12,11 @@
       { "key": "db", "labels": ["Postgres", "PostgreSQL", "Database"], "type": "database" }
     ],
     "relationships": [
-      { "from": "api", "to": "auth", "labels": ["verify JWT", "verify Bearer JWT", "validate JWT", "validate token", "verify token"] },
-      { "from": "api", "to": "redis", "labels": ["read cache", "cache get", "GET"] },
-      { "from": "redis", "to": "api", "labels": ["miss", "cache miss"] },
-      { "from": "api", "to": "db", "labels": ["query profile + metrics", "query database", "SELECT"] },
-      { "from": "api", "to": "redis", "labels": ["set cache", "cache set", "store cache", "write cache", "SET", "SETEX"] }
+      { "from": "api", "to": "auth", "labels": ["verify JWT", "校验 JWT", "verify Bearer JWT", "validate JWT", "validate token", "verify token"] },
+      { "from": "api", "to": "redis", "labels": ["read cache", "读取缓存", "cache get", "GET"] },
+      { "from": "redis", "to": "api", "labels": ["miss", "未命中", "cache miss"] },
+      { "from": "api", "to": "db", "labels": ["query profile + metrics", "查询资料 + 指标", "query database", "SELECT"] },
+      { "from": "api", "to": "redis", "labels": ["set cache", "设置缓存", "cache set", "store cache", "write cache", "SET", "SETEX"] }
     ]
   }
 }

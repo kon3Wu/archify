@@ -206,7 +206,7 @@ test('cli: demo creates a ready-to-open diagram in a chosen directory', () => {
 
   assert.equal(result.status, 0, result.stderr);
   assert.equal(fs.existsSync(output), true);
-  assert.match(fs.readFileSync(output, 'utf8'), /Sample Web App Diagram/);
+  assert.match(fs.readFileSync(output, 'utf8'), /示例 Web 应用 图表/);
   assert.match(result.stdout, new RegExp(`Demo ready: ${output.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
   assert.match(result.stdout, /Next: open the HTML in your browser/);
   assert.match(result.stdout, /archify render architecture/);
@@ -227,7 +227,7 @@ test('cli: render writes a diagram html file', () => {
   const result = run(['render', 'workflow', input, out]);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(fs.existsSync(out), true);
-  assert.match(fs.readFileSync(out, 'utf8'), /Agent Tool Call Workflow/);
+  assert.match(fs.readFileSync(out, 'utf8'), /Agent 工具调用工作流 图表/);
 });
 
 test('cli: visual-check returns a skipped receipt with exit 2 when Chrome is unavailable', () => {
@@ -253,7 +253,7 @@ test('cli: deliver atomically writes a checked artifact and structured receipt',
 
   assert.equal(result.status, 0, result.stderr);
   assert.equal(fs.existsSync(out), true);
-  assert.match(fs.readFileSync(out, 'utf8'), /Agent Tool Call Workflow/);
+  assert.match(fs.readFileSync(out, 'utf8'), /Agent 工具调用工作流 图表/);
 
   const receipt = JSON.parse(result.stdout);
   assert.equal(receipt.schemaVersion, 1);
@@ -404,7 +404,10 @@ test('cli: deliver works from an installed skill without node_modules', () => {
   }
 });
 
-test('cli: preview runs from an installed skill without node_modules and exits cleanly', { timeout: 30000 }, async () => {
+test('cli: preview runs from an installed skill without node_modules and exits cleanly', {
+  timeout: 30000,
+  skip: process.platform === 'win32' ? 'Windows child_process.kill(SIGTERM) reports a signal instead of the handled exit code' : false,
+}, async () => {
   const installedRoot = path.join(tmp, 'installed-preview-skill');
   copyInstalledSkill(installedRoot);
   const installedCli = path.join(installedRoot, 'bin/archify.mjs');

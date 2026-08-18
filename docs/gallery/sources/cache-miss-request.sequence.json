@@ -2,44 +2,44 @@
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "Cache Miss Request Sequence",
+    "title": "缓存未命中请求序列",
     "output": "examples/sequence-cache-miss-request.html",
     "viewBox": [820, 760],
     "animation": "trace",
     "quality_profile": "showcase",
     "views": [
-      { "id": "request-and-auth", "label": "Request and identity", "focus": ["user", "web", "api", "auth"], "note": "Follow the user request through the authentication check." },
-      { "id": "cache-fallback", "label": "Cache fallback", "focus": ["api", "redis", "db"], "note": "See the cache miss and the source-of-truth query it triggers." },
-      { "id": "return-and-trace", "label": "Return and trace", "focus": ["db", "api", "redis", "trace", "web", "user"], "note": "Separate response latency from the non-blocking observability write." }
+      { "id": "request-and-auth", "label": "请求与身份", "focus": ["user", "web", "api", "auth"], "note": "沿着用户请求浏览身份认证检查。" },
+      { "id": "cache-fallback", "label": "缓存回退", "focus": ["api", "redis", "db"], "note": "查看缓存未命中以及由此触发的事实来源查询。" },
+      { "id": "return-and-trace", "label": "返回与追踪", "focus": ["db", "api", "redis", "trace", "web", "user"], "note": "区分响应延迟与非阻塞的可观测性写入。" }
     ]
   },
   "participants": [
-    { "id": "user", "type": "external", "label": "User", "sublabel": "browser session" },
-    { "id": "web", "type": "frontend", "label": "Web App", "sublabel": "React UI" },
-    { "id": "api", "type": "backend", "label": "API", "sublabel": "request handler" },
-    { "id": "auth", "type": "security", "label": "Auth", "sublabel": "JWT verify" },
-    { "id": "redis", "type": "database", "label": "Redis", "sublabel": "cache" },
-    { "id": "db", "type": "database", "label": "Postgres", "sublabel": "source of truth" },
-    { "id": "trace", "type": "messagebus", "label": "Trace", "sublabel": "async event" }
+    { "id": "user", "type": "external", "label": "用户", "sublabel": "浏览器会话" },
+    { "id": "web", "type": "frontend", "label": "Web 应用", "sublabel": "React UI" },
+    { "id": "api", "type": "backend", "label": "API", "sublabel": "请求处理器" },
+    { "id": "auth", "type": "security", "label": "身份认证", "sublabel": "JWT 校验" },
+    { "id": "redis", "type": "database", "label": "Redis", "sublabel": "缓存" },
+    { "id": "db", "type": "database", "label": "Postgres", "sublabel": "事实来源" },
+    { "id": "trace", "type": "messagebus", "label": "追踪", "sublabel": "异步事件" }
   ],
   "segments": [
-    { "from": 150, "to": 295, "label": "Request" },
-    { "from": 315, "to": 505, "label": "Fallback" },
-    { "from": 525, "to": 665, "label": "Response + trace" }
+    { "from": 150, "to": 295, "label": "请求" },
+    { "from": 315, "to": 505, "label": "回退" },
+    { "from": 525, "to": 665, "label": "响应 + 追踪" }
   ],
   "messages": [
-    { "id": "open-page", "from": "user", "to": "web", "y": 185, "label": "open page", "variant": "default" },
+    { "id": "open-page", "from": "user", "to": "web", "y": 185, "label": "打开页面", "variant": "default" },
     { "id": "dashboard-request", "from": "web", "to": "api", "y": 228, "label": "GET /dashboard", "variant": "emphasis" },
-    { "id": "verify-jwt", "from": "api", "to": "auth", "y": 270, "label": "verify JWT", "variant": "security" },
-    { "id": "auth-claims", "from": "auth", "to": "api", "y": 305, "label": "claims ok", "variant": "return" },
-    { "id": "cache-read", "from": "api", "to": "redis", "y": 354, "label": "read cache", "variant": "default" },
-    { "id": "cache-miss", "from": "redis", "to": "api", "y": 391, "label": "miss", "variant": "return" },
-    { "id": "profile-query", "from": "api", "to": "db", "y": 443, "label": "query profile + metrics", "variant": "emphasis" },
-    { "id": "profile-rows", "from": "db", "to": "api", "y": 489, "label": "rows", "variant": "return" },
-    { "id": "cache-write", "from": "api", "to": "redis", "y": 536, "label": "set cache", "variant": "dashed" },
-    { "id": "trace-emit", "from": "api", "to": "trace", "y": 580, "label": "emit trace", "variant": "dashed" },
+    { "id": "verify-jwt", "from": "api", "to": "auth", "y": 270, "label": "校验 JWT", "variant": "security" },
+    { "id": "auth-claims", "from": "auth", "to": "api", "y": 305, "label": "声明有效", "variant": "return" },
+    { "id": "cache-read", "from": "api", "to": "redis", "y": 354, "label": "读取缓存", "variant": "default" },
+    { "id": "cache-miss", "from": "redis", "to": "api", "y": 391, "label": "未命中", "variant": "return" },
+    { "id": "profile-query", "from": "api", "to": "db", "y": 443, "label": "查询资料 + 指标", "variant": "emphasis" },
+    { "id": "profile-rows", "from": "db", "to": "api", "y": 489, "label": "数据行", "variant": "return" },
+    { "id": "cache-write", "from": "api", "to": "redis", "y": 536, "label": "设置缓存", "variant": "dashed" },
+    { "id": "trace-emit", "from": "api", "to": "trace", "y": 580, "label": "发送追踪", "variant": "dashed" },
     { "id": "dashboard-response", "from": "api", "to": "web", "y": 625, "label": "200 JSON", "variant": "return" },
-    { "id": "page-render", "from": "web", "to": "user", "y": 662, "label": "render", "variant": "return" }
+    { "id": "page-render", "from": "web", "to": "user", "y": 662, "label": "渲染", "variant": "return" }
   ],
   "activations": [
     { "participant": "web", "from": 220, "to": 668, "type": "frontend" },
@@ -52,29 +52,29 @@
   "cards": [
     {
       "dot": "emerald",
-      "title": "Happy Path",
+      "title": "成功路径",
       "items": [
-        "The main request is Web App -> API -> data source -> response",
-        "Return messages are quieter than forward calls",
-        "Activation bars make ownership duration visible"
+        "主请求路径是 Web 应用 → API → 数据源 → 响应",
+        "返回消息比正向调用更轻量",
+        "激活条让所有权持续时间清晰可见"
       ]
     },
     {
       "dot": "rose",
-      "title": "Policy + Fallback",
+      "title": "策略 + 回退",
       "items": [
-        "JWT verification is colored as a security interaction",
-        "Cache miss is visible without overpowering the main path",
-        "Database access only appears after cache fallback"
+        "JWT 校验以安全交互样式呈现",
+        "缓存未命中清晰可见，但不会压过主路径",
+        "只有缓存回退后才会访问数据库"
       ]
     },
     {
       "dot": "orange",
-      "title": "Async Trace",
+      "title": "异步追踪",
       "items": [
-        "Trace emission is dashed and secondary",
-        "It does not block the response path",
-        "The diagram separates user-facing latency from observability"
+        "追踪发送使用虚线并作为次要路径",
+        "它不会阻塞响应路径",
+        "图表将面向用户的延迟与可观测性分开"
       ]
     }
   ]

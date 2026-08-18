@@ -2,61 +2,61 @@
   "schema_version": 1,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Release Delivery Workflow",
+    "title": "发布交付工作流",
     "output": "examples/release-delivery.html",
     "animation": "trace",
     "quality_profile": "showcase",
     "views": [
-      { "id": "commit-to-checks", "label": "Commit to green build", "focus": ["commit", "pull_request", "build", "checks"], "note": "Follow the change through reproducible build and blocking quality gates." },
-      { "id": "approval-to-production", "label": "Approve and promote", "focus": ["checks", "approval", "deploy", "verify_prod", "announce"], "note": "See who authorizes production and how success is verified." },
-      { "id": "rollback-path", "label": "Failure and rollback", "focus": ["checks", "failed", "verify_prod", "rollback", "deploy"], "note": "Isolate the two places where delivery stops or reverses safely." }
+      { "id": "commit-to-checks", "label": "提交到构建通过", "focus": ["commit", "pull_request", "build", "checks"], "note": "沿着变更经过可复现构建和阻断性质量关卡的路径浏览。" },
+      { "id": "approval-to-production", "label": "审批并发布", "focus": ["checks", "approval", "deploy", "verify_prod", "announce"], "note": "查看谁授权生产发布，以及如何验证成功。" },
+      { "id": "rollback-path", "label": "失败与回滚", "focus": ["checks", "failed", "verify_prod", "rollback", "deploy"], "note": "单独查看交付停止或安全逆转的两个位置。" }
     ]
   },
   "lanes": [
-    { "id": "dev", "label": "Developer" },
-    { "id": "ci", "label": "Continuous Integration" },
-    { "id": "approval", "label": "Release Governance" },
-    { "id": "environment", "label": "Production Environment" },
-    { "id": "communication", "label": "Release Communication" },
-    { "id": "exceptions", "label": "Failure + Rollback", "variant": "exception" }
+    { "id": "dev", "label": "开发者" },
+    { "id": "ci", "label": "持续集成" },
+    { "id": "approval", "label": "发布治理" },
+    { "id": "environment", "label": "生产环境" },
+    { "id": "communication", "label": "发布沟通" },
+    { "id": "exceptions", "label": "失败 + 回滚", "variant": "exception" }
   ],
   "phases": [
-    { "id": "change", "label": "Change", "fromCol": 0, "toCol": 1 },
-    { "id": "verify", "label": "Build + verify", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
-    { "id": "promote", "label": "Promote + observe", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+    { "id": "change", "label": "变更", "fromCol": 0, "toCol": 1 },
+    { "id": "verify", "label": "构建 + 验证", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "promote", "label": "发布 + 观察", "fromCol": 4, "toCol": 5, "variant": "dashed" }
   ],
   "groups": [
-    { "id": "blocking_checks", "label": "Blocking checks", "lane": "ci", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
-    { "id": "rollback_work", "label": "Recovery path", "lane": "exceptions", "fromCol": 3, "toCol": 5, "variant": "security" }
+    { "id": "blocking_checks", "label": "阻断性检查", "lane": "ci", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "rollback_work", "label": "恢复路径", "lane": "exceptions", "fromCol": 3, "toCol": 5, "variant": "security" }
   ],
   "mainPath": ["commit", "pull_request", "build", "checks", "approval", "deploy", "verify_prod", "announce"],
   "nodes": [
-    { "id": "commit", "lane": "dev", "col": 0, "type": "frontend", "label": "Commit", "sublabel": "signed change" },
-    { "id": "pull_request", "lane": "dev", "col": 1, "type": "frontend", "label": "Pull Request", "sublabel": "reviewed diff" },
-    { "id": "build", "lane": "ci", "col": 2, "type": "backend", "label": "Build", "sublabel": "locked inputs", "tag": "reproducible" },
-    { "id": "checks", "lane": "ci", "col": 3, "type": "security", "label": "Quality Gates", "sublabel": "test + scan", "tag": "blocking" },
-    { "id": "approval", "lane": "approval", "col": 4, "type": "security", "label": "Approve", "sublabel": "release owner", "tag": "human gate" },
-    { "id": "deploy", "lane": "environment", "col": 4, "type": "cloud", "label": "Deploy", "sublabel": "canary 10%", "tag": "production" },
-    { "id": "verify_prod", "lane": "environment", "col": 5, "type": "backend", "label": "Verify", "sublabel": "smoke + SLO" },
-    { "id": "announce", "lane": "communication", "col": 5, "type": "external", "label": "Announce", "sublabel": "status + notes" },
-    { "id": "failed", "lane": "exceptions", "col": 2, "type": "security", "label": "Stop Release", "sublabel": "gate failed" },
-    { "id": "rollback", "lane": "exceptions", "col": 4, "width": 64, "type": "messagebus", "label": "Rollback", "sublabel": "last good image", "tag": "owner: on-call" }
+    { "id": "commit", "lane": "dev", "col": 0, "type": "frontend", "label": "提交", "sublabel": "已签名变更" },
+    { "id": "pull_request", "lane": "dev", "col": 1, "type": "frontend", "label": "Pull Request", "sublabel": "已审查差异" },
+    { "id": "build", "lane": "ci", "col": 2, "type": "backend", "label": "构建", "sublabel": "锁定输入", "tag": "可复现" },
+    { "id": "checks", "lane": "ci", "col": 3, "type": "security", "label": "质量关卡", "sublabel": "测试 + 扫描", "tag": "阻断" },
+    { "id": "approval", "lane": "approval", "col": 4, "type": "security", "label": "审批", "sublabel": "发布负责人", "tag": "人工关卡" },
+    { "id": "deploy", "lane": "environment", "col": 4, "type": "cloud", "label": "部署", "sublabel": "金丝雀 10%", "tag": "生产环境" },
+    { "id": "verify_prod", "lane": "environment", "col": 5, "type": "backend", "label": "验证", "sublabel": "冒烟 + SLO" },
+    { "id": "announce", "lane": "communication", "col": 5, "type": "external", "label": "发布公告", "sublabel": "状态 + 说明" },
+    { "id": "failed", "lane": "exceptions", "col": 2, "type": "security", "label": "停止发布", "sublabel": "关卡失败" },
+    { "id": "rollback", "lane": "exceptions", "col": 4, "width": 64, "type": "messagebus", "label": "回滚", "sublabel": "上个良好镜像", "tag": "值班负责人" }
   ],
   "edges": [
     { "from": "commit", "to": "pull_request" },
-    { "from": "pull_request", "to": "build", "label": "merge", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "pull_request", "to": "build", "label": "合并", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
     { "from": "build", "to": "checks" },
     { "from": "checks", "to": "approval", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
     { "from": "approval", "to": "deploy", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" },
     { "from": "deploy", "to": "verify_prod" },
-    { "from": "verify_prod", "to": "announce", "label": "healthy", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
-    { "from": "checks", "to": "failed", "label": "red", "variant": "security", "role": "error", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "verify_prod", "to": "announce", "label": "健康", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "checks", "to": "failed", "label": "失败", "variant": "security", "role": "error", "route": "drop", "fromSide": "bottom", "toSide": "top" },
     { "from": "verify_prod", "to": "rollback", "variant": "security", "role": "error", "route": "outside-right", "fromSide": "right", "toSide": "right" },
-    { "from": "rollback", "to": "deploy", "label": "restore", "variant": "dashed", "role": "return", "route": "return-left", "fromSide": "left", "toSide": "left" }
+    { "from": "rollback", "to": "deploy", "label": "恢复", "variant": "dashed", "role": "return", "route": "return-left", "fromSide": "left", "toSide": "left" }
   ],
   "cards": [
-    { "dot": "emerald", "title": "One Happy Path", "items": ["Every change is reviewed before a reproducible build", "Blocking checks must be green before human approval", "Production is complete only after smoke and SLO verification"] },
-    { "dot": "rose", "title": "Stop Conditions", "items": ["Test or security failure stops promotion", "Production health can reverse a release", "Rollback ownership is visible before an incident"] },
-    { "dot": "cyan", "title": "Release Evidence", "items": ["Approval, immutable image, and check results are retained", "The release announcement follows verification", "The main path remains readable without hiding failure"] }
+    { "dot": "emerald", "title": "一条成功主路径", "items": ["每次变更都在可复现构建前经过审查", "人工审批前阻断性检查必须全部通过", "只有冒烟和 SLO 验证完成后，生产发布才算完成"] },
+    { "dot": "rose", "title": "停止条件", "items": ["测试或安全失败会停止发布", "生产健康状况可以逆转一次发布", "事件发生前就应明确回滚所有权"] },
+    { "dot": "cyan", "title": "发布证据", "items": ["审批、不可变镜像和检查结果都会保留", "发布公告跟随验证之后发出", "主路径保持可读，同时不隐藏失败"] }
   ]
 }

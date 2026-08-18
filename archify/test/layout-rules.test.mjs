@@ -340,7 +340,7 @@ test('architecture: Clean Flow Gate rejects a connection through a component', (
 
 test('dataflow: showcase rejects a relationship label that hides another route', () => {
   const d = JSON.parse(fs.readFileSync(path.join(skillRoot, 'examples', 'event-stream.dataflow.json'), 'utf8'));
-  const approvedReplay = d.flows.find((flow) => flow.label === 'approved replay');
+  const approvedReplay = d.flows.find((flow) => flow.label === '已审批重放');
   delete approvedReplay.labelAt;
   delete approvedReplay.labelDx;
   delete approvedReplay.labelDy;
@@ -348,7 +348,7 @@ test('dataflow: showcase rejects a relationship label that hides another route',
   const { code, stderr } = render('dataflow', d);
   assert.notEqual(code, 0, `expected non-zero exit; stderr:\n${stderr}`);
   assert.match(stderr, /\[composition\/label-route-clearance\] showcase dataflow/);
-  assert.match(stderr, /approved replay.*failure sample/);
+  assert.match(stderr, /已审批重放.*失败样本/);
   assert.match(stderr, /labelAt.*labelDx.*labelDy.*labelSegment/);
 });
 
@@ -655,7 +655,7 @@ test('dataflow: stage border run is blocking and the inter-stage gutter passes',
   const failed = render('dataflow', bad);
   assert.notEqual(failed.code, 0);
   assert.match(failed.stderr, /\[composition\/container-border-run\] dataflow flows\[0\] id "web-clickstream"/);
-  assert.match(failed.stderr, /stage "Sources" right border for 114px/);
+  assert.match(failed.stderr, /stage "来源" right border for 114px/);
 
   const clean = load('dataflow');
   const passed = render('dataflow', clean);
@@ -668,7 +668,7 @@ test('sequence: a message cannot masquerade as a time-segment border', () => {
   const { code, stderr } = render('sequence', d);
   assert.notEqual(code, 0);
   assert.match(stderr, /\[composition\/container-border-run\] sequence messages\[4\] id "cache-read"/);
-  assert.match(stderr, /segment "Fallback" top border/);
+  assert.match(stderr, /segment "回退" top border/);
 });
 
 test('dataflow: Clean Flow Gate rejects a flow through an unrelated node', () => {

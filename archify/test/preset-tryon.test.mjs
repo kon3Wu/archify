@@ -44,8 +44,8 @@ test('all five renderers expose one reader-controlled visual style picker', () =
     const html = render(mode);
     assert.match(html, /id="btn-preset"[^>]+aria-haspopup="menu"[^>]+aria-controls="preset-menu"/, mode);
     assert.match(html, /id="preset-label"/, mode);
-    assert.match(html, /title="Choose visual style \(S cycles\)"/, mode);
-    assert.match(html, /id="preset-menu" role="menu" aria-label="Visual style"/, mode);
+    assert.match(html, /title="选择视觉样式（S 循环切换）"/, mode);
+    assert.match(html, /id="preset-menu" role="menu" aria-label="视觉样式"/, mode);
     for (const preset of ['classic', 'signal-flow', 'blueprint', 'editorial']) {
       assert.match(html, new RegExp(`data-preset-value="${preset}"[^>]+role="menuitemradio"`), `${mode}: ${preset}`);
     }
@@ -68,7 +68,7 @@ test('style selection synchronizes page, picker, and canonical SVG without touch
 test('omitted visual preset opens as Classic and theme switching cannot change it', () => {
   const html = render('architecture');
   const themeRuntime = html.match(/Archify\.theme = \(function \(\) \{[\s\S]*?\n    \}\)\(\);/)?.[0] || '';
-  assert.match(html, /<html lang="en" data-theme="dark" data-preset="classic">/);
+  assert.match(html, /<html lang="zh-CN" data-theme="dark" data-preset="classic">/);
   assert.match(svgBlock(html), /<svg\b[^>]* data-preset="classic"/);
   assert.match(themeRuntime, /html\.setAttribute\('data-theme', theme\)/);
   assert.doesNotMatch(themeRuntime, /data-preset|Archify\.preset/);

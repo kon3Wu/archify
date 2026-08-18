@@ -38,11 +38,11 @@ test('all five renderers inherit native Route Journey controls outside canonical
   for (const [mode, example] of Object.entries(CASES)) {
     const { result, html } = render(mode, example);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(html, /id="route-journey-controls" hidden role="group" aria-label="Route journey controls"/i, mode);
-    assert.match(html, /id="route-journey-prev"[^>]+aria-label="Previous route position"/i, mode);
-    assert.match(html, /id="route-journey-play"[^>]+aria-label="Play route journey"[^>]+aria-pressed="false"/i, mode);
-    assert.match(html, /id="route-journey-next"[^>]+aria-label="Next route position"/i, mode);
-    assert.match(html, /id="route-journey-overview"[^>]+aria-label="Show complete route overview"/i, mode);
+    assert.match(html, /id="route-journey-controls" hidden role="group" aria-label="路径旅程控制"/i, mode);
+    assert.match(html, /id="route-journey-prev"[^>]+aria-label="上一个路径位置"/i, mode);
+    assert.match(html, /id="route-journey-play"[^>]+aria-label="播放路径旅程"[^>]+aria-pressed="false"/i, mode);
+    assert.match(html, /id="route-journey-next"[^>]+aria-label="下一个路径位置"/i, mode);
+    assert.match(html, /id="route-journey-overview"[^>]+aria-label="显示完整路径概览"/i, mode);
     assert.match(html, /document\.createElement\(options\.interactive === true \? 'button' : 'span'\)/, mode);
     assert.doesNotMatch(canonicalSvg(html), /data-route-journey|route-journey-(?:flow|overlay)/, mode);
   }
@@ -64,7 +64,7 @@ test('a position owns its exact ordered incoming edge while the full route remai
 test('route chips provide one roving tab stop, native activation, and manual ownership', () => {
   assert.match(template, /item\.setAttribute\('data-route-journey-index', String\(index\)\)/);
   assert.match(template, /item\.setAttribute\('tabindex', index === 0 \? '0' : '-1'\)/);
-  assert.match(template, /item\.setAttribute\('aria-label', 'Route position ' \+ \(index \+ 1\) \+ ' of ' \+ ids\.length/);
+  assert.match(template, /item\.setAttribute\('aria-label', '路径第 ' \+ \(index \+ 1\) \+ ' 个位置，共 ' \+ ids\.length/);
   assert.match(template, /path\.addEventListener\('focusin'[\s\S]*?pauseJourney\(\{ preserveElapsed: true \}\)/);
   assert.match(template, /path\.addEventListener\('keydown'[\s\S]*?event\.key === 'ArrowRight'/);
   assert.match(template, /else if \(event\.key === 'Home'\) next = 0/);

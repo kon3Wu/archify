@@ -8,6 +8,10 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
+const unzipProbe = spawnSync(process.platform === 'win32' ? 'where.exe' : 'sh', process.platform === 'win32' ? ['unzip'] : ['-c', 'command -v unzip'], { encoding: 'utf8' });
+const unzipSkipReason = unzipProbe.status === 0 && unzipProbe.stdout.trim()
+  ? false
+  : 'unzip-dependent test skipped: the unzip command is unavailable in this environment';
 
 function workflowStep(workflow, name) {
   const marker = `      - name: ${name}`;
@@ -101,7 +105,7 @@ test('package smoke rejects every dependency or repository-only artifact', () =>
   }
 });
 
-test('package smoke rejects every dependency metadata field in a built package', () => {
+test('package smoke rejects every dependency metadata field in a built package', { skip: unzipSkipReason }, () => {
   const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'archify-built-package-gate-'));
   try {
     const archive = path.join(fixture, 'archify.zip');

@@ -36,7 +36,7 @@ test('all typed renderers inherit one viewer-only Semantic Lens', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
     assert.match(html, /id="semantic-lens" hidden role="dialog" aria-modal="false" aria-labelledby="semantic-lens-title"/, mode);
-    assert.match(html, /id="btn-semantic-lens"[^>]+aria-label="Open semantic lens"[^>]+aria-expanded="false"[^>]+aria-controls="semantic-lens"/, mode);
+    assert.match(html, /id="btn-semantic-lens"[^>]+aria-label="打开语义透镜"[^>]+aria-expanded="false"[^>]+aria-controls="semantic-lens"/, mode);
     assert.match(html, /Archify\.semanticLens = \(function \(\)/, mode);
     assert.match(html, /svg\.querySelectorAll\('\[data-node-id\]\[data-node-kind\]'\)/, mode);
     assert.doesNotMatch(canonicalSvg(html), /semantic-lens-overlay|data-lens-active|data-lens-match/, mode);
@@ -47,12 +47,12 @@ test('Semantic Lens derives honest kind counts and compares at most two roles', 
   const html = render('workflow', CASES.workflow);
   assert.match(html, /function collectKinds\(\)/);
   assert.match(html, /kind\.nodes\.push\(node\)/);
-  assert.match(html, /Choose up to two semantic kinds/);
+  assert.match(html, /最多选择两种语义类型/);
   assert.match(html, /if \(selectedKinds\.length >= 2\) return false/);
   assert.match(html, /var crossKind = selectedKinds\.length === 2/);
   assert.match(html, /fromKind === selectedKinds\[0\] && toKind === selectedKinds\[1\]/);
   assert.match(html, /fromKind === selectedKinds\[1\] && toKind === selectedKinds\[0\]/);
-  assert.match(html, /direct relationship/);
+  assert.match(html, /直接关系/);
   assert.match(html, /data-lens-peer/);
   assert.match(html, /data-lens-selected/);
 });

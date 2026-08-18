@@ -32,7 +32,7 @@ for (const [mode, example] of Object.entries(CASES)) {
   test(`${mode}: guided paths expose a viewer-only Story Trail`, () => {
     const { result, html } = render(mode, example);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(html, /id="guided-view-trail" hidden role="group" aria-label="Story trail"/);
+    assert.match(html, /id="guided-view-trail" hidden role="group" aria-label="故事路径"/);
     assert.match(html, /function renderStoryTrail\(view\)/);
     assert.match(html, /document\.createElement\('button'\)/);
     assert.match(html, /stop\.type = 'button'/);

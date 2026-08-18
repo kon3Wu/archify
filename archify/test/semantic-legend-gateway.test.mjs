@@ -74,7 +74,7 @@ test('only legends with an exact node-kind meaning publish bridge entries', () =
     'emphasis', 'return', 'security', 'dashed', 'default',
   ]);
   assert.doesNotMatch(sequence, /data-legend-bridge|data-legend-kind=/);
-  assert.match(sequence, />Legend</);
+  assert.match(sequence, />图例</);
 
   const dataflow = canonicalSvg(render('dataflow'));
   assert.deepEqual(values(dataflow, 'data-legend-semantic-kind'), [
@@ -83,7 +83,7 @@ test('only legends with an exact node-kind meaning publish bridge entries', () =
   assert.deepEqual(values(dataflow, 'data-legend-kind'), ['database']);
   assert.equal((dataflow.match(/data-legend-bridge(?:\s|>)/g) || []).length, 1);
   assert.ok(values(dataflow, 'data-node-kind').includes('database'));
-  assert.match(dataflow, />Legend</);
+  assert.match(dataflow, />图例</);
 });
 
 test('runtime decoration derives counts from compiled node facts and stays viewer-only', () => {
@@ -96,7 +96,7 @@ test('runtime decoration derives counts from compiled node facts and stays viewe
   assert.match(html, /entry\.setAttribute\('role', 'button'\)/);
   assert.match(html, /legendBridge\.setAttribute\('role', legendEntries\.length >= 3 \? 'toolbar' : 'group'\)/);
   assert.match(html, /var visibleLabel = entry\.getAttribute\('data-legend-label'\) \|\| fact\.label/);
-  assert.match(html, /entry\.setAttribute\('aria-label', 'Inspect ' \+ visibleLabel/);
+  assert.match(html, /entry\.setAttribute\('aria-label', '查看' \+ visibleLabel/);
   assert.match(html, /if \(!legendBridge \|\| html\.getAttribute\('data-embed'\) === 'true'\) return false/);
   assert.doesNotMatch(svg, /data-legend-bridge-runtime|data-legend-count=|role="toolbar"/);
   assert.doesNotMatch(svg, /data-legend-kind="[^"]+"[^>]+(?:role=|aria-pressed=)/);

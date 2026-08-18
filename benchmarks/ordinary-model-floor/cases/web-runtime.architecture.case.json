@@ -13,7 +13,7 @@
     ],
     "relationships": [
       { "from": "users", "to": "cdn", "labels": ["HTTPS"] },
-      { "from": "api", "to": "cache", "labels": ["read-through", "cache read", "GET / SET", "Redis access"] },
+      { "from": "api", "to": "cache", "labels": ["read-through", "读穿", "cache read", "GET / SET", "Redis access"] },
       { "from": "api", "to": "db", "labels": ["SQL", "database query"] }
     ]
   }

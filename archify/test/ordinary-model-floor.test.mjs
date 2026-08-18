@@ -125,7 +125,7 @@ test('benchmark rejects a renderer-valid candidate that changes required technic
         { id: 'db', type: 'database' },
       ],
       relationships: [
-        { from: 'api', to: 'cache', label: 'read-through' },
+        { from: 'api', to: 'cache', label: '读穿' },
         { from: 'api', to: 'db', label: 'SQL' },
       ],
     },
@@ -206,19 +206,19 @@ test('benchmark applies the same semantic and delivery seam to workflow, sequenc
       type: 'workflow',
       example: 'agent-tool-call.workflow.json',
       nodes: [{ id: 'approval', type: 'security' }, { id: 'tool', type: 'messagebus' }],
-      relationships: [{ from: 'router', to: 'approval', label: 'needs approval?' }],
+      relationships: [{ from: 'router', to: 'approval', label: '需要审批？' }],
     },
     {
       type: 'sequence',
       example: 'cache-miss-request.sequence.json',
       nodes: [{ id: 'redis', type: 'database' }, { id: 'db', type: 'database' }],
-      relationships: [{ from: 'redis', to: 'api', label: 'miss' }],
+      relationships: [{ from: 'redis', to: 'api', label: '未命中' }],
     },
     {
       type: 'dataflow',
       example: 'product-analytics.dataflow.json',
       nodes: [{ id: 'consent', type: 'security' }, { id: 'pii', type: 'security' }],
-      relationships: [{ from: 'consent', to: 'pii', label: 'identity map' }],
+      relationships: [{ from: 'consent', to: 'pii', label: '身份映射' }],
     },
     {
       type: 'lifecycle',

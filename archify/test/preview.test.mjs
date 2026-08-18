@@ -13,6 +13,26 @@ import { startPreview } from '../bin/preview.mjs';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(here, '..');
 
+function probeSymlinkCapability() {
+  const probeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'archify-preview-symlink-capability-'));
+  const target = path.join(probeRoot, 'target');
+  const link = path.join(probeRoot, 'link');
+  try {
+    fs.writeFileSync(target, 'symlink capability probe');
+    fs.symlinkSync(target, link, 'file');
+    return false;
+  } catch (error) {
+    return `symlink-specific test skipped: this environment cannot create file symlinks (${error.code || error.name})`;
+  } finally {
+    fs.rmSync(probeRoot, { recursive: true, force: true });
+  }
+}
+
+const symlinkSkipReason = probeSymlinkCapability();
+const sigtermSkipReason = process.platform === 'win32'
+  ? 'preview SIGTERM-specific test skipped: Windows child-process signal semantics do not support the bounded-kill assertion'
+  : false;
+
 function sha256(file) {
   return createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 }
@@ -54,7 +74,7 @@ function rawRequest(url, { method = 'GET', pathname = '/', hostHeader } = {}) {
   });
 }
 
-test('preview: rejects destructive or unsupported startup targets before watching', async () => {
+test('preview: rejects destructive or unsupported startup targets before watching', { skip: symlinkSkipReason }, async () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'archify-preview-startup-'));
   const input = path.join(tmp, 'diagram.json');
   fs.writeFileSync(input, '{}');
@@ -404,7 +424,7 @@ console.log(JSON.stringify({
   assert.deepEqual(fs.readdirSync(tmp).filter((name) => name.startsWith('.archify-preview-')), []);
 });
 
-test('preview: stopping has a bounded kill path for a delivery that never exits', { timeout: 5000 }, async () => {
+test('preview: stopping has a bounded kill path for a delivery that never exits', { skip: sigtermSkipReason, timeout: 5000 }, async () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'archify-preview-hung-stop-'));
   const input = path.join(tmp, 'diagram.json');
   const output = path.join(tmp, 'diagram.html');

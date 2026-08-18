@@ -2,108 +2,108 @@
   "schema_version": 1,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Agent Tool Call Workflow",
+    "title": "Agent 工具调用工作流",
     "animation": "trace",
     "visual_preset": "signal-flow",
     "quality_profile": "showcase",
     "views": [
       {
         "id": "happy-path",
-        "label": "Request to result",
+        "label": "从请求到结果",
         "focus": ["user", "chat", "planner", "router", "approval", "tool", "external", "final"],
-        "note": "Follow the successful request from user intent to the final reply."
+        "note": "沿着从用户意图到最终回复的成功请求浏览。"
       },
       {
         "id": "safety-gate",
-        "label": "Policy and recovery",
+        "label": "策略与恢复",
         "focus": ["router", "approval", "blocked", "retry"],
-        "note": "See where risky work stops, waits for consent, or returns for revision."
+        "note": "查看风险操作在哪里停止、等待同意或返回修改。"
       },
       {
         "id": "evidence-loop",
-        "label": "Evidence and memory",
+        "label": "证据与记忆",
         "focus": ["external", "store", "trace"],
-        "note": "Isolate the durable trace and context path behind the visible answer."
+        "note": "单独查看可持久化追踪记录和可见答案背后的上下文路径。"
       }
     ],
     "output": "examples/workflow-agent-tool-call-rendered.html",
     "viewBox": [720, 900]
   },
   "lanes": [
-    { "id": "ui", "label": "User Interface" },
-    { "id": "agent", "label": "Agent Runtime" },
-    { "id": "policy", "label": "Policy Boundary" },
-    { "id": "exceptions", "label": "Exception Handling", "variant": "exception" },
-    { "id": "tools", "label": "Tool Execution" },
-    { "id": "trace", "label": "Observability" }
+    { "id": "ui", "label": "用户界面" },
+    { "id": "agent", "label": "Agent 运行时" },
+    { "id": "policy", "label": "策略边界" },
+    { "id": "exceptions", "label": "异常处理", "variant": "exception" },
+    { "id": "tools", "label": "工具执行" },
+    { "id": "trace", "label": "可观测性" }
   ],
   "phases": [
-    { "id": "intake", "label": "Intake", "fromCol": 0, "toCol": 1 },
-    { "id": "reasoning", "label": "Plan + route", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
-    { "id": "execution", "label": "Execute + report", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+    { "id": "intake", "label": "接收", "fromCol": 0, "toCol": 1 },
+    { "id": "reasoning", "label": "规划 + 路由", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "execution", "label": "执行 + 汇报", "fromCol": 4, "toCol": 5, "variant": "dashed" }
   ],
   "groups": [
-    { "id": "agent_loop", "label": "Planning loop", "lane": "agent", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
-    { "id": "tool_work", "label": "Tool work", "lane": "tools", "fromCol": 4, "toCol": 5, "variant": "dashed" },
-    { "id": "exception_path", "label": "Human or policy stop", "lane": "exceptions", "fromCol": 3, "toCol": 5, "variant": "security" }
+    { "id": "agent_loop", "label": "规划循环", "lane": "agent", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "tool_work", "label": "工具工作", "lane": "tools", "fromCol": 4, "toCol": 5, "variant": "dashed" },
+    { "id": "exception_path", "label": "人工或策略停止", "lane": "exceptions", "fromCol": 3, "toCol": 5, "variant": "security" }
   ],
   "mainPath": ["user", "chat", "planner", "router", "approval", "tool", "external", "final"],
   "nodes": [
-    { "id": "user", "lane": "ui", "col": 0, "type": "external", "label": "User", "sublabel": "asks for work" },
-    { "id": "chat", "lane": "ui", "col": 1, "type": "frontend", "label": "Chat Surface", "sublabel": "thread + files" },
-    { "id": "final", "lane": "ui", "col": 5, "type": "backend", "label": "Final Reply", "sublabel": "answer + changes" },
-    { "id": "planner", "lane": "agent", "col": 2, "type": "backend", "label": "Agent Planner", "sublabel": "plan next step", "tag": "context aware" },
-    { "id": "router", "lane": "agent", "col": 3, "type": "backend", "label": "Tool Router", "sublabel": "choose capability" },
-    { "id": "approval", "lane": "policy", "col": 3, "type": "security", "label": "Approval Gate", "sublabel": "scope + consent", "tag": "block risky ops" },
-    { "id": "blocked", "lane": "exceptions", "col": 4, "type": "security", "label": "Blocked", "sublabel": "wait or reject" },
-    { "id": "retry", "lane": "exceptions", "col": 5, "type": "messagebus", "label": "Retry Path", "sublabel": "revise request" },
-    { "id": "tool", "lane": "tools", "col": 4, "type": "messagebus", "label": "Tool Call", "sublabel": "shell / browser / MCP", "tag": "structured result" },
-    { "id": "external", "lane": "tools", "col": 5, "type": "cloud", "label": "External API", "sublabel": "network service" },
-    { "id": "store", "lane": "trace", "col": 1, "type": "database", "label": "Context Store", "sublabel": "repo + memory" },
-    { "id": "trace", "lane": "trace", "col": 4, "type": "database", "label": "Trace Log", "sublabel": "events + output" }
+    { "id": "user", "lane": "ui", "col": 0, "type": "external", "label": "用户", "sublabel": "提出工作请求" },
+    { "id": "chat", "lane": "ui", "col": 1, "type": "frontend", "label": "聊天界面", "sublabel": "线程 + 文件" },
+    { "id": "final", "lane": "ui", "col": 5, "type": "backend", "label": "最终回复", "sublabel": "答案 + 变更" },
+    { "id": "planner", "lane": "agent", "col": 2, "type": "backend", "label": "Agent 规划器", "sublabel": "规划下一步", "tag": "理解上下文" },
+    { "id": "router", "lane": "agent", "col": 3, "type": "backend", "label": "工具路由器", "sublabel": "选择能力" },
+    { "id": "approval", "lane": "policy", "col": 3, "type": "security", "label": "审批关卡", "sublabel": "范围 + 同意", "tag": "阻止风险操作" },
+    { "id": "blocked", "lane": "exceptions", "col": 4, "type": "security", "label": "已阻塞", "sublabel": "等待或拒绝" },
+    { "id": "retry", "lane": "exceptions", "col": 5, "type": "messagebus", "label": "重试路径", "sublabel": "修改请求" },
+    { "id": "tool", "lane": "tools", "col": 4, "type": "messagebus", "label": "工具调用", "sublabel": "命令行 / 浏览器 / MCP", "tag": "结构化结果" },
+    { "id": "external", "lane": "tools", "col": 5, "type": "cloud", "label": "外部 API", "sublabel": "网络服务" },
+    { "id": "store", "lane": "trace", "col": 1, "type": "database", "label": "上下文存储", "sublabel": "仓库 + 记忆" },
+    { "id": "trace", "lane": "trace", "col": 4, "type": "database", "label": "追踪日志", "sublabel": "事件 + 输出" }
   ],
   "edges": [
     { "id": "request-chat", "from": "user", "to": "chat", "variant": "default" },
-    { "id": "plan-request", "from": "chat", "to": "planner", "label": "plan", "variant": "emphasis", "fromSide": "bottom", "toSide": "top", "route": "drop", "labelSegment": 1 },
+    { "id": "plan-request", "from": "chat", "to": "planner", "label": "规划", "variant": "emphasis", "fromSide": "bottom", "toSide": "top", "route": "drop", "labelSegment": 1 },
     { "id": "planner-route", "from": "planner", "to": "router", "variant": "default" },
-    { "id": "approval-check", "from": "router", "to": "approval", "label": "needs approval?", "variant": "security", "fromSide": "bottom", "toSide": "top", "route": "drop", "labelSegment": 0, "labelDx": 34, "labelDy": 18 },
+    { "id": "approval-check", "from": "router", "to": "approval", "label": "需要审批？", "variant": "security", "fromSide": "bottom", "toSide": "top", "route": "drop", "labelSegment": 0, "labelDx": 34, "labelDy": 18 },
     { "id": "approved-tool", "from": "approval", "to": "tool", "variant": "emphasis", "fromSide": "left", "toSide": "left", "route": "return-left" },
-    { "id": "approval-denied", "from": "approval", "to": "blocked", "label": "denied", "variant": "security", "role": "error", "fromSide": "bottom", "toSide": "top", "route": "drop", "labelSegment": 1, "labelDy": 12 },
+    { "id": "approval-denied", "from": "approval", "to": "blocked", "label": "已拒绝", "variant": "security", "role": "error", "fromSide": "bottom", "toSide": "top", "route": "drop", "labelSegment": 1, "labelDy": 12 },
     { "id": "retry-request", "from": "blocked", "to": "retry", "variant": "dashed", "role": "branch" },
     { "id": "tool-external-call", "from": "tool", "to": "external", "variant": "default" },
     { "id": "external-reply", "from": "external", "to": "final", "variant": "emphasis", "role": "return", "fromSide": "right", "toSide": "right", "route": "outside-right", "width": 1.2 },
-    { "id": "record-result", "from": "external", "to": "trace", "label": "record result", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "route": "bottom-channel", "labelSegment": 1 },
-    { "id": "write-trace-memory", "from": "store", "to": "trace", "label": "trace + memory", "variant": "dashed", "labelAt": [365, 735] }
+    { "id": "record-result", "from": "external", "to": "trace", "label": "记录结果", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "route": "bottom-channel", "labelSegment": 1 },
+    { "id": "write-trace-memory", "from": "store", "to": "trace", "label": "追踪 + 记忆", "variant": "dashed", "labelAt": [365, 735] }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Renderer Rules",
+      "title": "渲染规则",
       "items": [
-        "Lanes and columns determine node placement",
-        "Edges attach to explicit node anchors",
-        "Cross-lane paths use orthogonal routing",
-        "Short adjacent links stay unlabeled"
+        "泳道与列决定节点位置",
+        "边连接到明确的节点锚点",
+        "跨泳道路由使用正交路径",
+        "相邻的短连接保持无标签"
       ]
     },
     {
       "dot": "rose",
-      "title": "Workflow Semantics",
+      "title": "工作流语义",
       "items": [
-        "Approval is a first-class policy step",
-        "Consent gates are visible in the main path",
-        "External calls stay inside the tool lane",
-        "Trace writes are separate from the hot path"
+        "审批是策略中的一等步骤",
+        "同意关卡在主路径上清晰可见",
+        "外部调用保持在工具泳道内",
+        "追踪写入与热路径分离"
       ]
     },
     {
       "dot": "emerald",
-      "title": "Why It Matters",
+      "title": "这样做的意义",
       "items": [
-        "This is closer to a diagram_type renderer",
-        "The graph can be edited without SVG surgery",
-        "Layout rules can be tested and improved",
-        "A future IR can reuse this shape directly"
+        "这更接近 diagram_type 渲染器",
+        "无需修改 SVG 就可以编辑图",
+        "布局规则可以测试并持续改进",
+        "未来的 IR 可以直接复用这种结构"
       ]
     }
   ]

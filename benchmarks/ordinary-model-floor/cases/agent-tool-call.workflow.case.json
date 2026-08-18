@@ -14,9 +14,9 @@
     ],
     "relationships": [
       { "from": "planner", "to": "router" },
-      { "from": "router", "to": "approval", "labels": ["needs approval?", "approval required?", "requires approval?", "approve?", "consent?"] },
+      { "from": "router", "to": "approval", "labels": ["needs approval?", "需要审批？", "approval required?", "requires approval?", "approve?", "consent?"] },
       { "from": "approval", "to": "tool" },
-      { "from": "approval", "to": "blocked", "labels": ["denied", "rejected"] },
+      { "from": "approval", "to": "blocked", "labels": ["denied", "已拒绝", "rejected"] },
       { "from": "tool", "to": "external" }
     ]
   }

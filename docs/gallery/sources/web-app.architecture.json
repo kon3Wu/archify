@@ -2,45 +2,45 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Sample Web App",
+    "title": "示例 Web 应用",
     "output": "web-app-rendered.html",
     "quality_profile": "showcase",
     "views": [
-      { "id": "request-path", "label": "Primary request path", "focus": ["users", "cdn", "lb", "api", "db"], "note": "Follow the primary customer request from the edge to durable state." },
-      { "id": "identity-and-cache", "label": "Identity and cache", "focus": ["auth", "api", "cache"], "note": "Isolate authentication and the read-through cache beside the request path." },
-      { "id": "async-work", "label": "Static and async work", "focus": ["cdn", "s3", "api", "queue", "worker"], "note": "See the two secondary paths without adding noise to the main request." }
+      { "id": "request-path", "label": "主要请求路径", "focus": ["users", "cdn", "lb", "api", "db"], "note": "沿着客户主请求从边缘到持久状态的路径浏览。" },
+      { "id": "identity-and-cache", "label": "身份与缓存", "focus": ["auth", "api", "cache"], "note": "单独查看请求路径旁的身份认证和读穿缓存。" },
+      { "id": "async-work", "label": "静态与异步工作", "focus": ["cdn", "s3", "api", "queue", "worker"], "note": "查看两条次要路径，同时不增加主请求的噪声。" }
     ]
   },
   "components": [
-    { "id": "users", "type": "external", "label": "Users", "sublabel": "Browser / Mobile", "pos": [40, 300], "size": [120, 60] },
-    { "id": "auth", "type": "security", "label": "Auth Provider", "sublabel": "OAuth 2.0", "pos": [40, 110], "size": [120, 64], "tag": "JWT + PKCE" },
+    { "id": "users", "type": "external", "label": "用户", "sublabel": "浏览器 / 移动端", "pos": [40, 300], "size": [120, 60] },
+    { "id": "auth", "type": "security", "label": "身份认证服务", "sublabel": "OAuth 2.0", "pos": [40, 110], "size": [120, 64], "tag": "JWT + PKCE" },
     { "id": "cdn", "type": "cloud", "label": "CloudFront", "sublabel": "CDN", "pos": [250, 300], "size": [130, 60] },
-    { "id": "lb", "type": "cloud", "label": "Load Balancer", "sublabel": "HTTPS :443", "pos": [460, 300], "size": [130, 60] },
-    { "id": "api", "type": "backend", "label": "API Server", "sublabel": "FastAPI :8000", "pos": [670, 300], "size": [130, 60] },
-    { "id": "cache", "type": "database", "label": "Redis", "sublabel": "cache :6379", "pos": [670, 150], "size": [130, 60] },
-    { "id": "db", "type": "database", "label": "PostgreSQL", "sublabel": "primary :5432", "pos": [880, 300], "size": [130, 60] },
-    { "id": "s3", "type": "cloud", "label": "S3", "sublabel": "static assets", "pos": [250, 440], "size": [130, 60], "tag": "OAI protected" },
-    { "id": "queue", "type": "messagebus", "label": "SQS", "sublabel": "job queue", "pos": [670, 440], "size": [130, 60] },
-    { "id": "worker", "type": "backend", "label": "Worker", "sublabel": "async jobs", "pos": [880, 440], "size": [130, 60] }
+    { "id": "lb", "type": "cloud", "label": "负载均衡器", "sublabel": "HTTPS :443", "pos": [460, 300], "size": [130, 60] },
+    { "id": "api", "type": "backend", "label": "API 服务器", "sublabel": "FastAPI :8000", "pos": [670, 300], "size": [130, 60] },
+    { "id": "cache", "type": "database", "label": "Redis", "sublabel": "缓存 :6379", "pos": [670, 150], "size": [130, 60] },
+    { "id": "db", "type": "database", "label": "PostgreSQL", "sublabel": "主库 :5432", "pos": [880, 300], "size": [130, 60] },
+    { "id": "s3", "type": "cloud", "label": "S3", "sublabel": "静态资源", "pos": [250, 440], "size": [130, 60], "tag": "OAI 保护" },
+    { "id": "queue", "type": "messagebus", "label": "SQS", "sublabel": "作业队列", "pos": [670, 440], "size": [130, 60] },
+    { "id": "worker", "type": "backend", "label": "工作进程", "sublabel": "异步作业", "pos": [880, 440], "size": [130, 60] }
   ],
   "boundaries": [
-    { "kind": "region", "label": "AWS Region: us-west-2", "wraps": ["cdn", "lb", "api", "cache", "db", "s3", "queue", "worker"] },
+    { "kind": "region", "label": "AWS 区域：us-west-2", "wraps": ["cdn", "lb", "api", "cache", "db", "s3", "queue", "worker"] },
     { "kind": "security-group", "label": "sg-api :443/:8000", "wraps": ["lb", "api"] }
   ],
   "connections": [
     { "id": "users-to-cdn", "from": "users", "to": "cdn", "label": "HTTPS", "variant": "emphasis" },
-    { "id": "jwt-verification", "from": "auth", "to": "api", "label": "verify JWT", "variant": "security", "fromSide": "right", "toSide": "top", "via": [[620, 142], [620, 246], [735, 246]] },
+    { "id": "jwt-verification", "from": "auth", "to": "api", "label": "校验 JWT", "variant": "security", "fromSide": "right", "toSide": "top", "via": [[620, 142], [620, 246], [735, 246]] },
     { "id": "cdn-to-lb", "from": "cdn", "to": "lb" },
-    { "id": "static-assets", "from": "cdn", "to": "s3", "label": "static", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 58 },
+    { "id": "static-assets", "from": "cdn", "to": "s3", "label": "静态资源", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 58 },
     { "id": "lb-to-api", "from": "lb", "to": "api" },
-    { "id": "cache-read-through", "from": "api", "to": "cache", "label": "read-through", "fromSide": "top", "toSide": "bottom", "labelDy": -68 },
+    { "id": "cache-read-through", "from": "api", "to": "cache", "label": "读穿", "fromSide": "top", "toSide": "bottom", "labelDy": -68 },
     { "id": "api-sql", "from": "api", "to": "db", "label": "SQL" },
-    { "id": "enqueue-job", "from": "api", "to": "queue", "label": "enqueue", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 58 },
+    { "id": "enqueue-job", "from": "api", "to": "queue", "label": "入队", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 58 },
     { "id": "queue-to-worker", "from": "queue", "to": "worker" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Edge", "items": ["CloudFront CDN fronts all traffic", "S3 serves static assets via OAI"] },
-    { "dot": "emerald", "title": "Application", "items": ["FastAPI behind an HTTPS load balancer", "Redis read-through cache", "Async work drained from SQS by a worker"] },
-    { "dot": "rose", "title": "Security", "items": ["OAuth 2.0 with JWT + PKCE", "API + LB isolated in a security group"] }
+    { "dot": "cyan", "title": "边缘", "items": ["CloudFront CDN 承接全部流量", "S3 通过 OAI 提供静态资源"] },
+    { "dot": "emerald", "title": "应用", "items": ["FastAPI 位于 HTTPS 负载均衡器之后", "Redis 读穿缓存", "工作进程从 SQS 消化异步作业"] },
+    { "dot": "rose", "title": "安全", "items": ["OAuth 2.0 配合 JWT + PKCE", "API + LB 隔离在安全组中"] }
   ]
 }

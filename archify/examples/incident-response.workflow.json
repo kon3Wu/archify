@@ -2,50 +2,50 @@
   "schema_version": 1,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Incident Response Runbook",
+    "title": "事件响应运行手册",
     "output": "examples/incident-response.html",
     "animation": "trace",
     "visual_preset": "signal-flow",
     "quality_profile": "showcase",
     "views": [
-      { "id": "detect-and-triage", "label": "Detect and establish command", "focus": ["alert", "page", "triage", "declare"], "note": "Follow the first minutes from signal to an owned incident." },
-      { "id": "mitigate-and-verify", "label": "Mitigate and prove recovery", "focus": ["triage", "contain", "recover", "verify", "close"], "note": "Keep mitigation separate from the evidence required to close." },
-      { "id": "escalate-and-communicate", "label": "Escalation and communication", "focus": ["declare", "escalate", "update", "rollback"], "note": "See who is paged, what stakeholders hear, and when rollback begins." }
+      { "id": "detect-and-triage", "label": "检测与建立指挥", "focus": ["alert", "page", "triage", "declare"], "note": "沿着从信号到有人负责的事件，浏览最初几分钟。" },
+      { "id": "mitigate-and-verify", "label": "缓解与证明恢复", "focus": ["triage", "contain", "recover", "verify", "close"], "note": "将缓解措施与关闭事件所需的证据分开。" },
+      { "id": "escalate-and-communicate", "label": "升级与沟通", "focus": ["declare", "escalate", "update", "rollback"], "note": "查看谁收到呼叫、利益相关者听到什么，以及何时开始回滚。" }
     ]
   },
   "lanes": [
-    { "id": "signals", "label": "Signals" },
-    { "id": "responders", "label": "Incident Command" },
-    { "id": "mitigation", "label": "Service Mitigation" },
-    { "id": "recovery", "label": "Recovery Evidence" },
-    { "id": "communication", "label": "Stakeholder Communication" },
-    { "id": "exceptions", "label": "Escalation + Rollback", "variant": "exception" }
+    { "id": "signals", "label": "信号" },
+    { "id": "responders", "label": "事件指挥" },
+    { "id": "mitigation", "label": "服务缓解" },
+    { "id": "recovery", "label": "恢复证据" },
+    { "id": "communication", "label": "利益相关者沟通" },
+    { "id": "exceptions", "label": "升级 + 回滚", "variant": "exception" }
   ],
   "phases": [
-    { "id": "detect", "label": "Detect", "fromCol": 0, "toCol": 1 },
-    { "id": "respond", "label": "Triage + mitigate", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
-    { "id": "recover", "label": "Verify + close", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+    { "id": "detect", "label": "检测", "fromCol": 0, "toCol": 1 },
+    { "id": "respond", "label": "分诊 + 缓解", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "recover", "label": "验证 + 关闭", "fromCol": 4, "toCol": 5, "variant": "dashed" }
   ],
   "groups": [
-    { "id": "command", "label": "Incident command", "lane": "responders", "fromCol": 1, "toCol": 3, "variant": "emphasis" },
-    { "id": "exception_actions", "label": "If impact persists", "lane": "exceptions", "fromCol": 3, "toCol": 5, "variant": "security" }
+    { "id": "command", "label": "事件指挥", "lane": "responders", "fromCol": 1, "toCol": 3, "variant": "emphasis" },
+    { "id": "exception_actions", "label": "影响持续时", "lane": "exceptions", "fromCol": 3, "toCol": 5, "variant": "security" }
   ],
   "mainPath": ["alert", "page", "triage", "contain", "recover", "verify", "close"],
   "nodes": [
-    { "id": "alert", "lane": "signals", "col": 0, "type": "messagebus", "label": "SLO Alert", "sublabel": "burn rate" },
-    { "id": "page", "lane": "responders", "col": 1, "width": 76, "type": "external", "label": "Page On-call", "sublabel": "acknowledge" },
-    { "id": "triage", "lane": "responders", "col": 2, "width": 64, "type": "backend", "label": "Triage", "sublabel": "scope impact" },
-    { "id": "declare", "lane": "responders", "col": 3, "type": "security", "label": "Declare", "sublabel": "assign commander", "tag": "SEV-1/2" },
-    { "id": "contain", "lane": "mitigation", "col": 3, "width": 72, "type": "backend", "label": "Contain", "sublabel": "stop growth" },
-    { "id": "recover", "lane": "mitigation", "col": 4, "width": 52, "type": "cloud", "label": "Recover", "sublabel": "restore" },
-    { "id": "verify", "lane": "recovery", "col": 5, "type": "database", "label": "Verify", "sublabel": "SLO + traces", "tag": "15 min stable" },
-    { "id": "close", "lane": "communication", "col": 5, "type": "external", "label": "Resolve", "sublabel": "final update" },
-    { "id": "update", "lane": "communication", "col": 3, "type": "frontend", "label": "Status Update", "sublabel": "impact + ETA" },
-    { "id": "escalate", "lane": "exceptions", "col": 3, "width": 72, "type": "security", "label": "Escalate", "sublabel": "specialist" },
-    { "id": "rollback", "lane": "exceptions", "col": 5, "type": "messagebus", "label": "Rollback", "sublabel": "last good" }
+    { "id": "alert", "lane": "signals", "col": 0, "type": "messagebus", "label": "SLO 告警", "sublabel": "燃烧速率" },
+    { "id": "page", "lane": "responders", "col": 1, "width": 76, "type": "external", "label": "呼叫值班人员", "sublabel": "确认收到" },
+    { "id": "triage", "lane": "responders", "col": 2, "width": 64, "type": "backend", "label": "分诊", "sublabel": "评估影响范围" },
+    { "id": "declare", "lane": "responders", "col": 3, "type": "security", "label": "宣布事件", "sublabel": "分配指挥员", "tag": "SEV-1/2" },
+    { "id": "contain", "lane": "mitigation", "col": 3, "width": 72, "type": "backend", "label": "遏制", "sublabel": "停止扩散" },
+    { "id": "recover", "lane": "mitigation", "col": 4, "width": 52, "type": "cloud", "label": "恢复", "sublabel": "还原服务" },
+    { "id": "verify", "lane": "recovery", "col": 5, "type": "database", "label": "验证", "sublabel": "SLO + 追踪", "tag": "稳定 15 分钟" },
+    { "id": "close", "lane": "communication", "col": 5, "type": "external", "label": "解决", "sublabel": "最终更新" },
+    { "id": "update", "lane": "communication", "col": 3, "type": "frontend", "label": "状态更新", "sublabel": "影响 + 预计时间" },
+    { "id": "escalate", "lane": "exceptions", "col": 3, "width": 72, "type": "security", "label": "升级", "sublabel": "专项人员" },
+    { "id": "rollback", "lane": "exceptions", "col": 5, "type": "messagebus", "label": "回滚", "sublabel": "最后一个良好版本" }
   ],
   "edges": [
-    { "from": "alert", "to": "page", "label": "page", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "alert", "to": "page", "label": "呼叫", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
     { "from": "page", "to": "triage", "route": "bottom-channel", "fromSide": "bottom", "toSide": "bottom" },
     { "from": "triage", "to": "contain", "variant": "emphasis", "route": "drop", "fromSide": "bottom", "toSide": "top" },
     { "from": "contain", "to": "recover", "route": "bottom-channel", "fromSide": "bottom", "toSide": "bottom" },
@@ -57,8 +57,8 @@
     { "from": "verify", "to": "rollback", "variant": "security", "role": "error", "route": "outside-right", "fromSide": "right", "toSide": "right" }
   ],
   "cards": [
-    { "dot": "rose", "title": "Ownership First", "items": ["A page is not an incident until someone owns command", "Severity and scope are explicit before mitigation spreads", "Escalation names the missing expertise"] },
-    { "dot": "emerald", "title": "Recovery Is Evidence", "items": ["Mitigation can reduce impact without proving recovery", "SLOs and traces must stay healthy for a fixed window", "The final update follows verification, not optimism"] },
-    { "dot": "cyan", "title": "Communication Contract", "items": ["Stakeholders receive impact, action, and next update time", "Rollback remains visible as a deliberate response", "Every branch has an owner and observable exit"] }
+    { "dot": "rose", "title": "先明确所有权", "items": ["在有人负责指挥前，呼叫还不算事件", "缓解措施扩散前必须明确严重程度和影响范围", "升级要指出缺少哪类专业能力"] },
+    { "dot": "emerald", "title": "恢复需要证据", "items": ["缓解可以降低影响，但不能证明已经恢复", "SLO 与追踪必须在固定窗口内保持健康", "最终更新应跟随验证，而不是乐观判断"] },
+    { "dot": "cyan", "title": "沟通契约", "items": ["利益相关者会收到影响、行动和下一次更新时间", "回滚作为有意采取的响应保持可见", "每个分支都有负责人和可观察的退出"] }
   ]
 }

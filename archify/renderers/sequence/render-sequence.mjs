@@ -307,7 +307,7 @@ function renderParticipant(participant) {
   const sub = hasSub
     ? `\n          <text data-detail="context" x="${participant.cx}" y="${layout.topY + 39}" class="t-muted" font-size="${fittedNodeFontSize(participant.sublabel, layout.participantW, participantTextFit.sublabelPreferred, participantTextFit.sublabelMinimum)}" text-anchor="middle">${esc(participant.sublabel)}</text>`
     : '';
-  const passport = { kind: participant.type, sublabel: participant.sublabel, context: 'Sequence participant' };
+  const passport = { kind: participant.type, sublabel: participant.sublabel, context: '时序参与者' };
   return `        <g ${focusNodeAttrs(participant.id, participant.label, passport)}>
           ${focusNodeTitle(participant.label, passport)}
           <rect x="${participant.x}" y="${layout.topY}" width="${layout.participantW}" height="${layout.participantH}" rx="6" class="c-mask"/>
@@ -383,11 +383,11 @@ ${messageLabel(message, start, end)}${note}
 }
 
 const LEGEND_CATALOG = [
-  { kind: 'emphasis', label: 'request', className: 'a-emphasis', marker: 'arrowhead-emphasis', strokeWidth: 1.8 },
-  { kind: 'return', label: 'return', className: 'a-default', marker: 'arrowhead', dash: '3,5' },
-  { kind: 'security', label: 'security', className: 'a-security', marker: 'arrowhead-security' },
-  { kind: 'dashed', label: 'async trace', className: 'a-dashed', marker: 'arrowhead-dashed' },
-  { kind: 'default', label: 'default message', className: 'a-default', marker: 'arrowhead' },
+  { kind: 'emphasis', label: '请求', className: 'a-emphasis', marker: 'arrowhead-emphasis', strokeWidth: 1.8 },
+  { kind: 'return', label: '返回', className: 'a-default', marker: 'arrowhead', dash: '3,5' },
+  { kind: 'security', label: '安全', className: 'a-security', marker: 'arrowhead-security' },
+  { kind: 'dashed', label: '异步追踪', className: 'a-dashed', marker: 'arrowhead-dashed' },
+  { kind: 'default', label: '默认消息', className: 'a-default', marker: 'arrowhead' },
 ].map((entry) => ({ ...entry, interactive: false, swatchWidth: 34, swatchGap: 9 }));
 
 function renderLegend() {

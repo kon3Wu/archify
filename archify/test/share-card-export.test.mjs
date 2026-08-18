@@ -37,7 +37,7 @@ test('all five renderers expose one explicit 1200x630 Share Card export', () => 
   for (const mode of Object.keys(CASES)) {
     const html = render(mode);
     assert.match(html, /data-format="share-card"/, mode);
-    assert.match(html, /Share Card[\s\S]*?1200(?:&times;|×)630 PNG/, mode);
+    assert.match(html, /分享卡片[\s\S]*?1200(?:&times;|×)630 PNG/, mode);
     assert.match(html, /var SHARE_CARD_WIDTH = 1200;/, mode);
     assert.match(html, /var SHARE_CARD_HEIGHT = 630;/, mode);
     assert.match(html, /function rasterizeShareCard\(options\)/, mode);
@@ -52,8 +52,8 @@ test('Share Card uses contain-only canonical geometry with fixed safe areas', ()
   assert.match(html, /var fit = Math\.min\(availableWidth \/ data\.width, availableHeight \/ data\.height\);/);
   assert.match(html, /ctx\.drawImage\(img, drawX, drawY, drawWidth, drawHeight\);/);
   assert.match(html, /function canvas2dOrThrow\(canvas, label\)/);
-  assert.match(html, /2D canvas context unavailable for/);
-  assert.match(html, /canvas\.toBlob unavailable for/);
+  assert.match(html, /label \+ '不可用：当前浏览器没有 Canvas 支持'/);
+  assert.match(html, /label \+ '不可用：当前浏览器不支持 Canvas 导出'/);
   assert.match(html, /img\.onload = function \(\) \{\s*try \{/);
   assert.match(html, /function rasterizeShareCard\(options\)[\s\S]*?if \(!options\.variant\) return renderShareCard\(\);/);
   assert.match(html, /function renderShareCard\(options\)[\s\S]*?serializeSvg\(sourceScale, \{ routeSnapshot: routeSnapshot, reachSnapshot: reachSnapshot \}\)/);
@@ -75,14 +75,14 @@ test('Share Card is a canonical PNG with exact receipt dimensions and filename',
 test('Copy Share Card reuses one canonical card blob and writes only PNG to the clipboard', () => {
   const html = render('architecture');
   assert.match(html, /data-action="copy-share-card"/);
-  assert.match(html, /Copy Share Card[\s\S]*?<small class="hint">PNG to clipboard<\/small>/);
+  assert.match(html, /复制分享卡片[\s\S]*?<small class="hint">复制 PNG 到剪贴板<\/small>/);
   assert.match(html, /function runCopyShareCard\(\)[\s\S]*?var blobPromise = rasterizeShareCard\(\);/);
   const copyBlock = html.match(/function runCopyShareCard\(\) \{[\s\S]*?\n      \}/)?.[0] || '';
   assert.equal((copyBlock.match(/rasterizeShareCard\(\)/g) || []).length, 1);
   assert.match(copyBlock, /writePngToClipboard\(blobPromise\)/);
   assert.match(html, /new ClipboardItem\(\{ 'image\/png': blobPromise \}\)/);
   assert.match(copyBlock, /recordExportReceipt\('share-card', blob, true, \{ width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT \}\)/);
-  assert.match(copyBlock, /toast\('Copied Share Card'\)/);
+  assert.match(copyBlock, /toast\('已复制分享卡片'\)/);
   assert.match(html, /copyShareCard: runCopyShareCard/);
 });
 
@@ -90,7 +90,7 @@ test('Copy Share Card fails closed when image clipboard writing is unavailable',
   const html = render('workflow');
   assert.match(html, /it\.dataset\.action === 'copy-share-card'[\s\S]*?!canCopyImage\(\)/);
   assert.match(html, /function runCopyShareCard\(\)[\s\S]*?if \(!canCopyImage\(\)\)/);
-  assert.match(html, /Clipboard image write not supported by this browser/);
+  assert.match(html, /当前浏览器不支持写入剪贴板图像/);
   assert.match(html, /button\[data-action="copy-share-card"\]/);
   assert.match(html, /document\.documentElement\.removeAttribute\('data-last-export-format'\)/);
   assert.match(html, /data-last-export-error-format', 'share-card'/);
@@ -109,7 +109,7 @@ test('Share Card stays viewer-only and reuses export cleanup instead of source s
   assert.match(html, /@media print[\s\S]*?\.toolbar/);
   assert.match(html, /function rasterizeShareCard\(options\)[\s\S]*?if \(!options\.variant\) return renderShareCard\(\);/);
   assert.match(html, /function renderShareCard\(options\)[\s\S]*?serializeSvg\(sourceScale, \{ routeSnapshot: routeSnapshot, reachSnapshot: reachSnapshot \}\)/);
-  assert.match(html, /if \(!data\.canonicalStateClean\) return Promise\.reject\(new Error\('Share Card export could not remove temporary viewer state'\)\);/);
+  assert.match(html, /if \(!data\.canonicalStateClean\) return Promise\.reject\(new Error\('分享卡片导出无法移除临时查看器状态'\)\);/);
   assert.match(html, /canonicalStateClean/);
   assert.doesNotMatch(svgBlock(html), /data-last-export-|data-format="share-card"/);
 });

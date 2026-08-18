@@ -110,8 +110,8 @@ test('change navigator order is exact-ID based, complete, unique, and stable', (
   assert.deepEqual(rows.map((row) => row.key), [
     'component:fraud',
     'relationship:fraud-check',
-    'boundary:region:Production region',
-    'boundary:security-group:Checkout trust zone',
+    'boundary:region:生产区域',
+    'boundary:security-group:结算信任区',
     'component:checkout',
     'relationship:authorize-payment',
     'relationship:persist-order',
@@ -207,7 +207,7 @@ test('same-label node id changes remain one removal plus one addition', () => {
   const receipt = compareArchitecture(base, head);
   assert.equal(receipt.changes.components.find((change) => change.id === 'cache').status, 'removed');
   assert.equal(receipt.changes.components.find((change) => change.id === 'session-store').status, 'added');
-  assert.equal(receipt.changes.components.filter((change) => change.headLabel === 'Session Cache' || change.baseLabel === 'Session Cache').length, 2);
+  assert.equal(receipt.changes.components.filter((change) => change.headLabel === '会话缓存' || change.baseLabel === '会话缓存').length, 2);
 });
 
 test('repository mismatch fails and verified matching revisions remain evidence-bounded', () => {
@@ -242,25 +242,25 @@ test('compare CLI writes a deterministic three-state artifact and complete sidec
   assert.match(firstHtml, /data-node-id="cache"[^>]+data-delta-state="removed"/);
   assert.match(firstHtml, /data-node-id="fraud"[^>]+data-delta-state="added"/);
   assert.match(firstHtml, /data-node-id="queue"[^>]+data-delta-state="moved-from"/);
-  assert.match(firstHtml, /aria-label="Authored change review"/);
+  assert.match(firstHtml, /aria-label="作者变更评审"/);
   assert.equal((firstHtml.match(/class="change-row"/g) || []).length, 11);
   assert.match(firstHtml, /data-change-key="component:fraud"/);
   assert.match(firstHtml, /data-change-key="relationship:authorize-payment"/);
-  assert.match(firstHtml, /data-change-key="boundary:region:Production region"/);
+  assert.match(firstHtml, /data-change-key="boundary:region:生产区域"/);
   assert.match(firstHtml, /data-change-target-signature="[^"]+"/);
-  assert.match(firstHtml, /data-delta-boundary-key="region:Production region"/);
+  assert.match(firstHtml, /data-delta-boundary-key="region:生产区域"/);
   assert.equal((firstHtml.match(/class="snapshot-frame"/g) || []).length, 2);
-  assert.match(firstHtml, /title="Before architecture explorer"/);
-  assert.match(firstHtml, /title="After architecture explorer"/);
-  assert.match(firstHtml, /id="export-svg"[^>]*>Export SVG</);
-  assert.match(firstHtml, /id="share-card"[^>]*>Share Card</);
+  assert.match(firstHtml, /title="变更前架构浏览器"/);
+  assert.match(firstHtml, /title="变更后架构浏览器"/);
+  assert.match(firstHtml, /id="export-svg"[^>]*>导出 SVG</);
+  assert.match(firstHtml, /id="share-card"[^>]*>分享卡片</);
   assert.match(firstHtml, /window\.Archify\.deltaExport = \{ canonicalSvg: canonicalDeltaSvg, shareCard/);
   assert.match(firstHtml, /canvas\.width = 1200;[\s\S]*canvas\.height = 630;/);
   assert.match(firstHtml, /structural-frame.*stroke:var\(--delta\)!important/);
   assert.match(firstHtml, /structural-frame.*data-delta-state="changed".*stroke-dasharray:2 3!important/);
   assert.match(firstHtml, /data-delta-boundary-state="added".*fill:#34d399!important/);
   assert.match(firstHtml, /delta-boundary-marker\[data-delta-state\]\{color:var\(--delta\)\}/);
-  assert.match(firstHtml, /No authored architecture changes ·.*movementSummary/);
+  assert.match(firstHtml, /没有作者架构变更 ·.*movementSummary/);
   assert.match(firstHtml, /font-family:"JetBrains Mono",ui-monospace/);
   assert.doesNotMatch(firstHtml, /font-family:Inter|body\{min-width:1080px/);
   assert.match(firstHtml, /@media\(max-width:760px\)/);

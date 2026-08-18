@@ -36,9 +36,9 @@ test('all typed renderers inherit one viewer-only Route Probe', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
     assert.match(html, /id="route-probe" hidden role="region" aria-labelledby="route-probe-title"/, mode);
-    assert.match(html, /id="btn-route-probe"[^>]+aria-label="Trace a directed route"[^>]+aria-pressed="false"[^>]+aria-controls="route-probe"/, mode);
+    assert.match(html, /id="btn-route-probe"[^>]+aria-label="追踪有向路径"[^>]+aria-pressed="false"[^>]+aria-controls="route-probe"/, mode);
     assert.match(html, /Archify\.routeProbe = \(function \(\)/, mode);
-    assert.match(html, /Route Probe — shortest directed path over compiled semantics/, mode);
+    assert.match(html, /路径探针/ , mode);
     assert.equal((html.match(/<svg\b/g) || []).length, 1, `${mode} keeps one static canonical SVG`);
     assert.doesNotMatch(canonicalSvg(html), /data-route-|route-probe-flow/, mode);
   }
@@ -71,20 +71,20 @@ test('Route Probe turns a two-node question into a readable route receipt and st
   assert.match(html, /#route=' \+ encodeURIComponent\(startId\) \+ '~' \+ encodeURIComponent\(endId\)/);
   assert.match(html, /new URLSearchParams\(location\.hash\.replace/);
   assert.match(html, /Archify\.view\.reveal\(result\.nodes, \{ includeNeighbors: false, reason: 'route' \}\)/);
-  assert.match(html, /shortest authored route/);
+  assert.match(html, /renderPath\(result\.nodes, \{ interactive: true \}\)/);
 });
 
 test('Route Probe hands large-diagram endpoint selection to a reachability-aware Finder', () => {
   const html = render('dataflow', CASES.dataflow);
-  assert.match(html, /id="route-probe-find"[^>]+aria-label="Find a route start"[^>]+data-node-finder-trigger/);
+  assert.match(html, /id="route-probe-find"[^>]+aria-label="查找路径起点"[^>]+data-node-finder-trigger/);
   assert.match(html, /function hopDistancesFrom\(source\)/);
   assert.match(html, /kind: 'route-source'/);
   assert.match(html, /outgoing\[id\] && outgoing\[id\]\.length/);
   assert.match(html, /kind: 'route-target'/);
   assert.match(html, /Object\.keys\(distances\)\.filter/);
-  assert.match(html, /targetBadges\[id\] = distances\[id\] \+ ' hop'/);
+  assert.match(html, /targetBadges\[id\] = distances\[id\] \+ ' 跳'/);
   assert.match(html, /Archify\.finder\.open\(\{ context: context \}\)/);
-  assert.match(html, /findBtn\.textContent = 'Find target'/);
+  assert.match(html, /findBtn\.textContent = '查找终点'/);
   assert.match(html, /panel\.setAttribute\('data-finder-open', 'true'\)/);
   assert.match(html, /\.route-probe\[data-finder-open="true"\]/);
 });

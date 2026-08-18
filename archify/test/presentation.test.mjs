@@ -35,7 +35,7 @@ function svg(html) {
 test('all typed renderers ship the same presentation stage contract', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
-    assert.match(html, /id="btn-present"[^>]+aria-label="Enter presentation stage"[^>]+aria-pressed="false"/, mode);
+    assert.match(html, /id="btn-present"[^>]+aria-label="进入演示舞台"[^>]+aria-pressed="false"/, mode);
     assert.match(html, /Archify\.presentation = \(function \(\)/, mode);
     assert.match(html, /enter: function \(\) \{ return setActive\(true\); \}/, mode);
     assert.match(html, /exit: function \(\) \{ return setActive\(false\); \}/, mode);
@@ -65,7 +65,7 @@ test('presentation keyboard behavior exits in layers and remains accessible', ()
   assert.match(html, /e\.key === 'Escape' && Archify\.focus\.active\(\)/);
   assert.match(html, /e\.key === 'Escape' && Archify\.presentation\.active\(\)/);
   assert.match(html, /btn\.setAttribute\('aria-pressed', next \? 'true' : 'false'\)/);
-  assert.match(html, /Exit presentation stage \(F or Escape\)/);
+  assert.match(html, /退出演示舞台（F 或 Esc）/);
 });
 
 process.on('exit', () => fs.rmSync(tmp, { recursive: true, force: true }));

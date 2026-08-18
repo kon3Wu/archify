@@ -37,8 +37,8 @@ test('all five renderers inherit one viewer-only Story Moment Link control', () 
   for (const [mode, example] of Object.entries(CASES)) {
     const { result, html } = render(mode, example);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(html, /id="guided-view-beat-link"[^>]+aria-label="Select a Story Beat to copy its exact link"[^>]+disabled/);
-    assert.match(html, /id="guided-view-beat-link-label">Copy moment<\/span>/);
+    assert.match(html, /id="guided-view-beat-link"[^>]+aria-label="选择故事节拍以复制精确链接"[^>]+disabled/);
+    assert.match(html, /id="guided-view-beat-link-label">复制节拍<\/span>/);
     assert.doesNotMatch(canonicalSvg(html), /data-story-moment|guided-view-beat-link|#view=/);
   }
 });
@@ -69,8 +69,8 @@ test('copy feedback, one-shot playback, and reduced motion preserve the requeste
   assert.match(template, /navigator\.clipboard && typeof navigator\.clipboard\.writeText === 'function'/);
   assert.match(template, /navigator\.clipboard\.writeText\(value\)/);
   assert.match(template, /document\.execCommand\('copy'\)/);
-  assert.match(template, /beatLinkLabel\.textContent = copied \? 'Copied' : 'Copy failed'/);
-  assert.match(template, /Moment link copied/);
+  assert.match(template, /beatLinkLabel\.textContent = copied \? '已复制' : '复制失败'/);
+  assert.match(template, /已复制节拍链接/);
   assert.match(template, /function hashBeatMatchesCurrent\(\)/);
   assert.match(template, /if \(!storyAutomaticPlaybackAllowed\(\)\)[\s\S]*hashBeatMatchesCurrent\(\)[\s\S]*setAutoplayState\('reduced-motion'\)/);
   assert.match(template, /storyPlaybackScope = 'chapter'/);
@@ -84,7 +84,7 @@ test('the control keeps stable desktop/mobile geometry and existing viewer bound
   assert.match(template, /html\[data-embed="true"\][\s\S]*\.guided-views \{ display: none !important; \}/);
   assert.match(template, /html\[data-embed="true"\]\[data-share-moment="true"\] \.share-chapter-cue:not\(\[hidden\]\)/);
   assert.match(template, /pinnedMode = !shareMode && embedMode && hashBeatMatchesCurrent\(\)/);
-  assert.match(template, /pinned: 'Pinned'/);
+  assert.match(template, /pinned: '已固定'/);
   assert.match(template, /@media print[\s\S]*\.guided-views/);
   assert.match(template, /syncStoryControlsDisabled\(\)[\s\S]*beatLink\.disabled =/);
   assert.match(template, /clone\.querySelectorAll\('\[data-story-overlay\], \[data-story-carrier-overlay\]'\)/);

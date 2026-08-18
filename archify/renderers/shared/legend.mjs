@@ -199,7 +199,7 @@ export function renderLegend({ entries, layout, renderSwatch }) {
   const rootAttributes = hasInteractiveEntries ? ' data-legend data-legend-bridge' : ' data-legend';
   const parts = [
     `        <g${rootAttributes}>`,
-    `          <text x="${layout.x}" y="${measured.titleY}" class="t-primary" font-size="12" font-weight="650">Legend</text>`,
+    `          <text x="${layout.x}" y="${measured.titleY}" class="t-primary" font-size="12" font-weight="650">图例</text>`,
   ];
 
   for (const entry of measured.entries) {

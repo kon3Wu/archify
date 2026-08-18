@@ -4,6 +4,11 @@ All notable changes are documented here. Format loosely follows [Keep a Changelo
 
 ## [Unreleased]
 
+## [2.16.0] — 2026-08-18
+
+### Changed
+- **Chinese generated artifacts.** The canonical examples, six typed renderers, SVG accessibility text, automatic legends, and standalone Viewer now form a Chinese-only reader-facing edition. Technical identifiers, protocols, API paths, commands, formal product terms, and stable IDs remain unchanged; generated HTML uses `lang="zh-CN"` and does not expose locale switching.
+
 ## [2.15.0] — 2026-08-18
 
 ### Added

@@ -63,18 +63,18 @@ test('all typed renderers expose named, stable relationships without changing ge
 test('relationship lens groups incoming, outgoing, and self-loop paths and follows neighbors', () => {
   const html = render('architecture', CASES.architecture.example);
   assert.match(html, /id="focus-chip" hidden role="region" aria-labelledby="relationship-lens-title"/);
-  assert.match(html, /id="relationship-lens-list" aria-label="Connected relationships"/);
+  assert.match(html, /id="relationship-lens-list" aria-label="相连关系"/);
   assert.match(html, /function relationshipsFor\(id, byId\)/);
   assert.match(html, /direction = from === id && to === id \? 'loop' : \(from === id \? 'out' : 'in'\)/);
-  assert.match(html, /\{ id: 'out', label: 'Outgoing' \}/);
-  assert.match(html, /\{ id: 'in', label: 'Incoming' \}/);
+  assert.match(html, /\{ id: 'out', label: '出向' \}/);
+  assert.match(html, /\{ id: 'in', label: '入向' \}/);
   assert.match(html, /data-relationship-target/);
   assert.match(html, /data-relationship-key/);
   assert.match(html, /data-relationship-from/);
   assert.match(html, /data-relationship-to/);
   assert.match(html, /set\(id, \{ toggle: false \}\)/);
   assert.match(html, /Archify\.view\.reveal\(\[id\], \{ includeNeighbors: true, reason: 'relationship' \}\)/);
-  assert.doesNotMatch(svg(html), /relationship-lens|Connected relationships/);
+  assert.doesNotMatch(svg(html), /relationship-lens|相连关系/);
 });
 
 test('relationship preview precisely links pointer and keyboard rows to an edge and its endpoints', () => {

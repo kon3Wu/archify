@@ -70,13 +70,13 @@ const layout = {
 };
 
 const LEGEND_CATALOG = [
-  ['frontend', 'Frontend'],
-  ['backend', 'Backend'],
-  ['database', 'Database'],
-  ['cloud', 'Cloud'],
-  ['security', 'Security'],
-  ['messagebus', 'Message bus'],
-  ['external', 'External'],
+  ['frontend', '前端'],
+  ['backend', '后端'],
+  ['database', '数据库'],
+  ['cloud', '云服务'],
+  ['security', '安全'],
+  ['messagebus', '消息总线'],
+  ['external', '外部系统'],
 ].map(([kind, label]) => ({ kind, label }));
 
 // ---- Measure components from free coordinates --------------------------------
@@ -127,7 +127,7 @@ function componentContext(component) {
     .filter((boundary) => asArray(boundary.wraps).includes(component.id))
     .sort((a, b) => (b.width * b.height) - (a.width * a.height))
     .map((boundary) => boundary.label);
-  return scopes.length ? scopes.join(' › ') : 'Architecture component';
+  return scopes.length ? scopes.join(' › ') : '架构组件';
 }
 
 const architectureLegendEntries = resolveLegend(

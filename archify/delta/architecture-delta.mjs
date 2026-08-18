@@ -642,24 +642,50 @@ function expectedReviewTargetSignature(row) {
 
 const total = (summary, key) => summary.components[key] + summary.connections[key] + summary.boundaries[key];
 
+const DELTA_READER_COPY = Object.freeze({
+  proofRevision: '版本固定输入',
+  proofAuthored: '作者快照',
+  component: '组件',
+  relationship: '关系',
+  boundary: '边界',
+  semantic: '语义',
+  evidence: '证据',
+  geometry: '几何',
+  topology: '拓扑',
+  scope: '范围',
+  identity: '标识',
+});
+
+function deltaReaderKind(kindKey) {
+  return DELTA_READER_COPY[kindKey] || kindKey;
+}
+
+function deltaReaderClassifications(classifications) {
+  return classifications.map((classification) => DELTA_READER_COPY[classification] || classification).join('、');
+}
+
+function deltaReaderFields(fields) {
+  return fields.length ? fields.join('、') : DELTA_READER_COPY.identity;
+}
+
 export function renderArchitectureDeltaHtml({ receipt, baseSvg, deltaSvg, headSvg, baseHtml = '', headHtml = '', artifactCss }) {
   const rows = architectureDeltaChangeRows(receipt);
   const changed = total(receipt.summary, 'changed');
-  const proof = receipt.proofLevel === 'revision-pinned' ? 'REVISION-PINNED INPUTS' : 'AUTHORED SNAPSHOTS';
+  const proof = receipt.proofLevel === 'revision-pinned' ? DELTA_READER_COPY.proofRevision : DELTA_READER_COPY.proofAuthored;
   const rowHtml = rows.length ? rows.map((row, index) => {
     const label = row.headLabel || row.baseLabel || row.head?.label || row.base?.label || row.label || row.id;
     const targetSignature = expectedReviewTargetSignature(row);
-    return `<li data-change-status="${esc(row.status)}"><button class="change-row" type="button" data-change-index="${index}" data-change-key="${esc(row.key)}" data-change-kind="${esc(row.kindKey)}" data-change-id="${esc(row.id)}" data-change-label="${esc(label)}" data-change-status="${esc(row.status)}" data-change-classifications="${esc(row.classifications.join(', '))}" data-change-target-signature="${esc(targetSignature)}"><span class="token">${esc(markerFor(row.status) || '~')}</span><span>${esc(row.kind)}</span><strong>${esc(label)}</strong><code>${esc(row.id)}</code><span>${esc(row.classifications.join(', '))}</span><span>${esc(row.changedFields.join(', ') || 'identity')}</span></button></li>`;
-  }).join('\n') : '<li class="empty">No authored architecture changes.</li>';
+    return `<li data-change-status="${esc(row.status)}"><button class="change-row" type="button" data-change-index="${index}" data-change-key="${esc(row.key)}" data-change-kind="${esc(row.kindKey)}" data-change-id="${esc(row.id)}" data-change-label="${esc(label)}" data-change-status="${esc(row.status)}" data-change-classifications="${esc(row.classifications.join(', '))}" data-change-target-signature="${esc(targetSignature)}"><span class="token">${esc(markerFor(row.status) || '~')}</span><span>${esc(deltaReaderKind(row.kindKey))}</span><strong>${esc(label)}</strong><code>${esc(row.id)}</code><span>${esc(deltaReaderClassifications(row.classifications))}</span><span>${esc(deltaReaderFields(row.changedFields))}</span></button></li>`;
+  }).join('\n') : '<li class="empty">没有作者变更。</li>';
   const baseView = baseHtml
-    ? `<iframe class="snapshot-frame" title="Before architecture explorer" srcdoc="${esc(baseHtml)}"></iframe>`
+    ? `<iframe class="snapshot-frame" title="变更前架构浏览器" srcdoc="${esc(baseHtml)}"></iframe>`
     : baseSvg;
   const headView = headHtml
-    ? `<iframe class="snapshot-frame" title="After architecture explorer" srcdoc="${esc(headHtml)}"></iframe>`
+    ? `<iframe class="snapshot-frame" title="变更后架构浏览器" srcdoc="${esc(headHtml)}"></iframe>`
     : headSvg;
   const html = `<!doctype html>
-<html lang="en" data-theme="dark" data-preset="${esc(receipt.view.visualPreset)}">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(receipt.head.title)} Architecture Delta</title>
+<html lang="zh-CN" data-theme="dark" data-preset="${esc(receipt.view.visualPreset)}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(receipt.head.title)} 架构变更对比</title>
 <style>
 ${artifactCss}
 :root{color-scheme:dark;--d-add:#34d399;--d-remove:#fb7185;--d-change:#fbbf24;--d-move:#7dd3fc;--d-focus:#7dd3fc;--d-ink:#e6edf5;--d-muted:#8aa0b5;--d-line:#25384a}
@@ -673,15 +699,16 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
 @media(max-width:760px){.proof-page{width:100%;padding:12px}.proof-head{grid-template-columns:1fr;gap:14px;align-items:start}.proof-head h1{font-size:32px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}.metric{min-width:0}.proof-tools{align-items:stretch;flex-wrap:wrap;gap:8px}.view-switch{display:flex;flex:1 1 100%}.view-switch button{flex:1;padding-inline:8px}.legend{flex-wrap:wrap;gap:8px}.proof-tools>div:last-child{margin-left:auto}.review-strip{grid-template-columns:auto auto auto auto}.review-status{grid-column:1/-1;padding:4px 2px 0}.canvas{min-height:0;padding:6px;overflow:auto}.canvas svg{min-width:720px;max-height:none}.snapshot-frame{min-width:720px}.changes{overflow-x:auto}.change-row{min-width:820px}.proof-foot{flex-direction:column;gap:4px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.canvas[data-delta-review-active] [data-delta-review-current]{transition:none!important}}@media print{body{min-width:0;background:#fff;color:#111}.proof-page{width:100%;padding:0}.proof-tools,.review-strip,details{display:none!important}.canvas{display:none!important}.canvas[data-view="delta"]{display:block!important;border:0}.canvas[data-delta-review-active]{--review-same-opacity:1;--review-change-opacity:1}.canvas[data-delta-review-active] [data-delta-review-current]{opacity:1!important;transition:none!important}.proof-foot{color:#444}}
 </style></head>
-<body><main class="proof-page"><header class="proof-head"><div><p class="eyebrow">ARCHITECTURE DELTA · ${proof}</p><h1>See what changed<br>before you merge.</h1><p class="subtitle">${esc(receipt.base.title)} → ${esc(receipt.head.title)}</p></div><div class="metrics"><div class="metric add"><strong>${total(receipt.summary, 'added')}</strong><span>ADDED</span></div><div class="metric remove"><strong>${total(receipt.summary, 'removed')}</strong><span>REMOVED</span></div><div class="metric change"><strong>${changed}</strong><span>CHANGED</span></div></div></header>
-<div class="proof-tools"><div class="view-switch" role="tablist" aria-label="Architecture snapshot"><button role="tab" data-target="base" aria-selected="false">Before</button><button role="tab" data-target="delta" aria-selected="true">Delta</button><button role="tab" data-target="head" aria-selected="false">After</button></div><div class="legend"><span class="add"><i></i>+ ADD</span><span class="remove"><i></i>− DEL</span><span class="change"><i></i>~ MOD</span><span class="move"><i></i>↔ MOVE</span></div><div><button class="utility" id="export-svg" type="button">Export SVG</button> <button class="utility" id="share-card" type="button">Share Card</button> <button class="utility" id="preset" type="button">Preset</button> <button class="utility" id="theme" type="button">Theme</button></div></div>
-<nav class="review-strip" aria-label="Authored change review"><button class="review-step" id="review-overview" type="button" disabled>Overview</button><button class="review-step" id="review-previous" type="button" aria-label="Previous authored change" disabled>←</button><button class="review-step" id="review-play" type="button" aria-pressed="false"${rows.length ? '' : ' disabled'}>Review</button><button class="review-step" id="review-next" type="button" aria-label="Next authored change" disabled>→</button><div class="review-status" id="review-status" role="status" aria-live="polite">Overview · ${rows.length} authored changes</div></nav>
+<body><main class="proof-page"><header class="proof-head"><div><p class="eyebrow">架构变更对比 · ${proof}</p><h1>查看合并前的<br>变更内容</h1><p class="subtitle">${esc(receipt.base.title)} → ${esc(receipt.head.title)}</p></div><div class="metrics"><div class="metric add"><strong>${total(receipt.summary, 'added')}</strong><span>新增</span></div><div class="metric remove"><strong>${total(receipt.summary, 'removed')}</strong><span>删除</span></div><div class="metric change"><strong>${changed}</strong><span>修改</span></div></div></header>
+<div class="proof-tools"><div class="view-switch" role="tablist" aria-label="架构快照"><button role="tab" data-target="base" aria-selected="false">之前</button><button role="tab" data-target="delta" aria-selected="true">变更</button><button role="tab" data-target="head" aria-selected="false">之后</button></div><div class="legend"><span class="add"><i></i>+ 新增</span><span class="remove"><i></i>− 删除</span><span class="change"><i></i>~ 修改</span><span class="move"><i></i>↔ 移动</span></div><div><button class="utility" id="export-svg" type="button">导出 SVG</button> <button class="utility" id="share-card" type="button">分享卡片</button> <button class="utility" id="preset" type="button">样式</button> <button class="utility" id="theme" type="button">主题</button></div></div>
+<nav class="review-strip" aria-label="作者变更评审"><button class="review-step" id="review-overview" type="button" disabled>概览</button><button class="review-step" id="review-previous" type="button" aria-label="上一个作者变更" disabled>←</button><button class="review-step" id="review-play" type="button" aria-pressed="false"${rows.length ? '' : ' disabled'}>评审</button><button class="review-step" id="review-next" type="button" aria-label="下一个作者变更" disabled>→</button><div class="review-status" id="review-status" role="status" aria-live="polite">概览 · ${rows.length} 项作者变更</div></nav>
 <section class="canvas" data-view="base" hidden>${baseView}</section><section class="canvas" data-view="delta">${deltaSvg}</section><section class="canvas" data-view="head" hidden>${headView}</section>
-<details${rows.length <= 10 ? ' open' : ''}><summary>Exact authored changes · ${rows.length}</summary><ul class="changes">${rowHtml}</ul></details>
-<footer class="proof-foot"><span>Stable IDs only · completeness: complete · ${proof}</span><span>Authored IR only · no risk or mergeability inference</span></footer></main>
+<details${rows.length <= 10 ? ' open' : ''}><summary>精确作者变更 · ${rows.length}</summary><ul class="changes">${rowHtml}</ul></details>
+<footer class="proof-foot"><span>仅稳定 ID · 完整性：完整 · ${proof}</span><span>仅作者 IR · 不推断风险或可合并性</span></footer></main>
 <script id="archify-compare-receipt" type="application/json">${safeJson(receipt)}</script>
 <script>(()=>{
   const REVIEW_DWELL_MS = 1400;
+  const DELTA_READER_COPY = ${safeJson(DELTA_READER_COPY)};
   const tabs = [...document.querySelectorAll('[role="tab"]')];
   const views = [...document.querySelectorAll('[data-view]')];
   const deltaCanvas = document.querySelector('[data-view="delta"]');
@@ -712,7 +739,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     playbackTimer = 0;
     playing = false;
     playButton.setAttribute('aria-pressed', 'false');
-    playButton.textContent = activeIndex === rowButtons.length - 1 && rowButtons.length ? 'Replay' : 'Review';
+    playButton.textContent = activeIndex === rowButtons.length - 1 && rowButtons.length ? '重播' : '评审';
     status.setAttribute('aria-live', 'polite');
   }
 
@@ -729,7 +756,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     });
     [overviewButton, previousButton, playButton, nextButton].forEach((button) => { button.disabled = true; });
     status.dataset.state = 'unavailable';
-    status.textContent = 'Review unavailable · compare identity mismatch';
+    status.textContent = '评审不可用 · 对比身份不一致';
   }
 
   function receiptRows(receipt) {
@@ -833,8 +860,9 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     });
     activeIndex = index;
     updateControls();
-    const kind = row.dataset.changeKind.charAt(0).toUpperCase() + row.dataset.changeKind.slice(1);
-    status.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(rowButtons.length).padStart(2, '0') + ' · ' + kind + ' · ' + row.dataset.changeLabel + ' [' + row.dataset.changeId + '] · ' + row.dataset.changeClassifications;
+    const kind = deltaReaderKind(row.dataset.changeKind);
+    const classifications = row.dataset.changeClassifications.split(', ').map((value) => DELTA_READER_COPY[value] || value).join('、');
+    status.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(rowButtons.length).padStart(2, '0') + ' · ' + kind + ' · ' + row.dataset.changeLabel + ' [' + row.dataset.changeId + '] · ' + classifications;
     if (fromPlayback) status.setAttribute('aria-live', 'off');
     return true;
   }
@@ -851,7 +879,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     });
     show('delta');
     status.removeAttribute('data-state');
-    status.textContent = 'Overview · ' + rowButtons.length + ' authored changes';
+    status.textContent = '概览 · ' + rowButtons.length + ' 项作者变更';
     updateControls();
   }
 
@@ -875,7 +903,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     if (reducedMotion.matches || rowButtons.length < 2) return;
     playing = true;
     const token = ++playbackToken;
-    playButton.textContent = 'Pause';
+    playButton.textContent = '暂停';
     playButton.setAttribute('aria-pressed', 'true');
     status.setAttribute('aria-live', 'off');
     schedulePlayback(token);
@@ -883,7 +911,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
 
   function canonicalDeltaSvg() {
     const source = deltaCanvas?.querySelector(':scope > svg');
-    if (!source) throw new Error('Canonical Delta SVG is unavailable.');
+    if (!source) throw new Error('架构变更对比 SVG 不可用。');
     const clone = source.cloneNode(true);
     clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     clone.removeAttribute('style');
@@ -947,7 +975,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
       const url = URL.createObjectURL(blob);
       const image = new Image();
       image.onload = () => { URL.revokeObjectURL(url); resolve(image); };
-      image.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not rasterize canonical Delta SVG.')); };
+      image.onerror = () => { URL.revokeObjectURL(url); reject(new Error('无法栅格化架构变更对比 SVG。')); };
       image.src = url;
     });
   }
@@ -955,7 +983,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
   function pngBlob(canvas) {
     return new Promise((resolve, reject) => canvas.toBlob((blob) => {
       if (blob) resolve(blob);
-      else reject(new Error('Canvas returned no Share Card PNG.'));
+      else reject(new Error('画布没有返回分享卡片 PNG。'));
     }, 'image/png'));
   }
 
@@ -965,7 +993,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     canvas.width = 1200;
     canvas.height = 630;
     const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('2D canvas context unavailable for Architecture Delta Share Card.');
+    if (!ctx) throw new Error('架构变更分享卡片无法使用 2D Canvas 上下文。');
     ctx.fillStyle = '#071019';
     ctx.fillRect(0, 0, 1200, 630);
     ctx.fillStyle = '#0b1722';
@@ -975,16 +1003,16 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     ctx.strokeRect(34, 28, 1132, 574);
     ctx.font = '700 18px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.fillStyle = '#7dd3fc';
-    ctx.fillText('ARCHITECTURE DELTA', 66, 68);
+    ctx.fillText('架构变更对比', 66, 68);
     ctx.font = '700 34px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.fillStyle = '#e6edf5';
-    const title = String(receipt.head.title || 'Architecture').slice(0, 46) + ' Architecture Delta';
+    const title = String(receipt.head.title || '架构图').slice(0, 46) + ' 架构变更对比';
     ctx.fillText(title.slice(0, 58), 66, 112);
     ctx.font = '700 17px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.fillStyle = '#8aa0b5';
-    const componentLine = 'COMPONENTS  +' + receipt.summary.components.added + '  ~' + receipt.summary.components.changed + '  −' + receipt.summary.components.removed;
-    const connectionLine = 'CONNECTIONS  +' + receipt.summary.connections.added + '  ~' + receipt.summary.connections.changed + '  −' + receipt.summary.connections.removed;
-    const boundaryLine = 'BOUNDARY SCOPE  +' + receipt.summary.boundaries.added + '  ~' + receipt.summary.boundaries.changed + '  −' + receipt.summary.boundaries.removed;
+    const componentLine = '组件  +' + receipt.summary.components.added + '  ~' + receipt.summary.components.changed + '  −' + receipt.summary.components.removed;
+    const connectionLine = '关系  +' + receipt.summary.connections.added + '  ~' + receipt.summary.connections.changed + '  −' + receipt.summary.connections.removed;
+    const boundaryLine = '边界范围  +' + receipt.summary.boundaries.added + '  ~' + receipt.summary.boundaries.changed + '  −' + receipt.summary.boundaries.removed;
     ctx.fillText(componentLine, 66, 151);
     ctx.fillText(connectionLine, 420, 151);
     ctx.fillText(boundaryLine, 786, 151);
@@ -993,14 +1021,14 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
       const summary = receipt.summary[collection];
       return sum + summary.added + summary.changed + summary.removed;
     }, 0);
-    const movementSummary = '↔ moved ' + receipt.summary.components.moved + ' · rerouted ' + receipt.summary.connections.rerouted + ' · presentation ' + (receipt.summary.presentationChanged ? 'changed' : 'unchanged');
+    const movementSummary = '↔ 移动 ' + receipt.summary.components.moved + ' · 重新路由 ' + receipt.summary.connections.rerouted + ' · 呈现' + (receipt.summary.presentationChanged ? '已变更' : '未变更');
     const secondary = authoredChanges === 0
-      ? 'No authored architecture changes · ' + movementSummary
+      ? '没有作者架构变更 · ' + movementSummary
       : movementSummary;
     ctx.fillText(secondary, 66, 181);
     const proofLine = receipt.proofLevel === 'revision-pinned'
-      ? 'REV ' + String(receipt.base.revision).slice(0, 8) + ' → ' + String(receipt.head.revision).slice(0, 8) + ' · REVISION-PINNED INPUTS'
-      : 'AUTHORED SNAPSHOTS';
+      ? 'REV ' + String(receipt.base.revision).slice(0, 8) + ' → ' + String(receipt.head.revision).slice(0, 8) + ' · 版本固定输入'
+      : '作者快照';
     ctx.textAlign = 'right';
     ctx.fillText(proofLine, 1134, 181);
     ctx.textAlign = 'left';
@@ -1016,7 +1044,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     ctx.drawImage(image, 600 - width / 2, 385 - height / 2, width, height);
     ctx.font = '650 12px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.fillStyle = '#8aa0b5';
-    ctx.fillText('Stable authored IDs · static complete Delta · no risk or mergeability inference', 66, 588);
+    ctx.fillText('仅稳定作者 ID · 静态完整变更对比 · 不推断风险或可合并性', 66, 588);
     return pngBlob(canvas);
   }
 
@@ -1034,7 +1062,7 @@ html[data-theme="dark"] body{background:#071019!important;background-image:none!
     run(format) {
       if (format === 'svg') return exportCanonicalSvg();
       if (format === 'share-card') return downloadShareCard();
-      throw new Error('Unknown Architecture Delta export format: ' + format);
+      throw new Error('未知的架构变更导出格式：' + format);
     },
   };
 
@@ -1127,13 +1155,13 @@ export function validateArchitectureDeltaHtml(html, receipt) {
     }
   }
   if (!['base', 'delta', 'head'].every((id) => (html.match(new RegExp(`<section class="canvas" data-view="${id}"`, 'g')) || []).length === 1)) failures.push('expected one Before, Delta, and After canvas');
-  if ((html.match(/class="snapshot-frame" title="Before architecture explorer"/g) || []).length !== 1
-    || (html.match(/class="snapshot-frame" title="After architecture explorer"/g) || []).length !== 1) {
+  if ((html.match(/class="snapshot-frame" title="变更前架构浏览器"/g) || []).length !== 1
+    || (html.match(/class="snapshot-frame" title="变更后架构浏览器"/g) || []).length !== 1) {
     failures.push('Before and After must preserve one complete architecture explorer each');
   }
   if (!svgBalanced || svgDepth !== 0 || svgRoots !== 1 || deltaMarkup.slice(0, rootStart).trim() || deltaMarkup.slice(rootEnd).trim()) failures.push('expected exactly one root SVG in the Delta canvas');
   if ((html.match(/id="archify-compare-receipt"/g) || []).length !== 1) failures.push('expected exactly one embedded compare receipt');
-  if (!html.includes('aria-label="Authored change review"')) failures.push('missing exact-ID change navigator');
+  if (!html.includes('aria-label="作者变更评审"')) failures.push('missing exact-ID change navigator');
   if ((html.match(/class="change-row"/g) || []).length !== rows.length) failures.push('change navigator row count does not match the receipt');
   if (!html.includes('id="export-svg"') || !html.includes('id="share-card"')
     || !html.includes('window.Archify.deltaExport = { canonicalSvg: canonicalDeltaSvg, shareCard')) {

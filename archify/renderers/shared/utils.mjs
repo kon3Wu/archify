@@ -4,6 +4,26 @@ export function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPE_MAP[c]);
 }
 
+const DIAGRAM_TYPE_LABELS = Object.freeze({
+  architecture: '架构图',
+  'architecture diagram': '架构图',
+  'business-flow': '业务流程图',
+  'business-flow diagram': '业务流程图',
+  workflow: '工作流图',
+  'workflow diagram': '工作流图',
+  sequence: '时序图',
+  'sequence diagram': '时序图',
+  dataflow: '数据流图',
+  'data-flow': '数据流图',
+  'data-flow diagram': '数据流图',
+  lifecycle: '生命周期图',
+  'lifecycle diagram': '生命周期图',
+});
+
+export function diagramTypeLabel(kind) {
+  return DIAGRAM_TYPE_LABELS[String(kind ?? '').toLowerCase()] || '图表';
+}
+
 export function renderDefinitions() {
   return `        <!-- Definitions -->
         <defs>
@@ -100,14 +120,17 @@ ${card.items.map((item) => `          <li>&bull; ${esc(item)}</li>`).join('\n')}
 
 const SVG_SLOT_RE = /      <!-- ARCHIFY:SVG_SLOT_START -->[\s\S]*?      <!-- ARCHIFY:SVG_SLOT_END -->/;
 const CARDS_SLOT_RE = /    <!-- ARCHIFY:CARDS_SLOT_START -->[\s\S]*?    <!-- ARCHIFY:CARDS_SLOT_END -->/;
-const SUBTITLE_SLOT_RE = /^([ \t]*)<p class="subtitle">\[Subtitle description\]<\/p>[ \t]*(\r?\n)?/m;
+// The shipped template uses Chinese copy, while custom templates from the
+// pre-2.16 contract may still carry the old placeholder. Both are internal
+// slots; the placeholder is always replaced before a reader sees the HTML.
+const SUBTITLE_SLOT_RE = /^([ \t]*)<p class="subtitle">\[(?:副标题描述|Subtitle description)\]<\/p>[ \t]*(\r?\n)?/m;
 const GUIDED_VIEWS_PLACEHOLDER = '<!-- ARCHIFY:GUIDED_VIEWS_DATA -->';
 const SOURCE_EVIDENCE_PLACEHOLDER = '    <!-- ARCHIFY:SOURCE_EVIDENCE_DATA -->';
 
-const TEMPLATE_PLACEHOLDERS = [
-  '<html lang="en" data-theme="dark" data-preset="[VISUAL PRESET]">',
-  '<title>[PROJECT NAME] Architecture Diagram</title>',
-  '<h1>[PROJECT NAME] Architecture</h1>',
+const TEMPLATE_SLOT_RES = [
+  /<html lang="(?:zh-CN|en)" data-theme="dark" data-preset="\[VISUAL PRESET\]">/,
+  /<title>\[PROJECT NAME\](?: 图表| Architecture Diagram)<\/title>/,
+  /<h1>\[PROJECT NAME\](?: 架构图| Architecture)<\/h1>/,
   GUIDED_VIEWS_PLACEHOLDER,
 ];
 
@@ -121,9 +144,10 @@ export function applyTemplate(template, { title, subtitle, svg, cards, visualPre
   if (!SUBTITLE_SLOT_RE.test(template)) {
     throw new Error('applyTemplate: template missing subtitle placeholder');
   }
-  for (const ph of TEMPLATE_PLACEHOLDERS) {
-    if (!template.includes(ph)) {
-      throw new Error(`applyTemplate: template missing placeholder ${JSON.stringify(ph)}`);
+  for (const slot of TEMPLATE_SLOT_RES) {
+    const present = typeof slot === 'string' ? template.includes(slot) : slot.test(template);
+    if (!present) {
+      throw new Error(`applyTemplate: template missing placeholder ${slot}`);
     }
   }
   // Keep existing custom templates compatible when evidence is not requested.
@@ -146,9 +170,9 @@ export function applyTemplate(template, { title, subtitle, svg, cards, visualPre
     ? `<p class="subtitle">${esc(subtitle)}</p>`
     : '';
   return template
-    .replace(TEMPLATE_PLACEHOLDERS[0], () => `<html lang="en" data-theme="dark" data-preset="${esc(visualPreset)}">`)
-    .replace(TEMPLATE_PLACEHOLDERS[1], () => `<title>${esc(title)} Diagram</title>`)
-    .replace(TEMPLATE_PLACEHOLDERS[2], () => `<h1>${esc(title)}</h1>`)
+    .replace(TEMPLATE_SLOT_RES[0], () => `<html lang="zh-CN" data-theme="dark" data-preset="${esc(visualPreset)}">`)
+    .replace(TEMPLATE_SLOT_RES[1], () => `<title>${esc(title)} 图表</title>`)
+    .replace(TEMPLATE_SLOT_RES[2], () => `<h1>${esc(title)}</h1>`)
     .replace(SUBTITLE_SLOT_RE, (_match, indent, newline = '') => renderedSubtitle
       ? `${indent}${renderedSubtitle}${newline}`
       : '')

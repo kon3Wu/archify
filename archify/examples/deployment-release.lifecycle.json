@@ -2,36 +2,36 @@
   "schema_version": 1,
   "diagram_type": "lifecycle",
   "meta": {
-    "title": "Deployment Release Lifecycle",
+    "title": "部署发布生命周期",
     "output": "examples/deployment-release.html",
     "viewBox": [980, 680],
     "animation": "trace",
     "visual_preset": "signal-flow",
     "quality_profile": "showcase",
     "views": [
-      { "id": "promotion-rail", "label": "Promotion rail", "focus": ["queued", "building", "verifying", "ready", "live"], "note": "Follow the deployment object from accepted change to healthy production." },
-      { "id": "approval-gate", "label": "Approval gate", "focus": ["verifying", "approval", "cancelled", "ready"], "note": "Approval pauses promotion and can terminate the release cleanly." },
-      { "id": "rollback-outcomes", "label": "Rollback outcomes", "focus": ["ready", "rollback", "failed", "live", "paused", "rolled_back"], "note": "Separate pre-promotion failure from post-promotion health regression." }
+      { "id": "promotion-rail", "label": "发布主线", "focus": ["queued", "building", "verifying", "ready", "live"], "note": "沿着部署对象从变更接受到生产健康浏览。" },
+      { "id": "approval-gate", "label": "审批关卡", "focus": ["verifying", "approval", "cancelled", "ready"], "note": "审批会暂停发布，也可以干净地终止这次发布。" },
+      { "id": "rollback-outcomes", "label": "回滚结果", "focus": ["ready", "rollback", "failed", "live", "paused", "rolled_back"], "note": "区分发布前失败与发布后的健康回归。" }
     ]
   },
   "lanes": [
-    { "id": "main", "label": "Release phases" },
-    { "id": "waiting", "label": "Approval + health wait" },
-    { "id": "recovery", "label": "Rollback controller" },
-    { "id": "terminal", "label": "Terminal exits" }
+    { "id": "main", "label": "发布阶段" },
+    { "id": "waiting", "label": "审批 + 健康等待" },
+    { "id": "recovery", "label": "回滚控制器" },
+    { "id": "terminal", "label": "终态退出" }
   ],
   "states": [
-    { "id": "queued", "type": "start", "label": "Queued", "sublabel": "change accepted", "lane": "main", "col": 0, "step": "01", "tag": "pending" },
-    { "id": "building", "type": "active", "label": "Building", "sublabel": "immutable image", "lane": "main", "col": 1, "step": "02", "tag": "running" },
-    { "id": "verifying", "type": "decision", "label": "Verifying", "sublabel": "tests + policy", "lane": "main", "col": 2, "step": "03", "tag": "gate" },
-    { "id": "ready", "type": "waiting", "label": "Ready", "sublabel": "promotion pending", "lane": "main", "col": 3, "step": "04", "tag": "approved" },
-    { "id": "live", "type": "success", "label": "Live", "sublabel": "production healthy", "lane": "main", "col": 4, "step": "05", "tag": "success" },
-    { "id": "approval", "type": "waiting", "label": "Needs Approval", "sublabel": "release owner", "lane": "waiting", "col": 0, "tag": "pause" },
-    { "id": "rollback", "type": "active", "label": "Rolling Back", "sublabel": "last good image", "lane": "recovery", "col": 1, "tag": "automatic" },
-    { "id": "paused", "type": "waiting", "label": "Health Paused", "sublabel": "SLO regression", "lane": "waiting", "col": 2, "tag": "observe" },
-    { "id": "cancelled", "type": "failure", "label": "Cancelled", "sublabel": "approval denied", "lane": "terminal", "col": 0, "tag": "terminal" },
-    { "id": "failed", "type": "failure", "label": "Failed", "sublabel": "rollback failed", "lane": "terminal", "col": 1, "tag": "terminal" },
-    { "id": "rolled_back", "type": "success", "label": "Rolled Back", "sublabel": "service restored", "lane": "terminal", "col": 2, "tag": "terminal" }
+    { "id": "queued", "type": "start", "label": "排队中", "sublabel": "变更已接受", "lane": "main", "col": 0, "step": "01", "tag": "待处理" },
+    { "id": "building", "type": "active", "label": "构建中", "sublabel": "不可变镜像", "lane": "main", "col": 1, "step": "02", "tag": "运行中" },
+    { "id": "verifying", "type": "decision", "label": "验证中", "sublabel": "测试 + 策略", "lane": "main", "col": 2, "step": "03", "tag": "关卡" },
+    { "id": "ready", "type": "waiting", "label": "已就绪", "sublabel": "等待发布", "lane": "main", "col": 3, "step": "04", "tag": "已审批" },
+    { "id": "live", "type": "success", "label": "运行中", "sublabel": "生产环境健康", "lane": "main", "col": 4, "step": "05", "tag": "成功" },
+    { "id": "approval", "type": "waiting", "label": "需要审批", "sublabel": "发布负责人", "lane": "waiting", "col": 0, "tag": "暂停" },
+    { "id": "rollback", "type": "active", "label": "回滚中", "sublabel": "最后一个良好镜像", "lane": "recovery", "col": 1, "tag": "自动" },
+    { "id": "paused", "type": "waiting", "label": "健康已暂停", "sublabel": "SLO 回归", "lane": "waiting", "col": 2, "tag": "观察" },
+    { "id": "cancelled", "type": "failure", "label": "已取消", "sublabel": "审批被拒绝", "lane": "terminal", "col": 0, "tag": "终态" },
+    { "id": "failed", "type": "failure", "label": "失败", "sublabel": "回滚失败", "lane": "terminal", "col": 1, "tag": "终态" },
+    { "id": "rolled_back", "type": "success", "label": "已回滚", "sublabel": "服务已恢复", "lane": "terminal", "col": 2, "tag": "终态" }
   ],
   "transitions": [
     { "from": "verifying", "to": "approval", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
@@ -42,8 +42,8 @@
     { "from": "paused", "to": "rolled_back", "variant": "emphasis", "route": "straight", "fromSide": "bottom", "toSide": "top" }
   ],
   "cards": [
-    { "dot": "cyan", "title": "Promotion Rail", "items": ["The release object moves through five ordered phases", "Verification and approval remain distinct states", "Live means production health is currently proven"] },
-    { "dot": "amber", "title": "Wait States", "items": ["Human approval can pause without consuming a worker", "A health regression pauses further rollout", "Every wait exposes the event required to continue"] },
-    { "dot": "rose", "title": "Explicit Endings", "items": ["Denied approval ends as Cancelled", "Rollback controller failure ends as Failed", "Successful rollback is a terminal restored outcome"] }
+    { "dot": "cyan", "title": "发布主线", "items": ["发布对象经过五个有序阶段", "验证与审批保持为不同状态", "运行中表示当前已证明生产环境健康"] },
+    { "dot": "amber", "title": "等待状态", "items": ["人工审批可以暂停发布而不占用工作进程", "健康回归会暂停后续发布", "每个等待状态都会暴露继续所需的事件"] },
+    { "dot": "rose", "title": "明确的结束", "items": ["审批被拒绝后结束为已取消", "回滚控制器失败后结束为失败", "成功回滚是一个终态的恢复结果"] }
   ]
 }

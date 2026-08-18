@@ -36,7 +36,7 @@ function canonicalSvg(html) {
 test('all five renderers inherit one resolved-only Route Share Card Export item', () => {
   for (const [mode, example] of Object.entries(CASES)) {
     const html = render(mode, example);
-    assert.match(html, /data-action="route-share-card"[^>]*hidden disabled[^>]*>[\s\S]*?Route Share Card[\s\S]*?1200(?:&times;|×)630 PNG/, mode);
+    assert.match(html, /data-action="route-share-card"[^>]*hidden disabled[^>]*>[\s\S]*?路径分享卡片[\s\S]*?1200(?:&times;|×)630 PNG/, mode);
     assert.match(html, /function syncRouteShareItem\(\)/, mode);
     assert.match(html, /routeShareItem\.hidden = !snapshot;/, mode);
     assert.match(html, /routeShareItem\.disabled = !snapshot;/, mode);
@@ -127,14 +127,14 @@ test('Route Share Card reuses one 1200x630 variant seam and publishes a truthful
   assert.match(html, /renderShareCard\(\{ routeSnapshot: snapshot \}\)/);
   assert.doesNotMatch(html, /function rasterizeRouteShareCard|routeShareCard:/);
   assert.match(html, /var title = titleNode \? titleNode\.textContent : document\.title;/);
-  assert.match(html, /'Route: ' \+ routeSnapshot\.source\.label \+ ' → ' \+ routeSnapshot\.target\.label \+ ' · ' \+ routeSnapshot\.hops \+ ' directed hops'/);
+  assert.match(html, /'路径：' \+ routeSnapshot\.source\.label \+ ' → ' \+ routeSnapshot\.target\.label \+ ' · ' \+ routeSnapshot\.hops \+ ' 跳有向路径'/);
   assert.match(html, /recordExportReceipt\('share-card', blob, false, \{ width: SHARE_CARD_WIDTH, height: SHARE_CARD_HEIGHT \}, 'route', true\)/);
   assert.match(html, /diagramFilename\(\) \+ '-route-share-card\.png'/);
   assert.match(html, /data-last-export-variant/);
   assert.match(html, /data-last-export-route-state-clean/);
   assert.match(html, /clearExportReceipt\(\);[\s\S]*?var snapshot = Archify\.routeProbe/);
   assert.match(html, /function runExport\(format\)[\s\S]*?clearExportReceipt\(\);/);
-  assert.match(html, /var ctx = canvas2dOrThrow\(canvas, 'Share Card'\)/);
+  assert.match(html, /var ctx = canvas2dOrThrow\(canvas, '分享卡片'\)/);
 });
 
 test('skill and READMEs describe the optional Export variant and show one real card without changing the hero', () => {

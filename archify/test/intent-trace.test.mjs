@@ -66,7 +66,7 @@ test('Intent Trace separates hover, keyboard, touch, and committed focus', () =>
   assert.match(html, /addEventListener\('focusin'/);
   assert.match(html, /addEventListener\('focusout'/);
   assert.match(html, /show\(node\.getAttribute\('data-node-id'\), \{ announce: true \}\)/);
-  assert.match(html, /Press Enter for details/);
+  assert.match(html, /按 Enter 查看详情/);
   assert.match(html, /html\.getAttribute\('data-embed'\) === 'true'/);
   assert.match(html, /container\.classList\.contains\('is-panning'\)/);
   assert.match(html, /svg\.hasAttribute\('data-story-active'\)/);
