@@ -28,9 +28,9 @@
       "nodeCount": 10,
       "edgeCount": 10,
       "artifactBytes": 650700,
-      "artifactSha256": "8b68cda3ffc6ed6576f511386ef0d6f27af8ebdcbdca7e86053aa591544e229e",
-      "sourceBytes": 4332,
-      "sourceSha256": "ad459b25cd797c6c2972d5f8b3951496b8c54a31537bfd46610c4fa9a8d359ab",
+      "artifactSha256": "583f5dba6b0eb279790c2e70e2b430467b2893c61854cdd2ea80db774e82d5d3",
+      "sourceBytes": 4287,
+      "sourceSha256": "a6135804ee93fba1eb20d1b71022e7d20d1b2d5a3c6e14131ca60702847b2767",
       "checks": [
         {
           "name": "single_svg",
@@ -82,7 +82,7 @@
           "ambiguousCorridors": 0,
           "containerBorderRuns": 0,
           "labelRouteClearanceIssues": 0,
-          "minLabelRouteClearance": 18.8,
+          "minLabelRouteClearance": 29.9,
           "maxBends": 3,
           "routesOverSuggestedBends": 3,
           "maxStretch": 1.498,

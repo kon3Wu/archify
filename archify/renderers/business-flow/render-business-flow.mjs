@@ -85,6 +85,7 @@ const KIND_FILL = {
 const DECISION_OUTPUT_SIDES = new Set(['left', 'right', 'bottom']);
 const DECISION_BRANCH_ROLES = new Set(['yes', 'no']);
 const DECISION_ROUTE_GAP = 16;
+const DECISION_INPUT_STAGGER = 18;
 
 const layout = {
   laneX: 48,
@@ -217,6 +218,25 @@ const edgeSteps = new Map(sourceEdges.map((edge, index) => {
   const mainStep = Number.isInteger(fromStep) && toStep === fromStep + 1 ? fromStep : null;
   return [edge, mainStep ?? asArray(businessFlow.mainPath).length + index];
 }));
+
+const decisionInputRanks = new Map();
+const decisionInputGroups = new Map();
+for (const edge of sourceEdges) {
+  const target = nodes.get(edge.to);
+  if (target?.kind !== 'decision') continue;
+  const group = decisionInputGroups.get(target.id) || [];
+  group.push(edge);
+  decisionInputGroups.set(target.id, group);
+}
+for (const group of decisionInputGroups.values()) {
+  group.sort((left, right) => {
+    const leftNode = nodes.get(left.from);
+    const rightNode = nodes.get(right.from);
+    if (leftNode?.cx !== rightNode?.cx) return (leftNode?.cx ?? 0) - (rightNode?.cx ?? 0);
+    return `${left.id || ''}\u0000${left.from}\u0000${left.to}`.localeCompare(`${right.id || ''}\u0000${right.from}\u0000${right.to}`);
+  });
+  group.forEach((edge, index) => decisionInputRanks.set(edge, index));
+}
 
 function nodeStep(node) {
   return mainPathSteps.get(node.id)
@@ -707,8 +727,9 @@ function sameLaneAutoVia(start, end, from, to, fromSide, toSide) {
   return candidates.find((via) => routeHonorsEndpointSides([start, ...via, end], fromSide, toSide)) || candidates[0];
 }
 
-function decisionInputAutoVia(to, start, end, fromSide) {
-  const approachY = to.y - DECISION_ROUTE_GAP;
+function decisionInputAutoVia(edge, to, start, end, fromSide) {
+  const inputRank = decisionInputRanks.get(edge) || 0;
+  const approachY = to.y - DECISION_ROUTE_GAP - inputRank * DECISION_INPUT_STAGGER;
   const channels = [to.x - DECISION_ROUTE_GAP, to.x + to.width + DECISION_ROUTE_GAP];
   const candidates = [];
   const horizontalSides = new Set(['left', 'right']);
@@ -761,10 +782,10 @@ function decisionOutputAutoVia(from, to, start, end, fromSide, toSide) {
   return null;
 }
 
-function decisionAutoVia(from, to, start, end, fromSide, toSide) {
+function decisionAutoVia(edge, from, to, start, end, fromSide, toSide) {
   if (routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
   if (to.kind === 'decision') {
-    const via = decisionInputAutoVia(to, start, end, fromSide);
+    const via = decisionInputAutoVia(edge, to, start, end, fromSide);
     if (via) return via;
   }
   if (from.kind === 'decision') {
@@ -801,7 +822,7 @@ function routeVia(edge, from, to, start, end, fromSide, toSide) {
     }
     case 'auto':
     default: {
-      const decisionVia = decisionAutoVia(from, to, start, end, fromSide, toSide);
+      const decisionVia = decisionAutoVia(edge, from, to, start, end, fromSide, toSide);
       if (decisionVia) return decisionVia;
       if ((from.lane !== to.lane || from.row === to.row) && routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
       if (from.lane !== to.lane) {

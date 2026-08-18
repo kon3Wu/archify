@@ -74,3 +74,33 @@ Passed node --test test/business-flow.test.mjs test/gallery.test.mjs (6/6), npm 
 - examples/business-flow-standard-rendered.visual-check.2048x1320.dark.png
 - examples/business-flow-standard-rendered.visual-check.2048x1320.light.png
 - examples/business-flow-standard-rendered.visual-check.json
+
+## 2026-08-18 13:58:50 - Business-flow decision input corridor spillover
+
+**Bug**
+In the Chinese refund approval proof, the line from 受理申请 to 资料完整? visually merged with the retry line from 补充资料, making it appear that 受理申请 also connected to 补充资料.
+
+**Root Cause**
+Both automatic decision inputs were forced through the same top approach height, and the authored retry via reused the primary input corridor at [760,334]; multiple valid edges therefore looked like one unintended branch before reaching the shared decision top tip.
+
+**Changes**
+Ranked automatic inputs per decision and staggered their top approach heights by 18px; kept the retry input on the right-side geometric channel at its separate height, removed the stale hard-coded retry via from the refund example, and added exact route regression assertions plus regenerated gallery, screenshots, and ZIP artifacts.
+
+**Validation**
+Passed node --test test/business-flow.test.mjs test/gallery.test.mjs (6/6), npm run check:validators, node test/golden.mjs, release identity, business-flow showcase validate with 9/9 checks, visual-check containment at 1440x900/1600x1000/1920x1080/2048x1320 with light/dark captures, source and ZIP package smoke without node_modules, and installed-skill doctor/examples/validate/render/deliver. The focused first routing attempt was rejected by the existing proper-crossing gate and was corrected before final validation.
+
+**Files Changed**
+- archify.zip
+- archify/examples/refund-approval.business-flow.json
+- archify/renderers/business-flow/render-business-flow.mjs
+- archify/test/business-flow.test.mjs
+- docs/development-task-plan.md
+- docs/gallery.html
+- docs/gallery/artifacts/refund-approval.business-flow.html
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.1440x900.dark.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.1440x900.light.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.2048x1320.dark.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.2048x1320.light.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.json
+- docs/gallery/manifest.json
+- docs/gallery/sources/refund-approval.business-flow.json

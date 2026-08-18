@@ -61,7 +61,7 @@
       "toSide": "left",
       "via": [[844, 382], [844, 470]]
     },
-    { "id": "e-info-retry", "from": "need-info", "to": "inspect", "label": "重新提交", "role": "return", "fromSide": "left", "toSide": "top", "via": [[844, 470], [844, 334], [760, 334]], "labelSegment": 2 },
+    { "id": "e-info-retry", "from": "need-info", "to": "inspect", "label": "重新提交", "role": "return", "fromSide": "left", "toSide": "top", "labelSegment": 2 },
     { "id": "e-inspect-reject", "from": "inspect", "to": "reject", "label": "不符合", "labelAt": [1280, 330], "role": "no", "variant": "security", "fromSide": "right", "toSide": "right", "route": "outside-right", "channelX": 1352 },
     { "id": "e-audit-ledger", "from": "audit", "to": "ledger", "role": "main" },
     { "id": "e-ledger-complete", "from": "ledger", "to": "complete", "role": "main", "fromSide": "right", "toSide": "top", "via": [[1364, 616], [1364, 92], [1240, 92]] }

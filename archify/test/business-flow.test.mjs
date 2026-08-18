@@ -133,6 +133,8 @@ test('business-flow: decision ports reserve top for input, default yes/no output
   const refund = run(['render', 'business-flow', refundFixture, refundOutput]);
   assert.equal(refund.status, 0, refund.stderr);
   const refundHtml = fs.readFileSync(refundOutput, 'utf8');
+  assert.deepEqual(edgePoints(refundHtml, 'e-receive-inspect'), [[664, 382], [676, 382], [676, 334], [760, 334], [760, 350]], 'primary decision input keeps its own approach corridor');
+  assert.deepEqual(edgePoints(refundHtml, 'e-info-retry'), [[854, 470], [844, 470], [844, 316], [760, 316], [760, 350]], 'retry input uses a separate top approach height without merging into the primary input');
   assert.deepEqual(edgePoints(refundHtml, 'e-inspect-info').at(0), [828, 382], 'first no branch uses the decision right corner');
   assert.deepEqual(edgePoints(refundHtml, 'e-inspect-reject').at(0), [828, 382], 'multiple no branches may share the same real corner port');
 });
