@@ -1,10 +1,108 @@
 {
   "schemaVersion": 1,
   "generator": "scripts/build-gallery.mjs",
-  "archifyVersion": "2.14.0",
-  "entryCount": 11,
-  "checkCount": 99,
+  "archifyVersion": "2.15.0",
+  "entryCount": 12,
+  "checkCount": 108,
   "entries": [
+    {
+      "id": "refund-approval",
+      "type": "business-flow",
+      "title": "会员退款审批流程",
+      "subtitle": "客户、商家与财务协作完成退款，资料不足时回退补充",
+      "input": "gallery/sources/refund-approval.business-flow.json",
+      "artifact": "gallery/artifacts/refund-approval.business-flow.html",
+      "focus": "inspect",
+      "view": "approval",
+      "viewCount": 3,
+      "viewIds": [
+        "approval",
+        "retry",
+        "outcomes"
+      ],
+      "guidedPlayback": true,
+      "schemaVersion": 1,
+      "visualPreset": "editorial",
+      "animation": "static",
+      "engineeringProfile": null,
+      "nodeCount": 10,
+      "edgeCount": 10,
+      "artifactBytes": 650326,
+      "artifactSha256": "9b6daa75a62f47e8398a0fe00fc2ae872dedd93c30311d421784521a07357d3c",
+      "sourceBytes": 4331,
+      "sourceSha256": "f192199203cad5aa0442d4c258b5e1fc7e84d6a7746fedce7b9107e15edb7e07",
+      "checks": [
+        {
+          "name": "single_svg",
+          "ok": true
+        },
+        {
+          "name": "finite_svg",
+          "ok": true
+        },
+        {
+          "name": "orthogonal_arrows",
+          "ok": true
+        },
+        {
+          "name": "label_route_clearance",
+          "ok": true
+        },
+        {
+          "name": "relationship_crossings",
+          "ok": true
+        },
+        {
+          "name": "relationship_corridors",
+          "ok": true
+        },
+        {
+          "name": "container_border_runs",
+          "ok": true
+        },
+        {
+          "name": "route_rhythm",
+          "ok": true
+        },
+        {
+          "name": "legend_clearance",
+          "ok": true
+        }
+      ],
+      "composition": {
+        "schemaVersion": 1,
+        "profile": "showcase",
+        "status": "pass",
+        "summary": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "metrics": {
+          "properCrossings": 0,
+          "ambiguousCorridors": 0,
+          "containerBorderRuns": 0,
+          "labelRouteClearanceIssues": 0,
+          "minLabelRouteClearance": 10.6,
+          "maxBends": 3,
+          "routesOverSuggestedBends": 3,
+          "maxStretch": 8.2,
+          "routesOverSuggestedStretch": 2,
+          "minSegmentPx": 20,
+          "minInteriorSegmentPx": 20,
+          "shortSegmentCount": 0,
+          "shortEndpointSegmentCount": 0,
+          "shortInteriorSegmentCount": 0,
+          "microSegmentCount": 0
+        },
+        "suggestedLimits": {
+          "bendsPerRelationship": 2,
+          "stretch": 1.35,
+          "segmentPx": 16,
+          "microSegmentPx": 8
+        },
+        "issues": []
+      }
+    },
     {
       "id": "agent-tool-call",
       "type": "workflow",
@@ -27,10 +125,10 @@
       "engineeringProfile": null,
       "nodeCount": 12,
       "edgeCount": 11,
-      "artifactBytes": 644009,
-      "artifactSha256": "a7a3b2836f7f5795173db40527a9d2df1c53c99ac3a08049617ccef3072629c0",
-      "sourceBytes": 6367,
-      "sourceSha256": "9c94c8c0b2104478b77befb4cc5e343d381acba6e66645ab17616fde20b60e05",
+      "artifactBytes": 657457,
+      "artifactSha256": "3e113d7cba1a364a7fa4d004be306d89451c0f904123e7ff3b3de0a52130e5b7",
+      "sourceBytes": 6477,
+      "sourceSha256": "6b26a4f5fc61c5bbf8d016a3f6dba6a03555d11c3809338c43f962b79ad80e8c",
       "checks": [
         {
           "name": "single_svg",
@@ -125,10 +223,10 @@
       "engineeringProfile": "deployment-ownership",
       "nodeCount": 12,
       "edgeCount": 12,
-      "artifactBytes": 646602,
-      "artifactSha256": "c41965605d4b7157c8a080aa52cf7d1075d96bdcae3cbbd2f82a6974bc5160cc",
-      "sourceBytes": 5454,
-      "sourceSha256": "738e9c7f22e4e6e88f5aafc087dc58409105927daa9a79aaf240c8393654494f",
+      "artifactBytes": 660050,
+      "artifactSha256": "dd3cb77841f259339868e0ce1ba52381ffa7c2aaf7ac1d16ede4b1583cd50698",
+      "sourceBytes": 5525,
+      "sourceSha256": "29857c2e02f685920bfb098509b884c6c4efdb104996c5fac74c75161793892c",
       "checks": [
         {
           "name": "single_svg",
@@ -223,10 +321,10 @@
       "engineeringProfile": null,
       "nodeCount": 7,
       "edgeCount": 12,
-      "artifactBytes": 640506,
-      "artifactSha256": "738d651b8c3f3ff8b5b5298834cbd8b7acda5f46a456c5be031647cbc6eb2216",
-      "sourceBytes": 4345,
-      "sourceSha256": "4bbaa6ca3cd4036002fd5d0f3a332eb922cec69d09bac3d7925f95beb4308389",
+      "artifactBytes": 653954,
+      "artifactSha256": "efedefa5cea3d42dc3444c33968198be2bc0361818b962465dbd37228c44d02a",
+      "sourceBytes": 4426,
+      "sourceSha256": "e488ac5c94b3b844fb129eb8b243fb6ad4c0cfa83c51b8a4c38af0fb884e3406",
       "checks": [
         {
           "name": "single_svg",
@@ -321,10 +419,10 @@
       "engineeringProfile": null,
       "nodeCount": 10,
       "edgeCount": 10,
-      "artifactBytes": 642833,
-      "artifactSha256": "9380260f7e27c0051d62c0fa31629f27c1f75b9470709e14226665bc97174436",
-      "sourceBytes": 5164,
-      "sourceSha256": "e5c880417eac1623923c3dd5461e0c78acd762e1621a28bd53fc14a84cad6a91",
+      "artifactBytes": 656281,
+      "artifactSha256": "1b12365c491d956697f9c7ad65b2fc382d53f25910a8697ff34e1efb7f7dd437",
+      "sourceBytes": 5226,
+      "sourceSha256": "4e9e845e8721d558558eb132665b03373bfdf94c6e21070b77a29c2a7660e91d",
       "checks": [
         {
           "name": "single_svg",
@@ -419,10 +517,10 @@
       "engineeringProfile": null,
       "nodeCount": 11,
       "edgeCount": 10,
-      "artifactBytes": 640146,
-      "artifactSha256": "8897a1e52ef56907790854d52abd15230b58f29319aac3ab0004938396cfb74a",
-      "sourceBytes": 5375,
-      "sourceSha256": "5c760c82eee545dfb7da38a4e628059d7891af4cfbfc13c8a7009ea64f69aa1b",
+      "artifactBytes": 653594,
+      "artifactSha256": "81a9e0cdabc7c51b84ed229c820b3d9df46add8472d1dd8d023df24f89d3ea31",
+      "sourceBytes": 5439,
+      "sourceSha256": "0cd773b0cf04d74c4b378152648a53821f0a01c3f42e2a56514ffbbe954db305",
       "checks": [
         {
           "name": "single_svg",
@@ -517,10 +615,10 @@
       "engineeringProfile": null,
       "nodeCount": 10,
       "edgeCount": 10,
-      "artifactBytes": 644091,
-      "artifactSha256": "3c30dd770f181415c11ec0b0526d86991af2177fb790182ecb7bf47d0c798cd7",
-      "sourceBytes": 5627,
-      "sourceSha256": "6fa38a7ccedf96da592d60b392783b846188eaa3ec9136c6dc06ca020e43a110",
+      "artifactBytes": 657539,
+      "artifactSha256": "f71edaba98f14ac3e6e5c3cfa02b9fc23e8eaa8faf79b7cfb5caf7e020868a56",
+      "sourceBytes": 5703,
+      "sourceSha256": "09f7214d63f8b7736904e00bb93886bdf9d3a869fc8bd549417005f439c2de36",
       "checks": [
         {
           "name": "single_svg",
@@ -615,10 +713,10 @@
       "engineeringProfile": null,
       "nodeCount": 7,
       "edgeCount": 14,
-      "artifactBytes": 640916,
-      "artifactSha256": "48d171db0c78bd06a4c404d9a8d4d461d458445002acc1bb50ae518f9f416fb5",
-      "sourceBytes": 4370,
-      "sourceSha256": "545f20920c89b69c2bb1f15508d5543fddbeb15cffba61e102206e04bd5a5cd9",
+      "artifactBytes": 654364,
+      "artifactSha256": "5c8c677843dd6f6f4acfd5a182390ca8537f4696ec2f9a05a8a54cb125c8c3e2",
+      "sourceBytes": 4431,
+      "sourceSha256": "4a57f189edff7ba720212fd30541036c5f76b56a2676e5f8cb94dc4efdbbc886",
       "checks": [
         {
           "name": "single_svg",
@@ -713,10 +811,10 @@
       "engineeringProfile": null,
       "nodeCount": 12,
       "edgeCount": 12,
-      "artifactBytes": 648010,
-      "artifactSha256": "f4f58688101dc5fbcc918f2208daf99d44755876c41dc31454655296b218da20",
-      "sourceBytes": 5433,
-      "sourceSha256": "a92d6597ddbe164f395da32a7d4b33cfae08edd7d9600a6fb45a2058e5bbb43e",
+      "artifactBytes": 661458,
+      "artifactSha256": "03f90f0a59b928ab72e99b26e34f3b8fca7d97736a41fae0e44d50c1e17abdc1",
+      "sourceBytes": 5490,
+      "sourceSha256": "811ef842f3ea2e6741b4363c646a3a2fef961bdf211e40504c8f42792982540e",
       "checks": [
         {
           "name": "single_svg",
@@ -811,10 +909,10 @@
       "engineeringProfile": null,
       "nodeCount": 10,
       "edgeCount": 6,
-      "artifactBytes": 637726,
-      "artifactSha256": "9ef047c4a029fa4649d84a0c299552a5d02f31ac0e3a51b7187b6696f33ed718",
-      "sourceBytes": 4417,
-      "sourceSha256": "af939579dcafc8b4c49f09594591577994398aee57a57369d4c791dfc0d85a42",
+      "artifactBytes": 651174,
+      "artifactSha256": "e028986932c4694cb9dac4af1ad367f6d23c55d2e4d4619c415a5fad8e1cc8de",
+      "sourceBytes": 4488,
+      "sourceSha256": "38533a6322fcd562b5f0a4b54dba7244f12730749da54abd66d7a0078e7b2ddb",
       "checks": [
         {
           "name": "single_svg",
@@ -909,10 +1007,10 @@
       "engineeringProfile": null,
       "nodeCount": 11,
       "edgeCount": 6,
-      "artifactBytes": 638696,
-      "artifactSha256": "3f13e00c25236bfdb214e8c10659ac2fbc0cb8d5cc6d727ef19207ee4abfdde3",
-      "sourceBytes": 4274,
-      "sourceSha256": "735c2c5819266e6ea2a71775b6eefce98b53030ce90cb721dc8e1d022ce5be71",
+      "artifactBytes": 652144,
+      "artifactSha256": "f253029c104a898689b1540d61421557f65bf252c5cb8d3255635107c03533c8",
+      "sourceBytes": 4323,
+      "sourceSha256": "79c0ca31144eb15d76dfeb99ee6ae7e660cb8d7c45f30e70becf3eaca762e8df",
       "checks": [
         {
           "name": "single_svg",
@@ -1007,10 +1105,10 @@
       "engineeringProfile": null,
       "nodeCount": 10,
       "edgeCount": 9,
-      "artifactBytes": 637933,
-      "artifactSha256": "b1753910784abc7e37952868051861c2c90d953aeb80342ebb59febdeec87612",
-      "sourceBytes": 3793,
-      "sourceSha256": "483350f5297df682aba4e4a0fa491307ce3d3abd725ae4df07fab177490752cf",
+      "artifactBytes": 651381,
+      "artifactSha256": "c0971e2644fd188f068ed14280d7608e2f354c85fc98e7219609ac8ffd2255e2",
+      "sourceBytes": 3839,
+      "sourceSha256": "40b880d0bbe32ce49c1c607158973132ce2de5118f934f976b6749cc2ddbbf0e",
       "checks": [
         {
           "name": "single_svg",

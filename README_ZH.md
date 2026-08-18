@@ -10,16 +10,16 @@
 
 Archify 是适用于 Raven、Cursor、Claude Code、Codex CLI 和 OpenCode 的 Agent Skill。给它系统描述或代码仓库，就能得到可交互、可分享的专业技术地图。
 
-- **打开就是成品** —— 五种技术图、四套视觉预设、深浅主题，以及显式启用的有限动态
+- **打开就是成品** —— 六种 Typed 图表模式（包含产品/PRD 业务流程）、四套视觉预设、深浅主题，以及显式启用的有限动态
 - **合并前先看清架构变化** —— 把两份已校验快照对比为 Before / Delta / After，准确区分新增、删除、语义变化、移动和重路由
 - **每次探索都有依据** —— 搜索节点、按需打开版本校验过的源码、追踪作者定义的上下游可达范围与精确路径、对比角色、播放故事，但不编造拓扑
 - **一个文件即可放心交付** —— Typed JSON IR 和确定性校验生成独立 HTML，并支持 PNG、SVG、WebM 与 1200×630 分享卡片
 
 ![License](https://img.shields.io/badge/license-MIT-22c55e?style=flat-square)
 ![Agent Skill](https://img.shields.io/badge/Agent-Skill-7C3AED?style=flat-square)
-![稳定版本](https://img.shields.io/badge/version-2.14.0-0891b2?style=flat-square)
+![稳定版本](https://img.shields.io/badge/version-2.15.0-0891b2?style=flat-square)
 
-**当前稳定版本：** `v2.14.0`。详见[版本历史](CHANGELOG.md#2140--2026-08-11)。
+**当前稳定版本：** `v2.15.0`。详见[版本历史](CHANGELOG.md#2150--2026-08-18)。
 
 **[在线项目页](https://tt-a1i.github.io/archify/)** · **[场景选图指南](https://tt-a1i.github.io/archify/guide.html)** · **[Proof Lab](https://tt-a1i.github.io/archify/gallery.html)**
 
@@ -56,7 +56,7 @@ npx skills add tt-a1i/archify -g
 | [![Agent 工作流正在播放一个作者章节](docs/assets/archify-demo-story.png)](https://tt-a1i.github.io/archify/gallery/artifacts/agent-tool-call.workflow.html?theme=dark&present=1&play=1#view=happy-path) | [![缓存未命中时从 Web App 到 Postgres 的路径](docs/assets/archify-demo-route.png)](https://tt-a1i.github.io/archify/gallery/artifacts/cache-miss.sequence.html?theme=dark&present=1#route=web~db) | [![生产架构中后端与数据库角色的真实关系](docs/assets/archify-demo-lens.png)](https://tt-a1i.github.io/archify/gallery/artifacts/production-deployment.architecture.html?theme=dark&present=1#lens=backend~database) |
 | 播放一次有限的命名章节。 | 检查最短的作者有向路径。 | 对比语义角色之间的真实流量。 |
 
-[Proof Lab](https://tt-a1i.github.io/archify/gallery.html) 收录全部 11 个仓库内场景、JSON 源、命名视图和校验回执。
+[Proof Lab](https://tt-a1i.github.io/archify/gallery.html) 收录全部 12 个仓库内场景，包括标准业务流程示例和中文多角色退款流程证明，以及 JSON 源、命名视图和校验回执。
 
 ### 从真实仓库读出来，不是只靠 Prompt 画出来
 
@@ -136,10 +136,11 @@ Redis Session 查询 -> PostgreSQL 回源。把缓存未命中作为次要路径
 | 类型 | 最适合 | Prompt 中应包含 |
 |---|---|---|
 | **Architecture** | 组件、服务、存储和系统边界 | 范围、核心组件、主要路径 |
-| **Workflow** | CI/CD、审批、工具调用、Runbook | 参与者、顺序、分支、异常 |
+| **Business Flow** | 产品/PRD 流程与角色泳道 | 角色、结果、决策 |
+| **Workflow** | 技术编排、CI/CD、工具调用、Runbook | 参与者、顺序、分支、异常 |
 | **Sequence** | API 调用、缓存回源、鉴权、异步链路 | 调用方、被调用方、返回、时序 |
 | **Data Flow** | 数据管线、血缘、PII、下游消费者 | 来源、转换、存储、边界 |
-| **Lifecycle** | 状态、重试、等待、终态 | 状态、事件、重试与取消路径 |
+| **Lifecycle** | 持久状态、重试、等待、终态 | 状态、事件、重试与取消路径 |
 
 做生产部署评审时，Architecture 可以按需启用 `deployment-ownership`
 工程画像：负责人、单一区域归属、数据库私有边界或边界穿越机制缺失时会直接阻断。

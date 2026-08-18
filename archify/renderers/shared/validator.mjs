@@ -36,7 +36,7 @@ function formatErrors(errors, data) {
 }
 
 export function validateSchema(diagramType, data) {
-  const validate = validators[diagramType];
+  const validate = validators[diagramType === 'business-flow' ? 'businessFlow' : diagramType];
   if (!validate) {
     throw new Error(`validateSchema: unknown diagram type "${diagramType}"`);
   }

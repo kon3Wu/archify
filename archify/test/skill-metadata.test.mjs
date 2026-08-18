@@ -8,7 +8,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.join(here, '..');
 const skill = readFileSync(path.join(skillRoot, 'SKILL.md'), 'utf8');
 const authoringContract = readFileSync(path.join(skillRoot, 'references', 'authoring-contract.md'), 'utf8');
-const frontmatter = skill.match(/^---\n([\s\S]*?)\n---/);
+const frontmatter = skill.match(/^---\r?\n([\s\S]*?)\r?\n---/);
 
 test('skill description is portable across 1024-character runtimes and remains searchable', () => {
   assert.ok(frontmatter, 'SKILL.md must start with YAML frontmatter');

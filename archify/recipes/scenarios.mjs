@@ -189,6 +189,27 @@ const RAW_RECIPES = [
     },
   },
   {
+    id: 'member-refund-approval', type: 'business-flow', proof: 'refund-approval',
+    presentation: { preset: 'editorial', motion: 'static', views: 'recommended' },
+    signals: [['会员退款审批流程', 24], ['退款审批', 18], ['业务流程', 14], ['business process', 12], ['refund approval', 12], ['customer journey', 8], ['退款流程', 18], ['跨角色审批', 14], ['补充资料', 10]],
+    en: {
+      title: 'Member refund approval', question: 'How do customer, merchant, and finance roles complete a business decision?',
+      summary: 'A business-readable process with role lanes, explicit outcomes, supporting documents, retry or rework, and a terminal result.',
+      useWhen: 'Product or PRD process reviews, customer journeys, approval chains, exception handling, and cross-role operations.',
+      avoidWhen: 'The audience needs technical orchestration, exact API timing, or a durable object state machine; use workflow, sequence, or lifecycle instead.',
+      include: ['business roles or swimlanes', 'start and terminal outcomes', 'explicit decision labels', 'documents, manual actions, and rework paths'],
+      prompt: 'Use Archify business-flow mode to model this product or PRD business process. Keep the layout left to right, use role lanes when ownership changes, show start/end outcomes, label every decision branch, and include documents, manual inputs, rework, retry, and cross-lane handoffs only when they are real. Do not turn the diagram into a full BPMN notation or a technical runbook.',
+    },
+    zh: {
+      title: '会员退款审批流程', question: '客户、商家和财务如何协作完成一次业务决策？',
+      summary: '面向业务读者的跨角色流程，明确泳道、决策结果、凭证、补充资料和终态。',
+      useWhen: '适合产品/PRD 评审、客户旅程、审批链、异常处理和跨角色运营流程。',
+      avoidWhen: '如果重点是技术编排、精确 API 时序或持久对象状态机，请分别使用 workflow、sequence 或 lifecycle。',
+      include: ['业务角色或泳道', '开始与终态', '明确的决策标签', '凭证、人工动作与返工路径'],
+      prompt: '使用 Archify business-flow 模式建模这段产品或 PRD 业务流程。保持从左到右；责任发生变化时使用角色泳道；展示开始和结束结果；为每条决策分支标注业务标签；仅在事实存在时加入凭证、人工输入、补充资料、重试和跨泳道交接。首版不要扩展成完整 BPMN，也不要画成技术 Runbook。',
+    },
+  },
+  {
     id: 'object-lifecycle', type: 'lifecycle', proof: 'agent-run',
     presentation: { preset: 'classic', motion: 'trace', views: 'optional' },
     signals: [['state machine', 15], ['object lifecycle', 14], ['status transition', 11], ['terminal state', 9], ['retry state', 8], ['状态机', 15], ['生命周期', 13], ['状态流转', 11], ['终态', 9], ['等待态', 8], ['重试状态', 8]],
@@ -303,7 +324,7 @@ export function recommendScenario(query, options = {}) {
 
 export function formatScenarioList(lang = 'en') {
   const isZh = lang === 'zh';
-  const heading = isZh ? 'Archify 场景配方（11）' : 'Archify scenario recipes (11)';
+  const heading = isZh ? 'Archify 场景配方（12）' : 'Archify scenario recipes (12)';
   const intro = isZh
     ? '先选择你要回答的问题，再选择图表类型。可运行：archify guide "你的场景"'
     : 'Choose the question before the diagram type. Run: archify guide "your scenario"';

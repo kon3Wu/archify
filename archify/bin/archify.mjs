@@ -10,7 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(__dirname, '..');
 
-const TYPES = new Set(['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle']);
+const TYPES = new Set(['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle', 'business-flow']);
 
 function usage() {
   return `Usage:
@@ -28,7 +28,7 @@ function usage() {
   archify demo [output-directory]
 
 Types:
-  architecture, workflow, sequence, dataflow, lifecycle
+  architecture, workflow, sequence, dataflow, lifecycle, business-flow
 `;
 }
 
@@ -1295,7 +1295,7 @@ async function commandDoctor() {
   if (validatorsExist) {
     try {
       const module = await import(`${pathToFileURL(validators).href}?doctor=${Date.now()}`);
-      validatorsValid = [...TYPES].every((type) => typeof module[type] === 'function');
+      validatorsValid = [...TYPES].every((type) => typeof module[type === 'business-flow' ? 'businessFlow' : type] === 'function');
     } catch {
       validatorsValid = false;
     }
@@ -1314,6 +1314,7 @@ async function commandDoctor() {
     sequence: 'cache-miss-request.sequence.json',
     dataflow: 'product-analytics.dataflow.json',
     lifecycle: 'agent-run.lifecycle.json',
+    'business-flow': 'standard-business-flow.business-flow.json',
   };
 
   for (const type of TYPES) {
@@ -1410,6 +1411,8 @@ function commandDemo(args) {
   const outputDirectory = path.resolve(args[0] || process.cwd());
   const output = path.join(outputDirectory, 'archify-demo.html');
   const input = path.join(skillRoot, 'examples/web-app.architecture.json');
+  const businessOutput = path.join(outputDirectory, 'archify-business-flow-demo.html');
+  const businessInput = path.join(skillRoot, 'examples/standard-business-flow.business-flow.json');
 
   try {
     fs.mkdirSync(outputDirectory, { recursive: true });
@@ -1419,10 +1422,14 @@ function commandDemo(args) {
 
   const result = runNode([rendererPath('architecture'), input, output]);
   if (result.status !== 0) exitFrom(result);
+  const businessResult = runNode([rendererPath('business-flow'), businessInput, businessOutput]);
+  if (businessResult.status !== 0) exitFrom(businessResult);
 
   console.log(`\nDemo ready: ${output}`);
+  console.log(`Business-flow demo ready: ${businessOutput}`);
   console.log('Next: open the HTML in your browser, then render your own diagram:');
   console.log('  archify render architecture <input.json> <output.html>');
+  console.log('  archify render business-flow <input.json> <output.html>');
 }
 
 function commandValidate(args) {

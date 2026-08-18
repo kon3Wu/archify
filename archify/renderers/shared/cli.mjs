@@ -36,7 +36,7 @@ export function loadDiagram({ rendererDir, diagramType, defaultExample, argv = p
   return { diagram, template, outPath, sourceEvidence };
 }
 
-const START_TYPES = new Set(['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle']);
+const START_TYPES = new Set(['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle', 'business-flow']);
 
 // Common CLI tail: fill the template and write the standalone HTML file.
 export function writeDiagram({ outPath, template, diagramType, meta, svg, cards, sourceEvidence = null }) {
@@ -63,6 +63,7 @@ const SEMANTIC_COLLECTIONS = {
   sequence: 'participants',
   dataflow: 'nodes',
   lifecycle: 'states',
+  'business-flow': 'nodes',
 };
 
 const RELATIONSHIP_COLLECTIONS = {
@@ -71,6 +72,7 @@ const RELATIONSHIP_COLLECTIONS = {
   sequence: 'messages',
   dataflow: 'flows',
   lifecycle: 'transitions',
+  'business-flow': 'edges',
 };
 
 // Relationship IDs are optional for backwards compatibility, but once an
@@ -100,7 +102,7 @@ export function validateRelationshipIds(diagramType, diagram) {
 }
 
 // JSON Schema keeps the view object bounded; this pass checks facts that span
-// collections. Keeping it here makes the same contract apply to all five
+// collections. Keeping it here makes the same contract apply to all six
 // renderers, including the zero-install standalone-validator path.
 export function validateGuidedViews(diagramType, diagram) {
   const views = diagram.meta?.views;

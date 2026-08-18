@@ -17,6 +17,20 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(skillRoot, 'package.jso
 
 const CASES = [
   {
+    id: 'refund-approval',
+    type: 'business-flow',
+    input: 'refund-approval.business-flow.json',
+    output: 'refund-approval.business-flow.html',
+    focus: 'inspect',
+    view: 'approval',
+    accent: '#fb7185',
+    featured: true,
+    titleEn: 'Member Refund Approval',
+    titleZh: '会员退款审批流程',
+    descriptionEn: 'A customer, merchant, and finance process with explicit outcomes, supporting documents, a retry loop, and a cross-role handoff.',
+    descriptionZh: '客户、商家与财务协作的退款流程，包含明确结果、凭证、补充资料回退和跨角色交接。',
+  },
+  {
     id: 'agent-tool-call',
     type: 'workflow',
     input: 'agent-tool-call.workflow.json',
@@ -168,6 +182,7 @@ const SHAPES = {
   sequence: ['participants', 'messages'],
   dataflow: ['nodes', 'flows'],
   lifecycle: ['states', 'transitions'],
+  'business-flow': ['nodes', 'edges'],
 };
 
 const TYPE_LABELS = {
@@ -176,6 +191,7 @@ const TYPE_LABELS = {
   sequence: 'Sequence',
   dataflow: 'Data flow',
   lifecycle: 'Lifecycle',
+  'business-flow': 'Business flow',
 };
 
 function digest(buffer) {

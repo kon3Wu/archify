@@ -25,7 +25,7 @@ test('start page: checked-in HTML is reproducible from canonical scenario recipe
   }
 });
 
-test('start page: offers five bounded bilingual starts without ingesting source content', () => {
+test('start page: offers six bounded bilingual starts without ingesting source content', () => {
   const html = fs.readFileSync(path.join(repoRoot, 'docs/start.html'), 'utf8');
   assert.doesNotMatch(html, /\[\[[A-Z0-9_]+\]\]/);
   assert.match(html, /npx -y skills add tt-a1i\/archify --skill archify --agent codex --global --copy --yes/);
@@ -46,10 +46,10 @@ test('start page: offers five bounded bilingual starts without ingesting source 
   const dataMatch = html.match(/<script id="start-data" type="application\/json">([\s\S]*?)<\/script>/);
   assert.ok(dataMatch);
   const data = JSON.parse(dataMatch[1]);
-  assert.deepEqual(Object.keys(data), ['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle']);
+  assert.deepEqual(Object.keys(data), ['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle', 'business-flow']);
   assert.ok(Object.values(data).every((entry) => entry.en.prompt && entry.zh.prompt && entry.proof));
 
-  const scriptMatch = html.match(/<script>\n([\s\S]*?)\n  <\/script>\n<\/body>/);
+  const scriptMatch = html.match(/<script>\r?\n([\s\S]*?)\r?\n  <\/script>\r?\n<\/body>/);
   assert.ok(scriptMatch);
   assert.doesNotThrow(() => new vm.Script(scriptMatch[1]));
   assert.match(scriptMatch[1], /KNOWN_TYPES\.has\(requestedType\)/);
@@ -75,6 +75,7 @@ test('generated artifacts omit the promotional footer and shortcut manual', () =
     sequence: 'cache-miss-request.sequence.json',
     dataflow: 'product-analytics.dataflow.json',
     lifecycle: 'agent-run.lifecycle.json',
+    'business-flow': 'standard-business-flow.business-flow.json',
   };
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'archify-start-artifacts-'));
   try {

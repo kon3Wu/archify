@@ -35,14 +35,14 @@ test('guide page: ships bilingual recipes and syntactically valid interaction co
   const dataMatch = html.match(/<script id="guide-data" type="application\/json">([\s\S]*?)<\/script>/);
   assert.ok(dataMatch);
   const data = JSON.parse(dataMatch[1]);
-  assert.equal(data.length, 11);
+  assert.equal(data.length, 12);
   assert.equal(data.filter((recipe) => recipe.type === 'workflow').length, 3);
   assert.ok(data.every((recipe) => recipe.en.prompt && recipe.zh.prompt && recipe.proof));
   assert.match(html, /gallery\.html#proof-/);
   assert.match(html, /Open verified example/);
   assert.match(html, /打开验证成品/);
 
-  const scriptMatch = html.match(/<script>\n([\s\S]*?)\n  <\/script>\n<\/body>/);
+  const scriptMatch = html.match(/<script>\r?\n([\s\S]*?)\r?\n  <\/script>\r?\n<\/body>/);
   assert.ok(scriptMatch);
   assert.doesNotThrow(() => new vm.Script(scriptMatch[1]));
 });

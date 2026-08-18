@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "diagram_type": "business-flow",
+  "meta": {
+    "title": "会员退款审批流程",
+    "subtitle": "客户、商家与财务协作完成退款，资料不足时回退补充",
+    "visual_preset": "editorial",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto"
+    },
+    "views": [
+      {
+        "id": "approval",
+        "label": "审批主线",
+        "focus": ["apply", "submit", "receive", "inspect", "audit", "ledger", "complete"]
+      },
+      {
+        "id": "retry",
+        "label": "补充资料",
+        "focus": ["inspect", "need-info"]
+      },
+      {
+        "id": "outcomes",
+        "label": "审批结果",
+        "focus": ["inspect", "audit", "ledger", "complete", "reject"]
+      }
+    ]
+  },
+  "mainPath": ["apply", "submit", "receipt", "receive", "inspect", "audit", "ledger", "complete"],
+  "lanes": [
+    { "id": "customer", "label": "客户", "variant": "normal" },
+    { "id": "merchant", "label": "商家", "variant": "normal" },
+    { "id": "finance", "label": "财务", "variant": "normal" }
+  ],
+  "nodes": [
+    { "id": "apply", "kind": "start", "label": "发起退款", "sublabel": "会员", "lane": "customer", "row": 0, "col": 0 },
+    { "id": "submit", "kind": "manual-input", "label": "填写原因", "sublabel": "客户操作", "lane": "customer", "row": 0, "col": 1 },
+    { "id": "receipt", "kind": "document", "label": "上传凭证", "sublabel": "订单与图片", "lane": "customer", "row": 0, "col": 2 },
+    { "id": "receive", "kind": "process", "label": "受理申请", "sublabel": "商家客服", "lane": "merchant", "row": 0, "col": 3 },
+    { "id": "inspect", "kind": "decision", "label": "资料完整?", "sublabel": "退款规则", "lane": "merchant", "row": 0, "col": 4 },
+    { "id": "need-info", "kind": "external", "label": "补充资料", "sublabel": "客户通知", "lane": "merchant", "row": 1, "col": 5 },
+    { "id": "audit", "kind": "subprocess", "label": "复核退款", "sublabel": "财务审批", "lane": "finance", "row": 0, "col": 5 },
+    { "id": "ledger", "kind": "data-store", "label": "登记退款", "sublabel": "支付台账", "lane": "finance", "row": 0, "col": 6 },
+    { "id": "complete", "kind": "end", "label": "退款完成", "sublabel": "会员到账", "lane": "customer", "row": 0, "col": 7 },
+    { "id": "reject", "kind": "end", "label": "驳回申请", "sublabel": "规则不符", "lane": "customer", "row": 1, "col": 7 }
+  ],
+  "edges": [
+    { "id": "e-apply-submit", "from": "apply", "to": "submit", "role": "main" },
+    { "id": "e-submit-receipt", "from": "submit", "to": "receipt", "role": "main" },
+    { "id": "e-receipt-receive", "from": "receipt", "to": "receive", "role": "main", "fromSide": "bottom", "toSide": "top", "route": "drop", "bias": 0.5 },
+    { "id": "e-receive-inspect", "from": "receive", "to": "inspect", "role": "main" },
+    { "id": "e-inspect-audit", "from": "inspect", "to": "audit", "label": "完整", "role": "main", "fromSide": "bottom", "toSide": "top", "route": "drop", "bias": 0.5 },
+    {
+      "id": "e-inspect-info",
+      "from": "inspect",
+      "to": "need-info",
+      "label": "缺资料",
+      "role": "branch",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [[760, 450], [820, 450], [820, 470]]
+    },
+    { "id": "e-info-retry", "from": "need-info", "to": "inspect", "label": "重新提交", "role": "return", "fromSide": "left", "toSide": "bottom", "via": [[220, 470], [220, 450], [760, 450]], "labelSegment": 2 },
+    { "id": "e-inspect-reject", "from": "inspect", "to": "reject", "label": "不符合", "labelAt": [1280, 330], "role": "error", "fromSide": "right", "toSide": "right", "route": "outside-right", "channelX": 1352 },
+    { "id": "e-audit-ledger", "from": "audit", "to": "ledger", "role": "main" },
+    { "id": "e-ledger-complete", "from": "ledger", "to": "complete", "role": "main", "fromSide": "right", "toSide": "top", "via": [[1364, 616], [1364, 92], [1240, 92]] }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "协作规则",
+      "items": [
+        "客户提交原因与凭证，商家检查退款条件。",
+        "资料不完整时通知补充，并沿左侧回退到检查节点。",
+        "通过后由财务复核、登记台账，再回到客户侧完成。"
+      ]
+    }
+  ]
+}

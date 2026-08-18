@@ -14,16 +14,16 @@
 
 Archify is an agent skill for Raven, Cursor, Claude Code, Codex CLI, and OpenCode. Give it a system description or repository; get an interactive, shareable technical map.
 
-- **Open it and present** — five technical diagram types, four visual presets, dark/light themes, and optional finite motion
+- **Open it and present** — six diagram modes, including product/PRD business flows, four presets, dark/light themes, and finite motion
 - **Review architecture changes before merge** — compare two validated snapshots as Before / Delta / After, with exact added, removed, changed, moved, and rerouted facts
 - **Every interaction stays grounded** — search nodes, optionally open revision-verified source, trace upstream/downstream authored reach and exact routes, compare roles, and play guided stories without inventing topology
 - **One file, ready to trust and share** — typed JSON IR and deterministic checks produce self-contained HTML plus PNG, SVG, WebM, and 1200×630 share cards
 
 ![License](https://img.shields.io/badge/license-MIT-22c55e?style=flat-square)
 ![Agent Skill](https://img.shields.io/badge/Agent-Skill-7C3AED?style=flat-square)
-![Stable Version](https://img.shields.io/badge/version-2.14.0-0891b2?style=flat-square)
+![Stable Version](https://img.shields.io/badge/version-2.15.0-0891b2?style=flat-square)
 
-**Current stable version:** `v2.14.0`. See [Changelog](CHANGELOG.md#2140--2026-08-11).
+**Current stable version:** `v2.15.0`. See [Changelog](CHANGELOG.md#2150--2026-08-18).
 
 **[Project page](https://tt-a1i.github.io/archify/)** · **[Scenario guide](https://tt-a1i.github.io/archify/guide.html)** · **[Proof Lab](https://tt-a1i.github.io/archify/gallery.html)**
 
@@ -60,7 +60,7 @@ These are generated Archify artifacts, not product mockups. Click a frame to ope
 | [![Agent workflow playing one authored chapter](docs/assets/archify-demo-story.png)](https://tt-a1i.github.io/archify/gallery/artifacts/agent-tool-call.workflow.html?theme=dark&present=1&play=1#view=happy-path) | [![Cache-miss sequence showing the Web App to Postgres route](docs/assets/archify-demo-route.png)](https://tt-a1i.github.io/archify/gallery/artifacts/cache-miss.sequence.html?theme=dark&present=1#route=web~db) | [![Production architecture comparing backend and database roles](docs/assets/archify-demo-lens.png)](https://tt-a1i.github.io/archify/gallery/artifacts/production-deployment.architecture.html?theme=dark&present=1#lens=backend~database) |
 | Play one finite named chapter. | Inspect the shortest authored directed path. | Compare real traffic between semantic roles. |
 
-The [Proof Lab](https://tt-a1i.github.io/archify/gallery.html) contains all 11 checked-in scenarios, their JSON sources, named views, and validation receipts.
+The [Proof Lab](https://tt-a1i.github.io/archify/gallery.html) contains 12 scenarios, including business-flow, with JSON sources, views, and receipts.
 
 ### A real repository, mapped from source
 
@@ -76,13 +76,13 @@ Same diagram, two themes, one click to switch:
 |---|---|
 | ![Dark theme](docs/assets/archify-dark.png) | ![Light theme](docs/assets/archify-light.png) |
 
-The Export menu copies PNG to the clipboard and downloads static or motion formats:
+Export copies PNG and downloads static or motion formats:
 
 ![Export menu](docs/assets/archify-menu.png)
 
-Use **Copy Share Card** when you want a canonical 1200×630 image for a README, release, or social post.
+Use **Copy Share Card** for a canonical 1200×630 image.
 
-After tracing a route, **Export → Route Share Card** downloads that authored path as a 1200×630 PNG with the full diagram retained for context.
+After tracing a route, **Export → Route Share Card** downloads a 1200×630 PNG with full context.
 
 ![Route Share Card showing the exact Users to API Server path with the full architecture retained as context](docs/assets/archify-route-share-card.png)
 
@@ -140,7 +140,8 @@ Continue with focused requests such as `add Redis`, `move auth to the left`, or 
 | Type | Best for | Include in your prompt |
 |---|---|---|
 | **Architecture** | Components, services, storage, boundaries | Scope, core components, primary path |
-| **Workflow** | CI/CD, approvals, tool calls, runbooks | Participants, order, branches, exceptions |
+| **Business Flow** | Product/PRD processes and role lanes | Roles, outcomes, decisions |
+| **Workflow** | Technical orchestration, CI/CD, tool calls, runbooks | Participants, order, branches, exceptions |
 | **Sequence** | API calls, cache fallback, auth, async traces | Callers, callees, returns, timing |
 | **Data Flow** | Pipelines, lineage, PII, consumers | Sources, transforms, stores, boundaries |
 | **Lifecycle** | States, retries, waits, terminal outcomes | States, events, retry and cancellation paths |

@@ -98,6 +98,7 @@ try {
     ['sequence', 'cache-miss-request.sequence.json'],
     ['dataflow', 'product-analytics.dataflow.json'],
     ['lifecycle', 'agent-run.lifecycle.json'],
+    ['business-flow', 'standard-business-flow.business-flow.json'],
   ];
   for (const [mode, fixture] of fixtures) {
     const receipt = JSON.parse(run([
@@ -134,6 +135,15 @@ try {
     || !/^[a-f0-9]{64}$/.test(delivered.specification?.sha256 || '')
     || !(delivered.specification?.bytes > 0)) {
     throw new Error('packaged workflow delivery did not return a passing receipt');
+  }
+
+  const businessDelivered = JSON.parse(run([
+    'deliver', 'business-flow', path.join(skillRoot, 'examples', fixtures[5][1]),
+    path.join(scratch, 'business-flow-delivered.html'), '--quality', 'showcase', '--json',
+  ]));
+  if (!businessDelivered.ok || businessDelivered.type !== 'business-flow'
+    || businessDelivered.validation?.compositionStatus !== 'pass') {
+    throw new Error('packaged business-flow delivery did not return a passing receipt');
   }
 
   const visualSkipped = JSON.parse(runExpectFailure([

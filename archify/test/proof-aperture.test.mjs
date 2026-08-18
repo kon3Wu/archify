@@ -34,7 +34,7 @@ test('desktop hero budget exposes live diagram content without shrinking its can
 });
 
 test('narrow viewport preserves a contained fallback without adding a mobile product surface', () => {
-  const mobile = landing.match(/@media\(max-width:640px\)\s*\{([\s\S]+?)\n\s*\}\n\s*<\/style>/)?.[1];
+  const mobile = landing.match(/@media\(max-width:640px\)\s*\{([\s\S]+?)\r?\n\s*\}\r?\n\s*<\/style>/)?.[1];
   assert.ok(mobile, 'narrow mobile media query missing');
   assert.match(mobile, /\.hero\s*\{\s*padding-top:6\.75rem;\s*\}/);
   assert.match(mobile, /\.hero-actions \.btn\s*\{\s*flex:1;\s*justify-content:center;\s*\}/);

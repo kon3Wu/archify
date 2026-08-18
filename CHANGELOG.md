@@ -4,6 +4,14 @@ All notable changes are documented here. Format loosely follows [Keep a Changelo
 
 ## [Unreleased]
 
+## [2.15.0] — 2026-08-18
+
+### Added
+- **Standard business-flow diagrams.** Added the independent `business-flow` type for product/PRD processes: optional role lanes, fixed left-to-right row/column placement, nine business node shapes, explicit decision outcomes, retry/rework loops, shape-aware four-way ports, structured layout diagnostics, real-shape legends, CLI/render/preview/deliver integration, English and Chinese proofs, Start/Guide/Gallery coverage, and dependency-free package smoke coverage.
+
+### Changed
+- **Clearer type routing.** Product/PRD business processes now route to `business-flow`; technical orchestration and Runbooks remain `workflow`; API call timing remains `sequence`; persistent state transitions remain `lifecycle`. The package and public documentation are now version `2.15.0` with six typed diagram modes and twelve Proof Lab scenarios.
+
 ## [2.14.0] — 2026-08-11
 
 ### Added
