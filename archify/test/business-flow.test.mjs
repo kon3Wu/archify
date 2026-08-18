@@ -20,6 +20,12 @@ function run(args) {
   });
 }
 
+function edgePoints(html, id) {
+  const match = html.match(new RegExp(`data-edge-id="${id}"[^>]*data-composition-points="([^"]+)"`));
+  assert.ok(match, `missing route points for ${id}`);
+  return match[1].split(';').map((point) => point.split(',').map(Number));
+}
+
 test('business-flow: standard proof renders all nine semantic shapes and real legend shapes', () => {
   const output = path.join(scratch, 'standard.html');
   const result = run(['render', 'business-flow', fixture, output]);
@@ -57,6 +63,33 @@ test('business-flow: schema and semantic diagnostics reject invalid decisions an
   assert.notEqual(invalidResult.status, 0);
   const invalidReceipt = JSON.parse(invalidResult.stdout);
   assert.ok(invalidReceipt.diagnostics.some((entry) => entry.code === 'business-flow/decision-branch-count'));
+
+  const invalidRole = JSON.parse(fs.readFileSync(fixture, 'utf8'));
+  invalidRole.edges.find((edge) => edge.id === 'e-check-fulfill').role = 'maybe';
+  const invalidRolePath = path.join(scratch, 'invalid-decision-role.json');
+  fs.writeFileSync(invalidRolePath, JSON.stringify(invalidRole));
+  const invalidRoleResult = run(['validate', 'business-flow', invalidRolePath, '--json']);
+  assert.notEqual(invalidRoleResult.status, 0);
+  const invalidRoleReceipt = JSON.parse(invalidRoleResult.stdout);
+  assert.ok(invalidRoleReceipt.diagnostics.some((entry) => entry.code === 'schema/enum'));
+
+  const invalidInputSide = JSON.parse(fs.readFileSync(fixture, 'utf8'));
+  invalidInputSide.edges.find((edge) => edge.id === 'e-capture-check').toSide = 'left';
+  const invalidInputSidePath = path.join(scratch, 'invalid-decision-input-side.json');
+  fs.writeFileSync(invalidInputSidePath, JSON.stringify(invalidInputSide));
+  const invalidInputSideResult = run(['validate', 'business-flow', invalidInputSidePath, '--json']);
+  assert.notEqual(invalidInputSideResult.status, 0);
+  const invalidInputSideReceipt = JSON.parse(invalidInputSideResult.stdout);
+  assert.ok(invalidInputSideReceipt.diagnostics.some((entry) => entry.code === 'business-flow/decision-input-side'));
+
+  const invalidOutputSide = JSON.parse(fs.readFileSync(fixture, 'utf8'));
+  invalidOutputSide.edges.find((edge) => edge.id === 'e-check-fulfill').fromSide = 'top';
+  const invalidOutputSidePath = path.join(scratch, 'invalid-decision-output-side.json');
+  fs.writeFileSync(invalidOutputSidePath, JSON.stringify(invalidOutputSide));
+  const invalidOutputSideResult = run(['validate', 'business-flow', invalidOutputSidePath, '--json']);
+  assert.notEqual(invalidOutputSideResult.status, 0);
+  const invalidOutputSideReceipt = JSON.parse(invalidOutputSideResult.stdout);
+  assert.ok(invalidOutputSideReceipt.diagnostics.some((entry) => entry.code === 'business-flow/decision-output-side'));
 });
 
 test('business-flow: cross-lane, retry, and shape-aware route endpoints survive validation', () => {
@@ -67,6 +100,41 @@ test('business-flow: cross-lane, retry, and shape-aware route endpoints survive 
   assert.match(html, /data-edge-id="e-info-retry"[^>]*data-composition-points="[^"]+"/);
   assert.match(html, /data-edge-id="e-ledger-complete"[^>]*data-composition-points="1146,616;1364,616;1364,92;1240,92;1240,116"/);
   assert.match(html, /data-edge-id="e-inspect-reject"[^>]*marker-end/);
+});
+
+test('business-flow: decision ports reserve top for input, default yes/no outputs, and allow swapped sides', () => {
+  const standardOutput = path.join(scratch, 'decision-ports-standard.html');
+  const standard = run(['render', 'business-flow', fixture, standardOutput]);
+  assert.equal(standard.status, 0, standard.stderr);
+  const standardHtml = fs.readFileSync(standardOutput, 'utf8');
+
+  assert.deepEqual(edgePoints(standardHtml, 'e-capture-check').at(0), [506, 148], 'decision input starts at the source shape');
+  assert.deepEqual(edgePoints(standardHtml, 'e-capture-check').at(-1), [600, 116], 'decision input lands on the top tip');
+  assert.deepEqual(edgePoints(standardHtml, 'e-check-fulfill').at(0), [600, 180], 'yes defaults to the bottom tip');
+  assert.deepEqual(edgePoints(standardHtml, 'e-check-exception').at(0), [668, 148], 'no defaults to the right corner for a right-side target');
+
+  const swapped = JSON.parse(fs.readFileSync(fixture, 'utf8'));
+  const yes = swapped.edges.find((edge) => edge.id === 'e-check-fulfill');
+  const no = swapped.edges.find((edge) => edge.id === 'e-check-exception');
+  yes.role = 'no';
+  yes.fromSide = 'bottom';
+  no.role = 'yes';
+  no.fromSide = 'right';
+  const swappedInput = path.join(scratch, 'decision-ports-swapped.json');
+  const swappedOutput = path.join(scratch, 'decision-ports-swapped.html');
+  fs.writeFileSync(swappedInput, JSON.stringify(swapped));
+  const swappedResult = run(['render', 'business-flow', swappedInput, swappedOutput]);
+  assert.equal(swappedResult.status, 0, swappedResult.stderr);
+  const swappedHtml = fs.readFileSync(swappedOutput, 'utf8');
+  assert.deepEqual(edgePoints(swappedHtml, 'e-check-fulfill').at(0), [600, 180], 'explicit fromSide keeps no below');
+  assert.deepEqual(edgePoints(swappedHtml, 'e-check-exception').at(0), [668, 148], 'explicit fromSide moves yes to the right corner');
+
+  const refundOutput = path.join(scratch, 'decision-ports-multiple-no.html');
+  const refund = run(['render', 'business-flow', refundFixture, refundOutput]);
+  assert.equal(refund.status, 0, refund.stderr);
+  const refundHtml = fs.readFileSync(refundOutput, 'utf8');
+  assert.deepEqual(edgePoints(refundHtml, 'e-inspect-info').at(0), [828, 382], 'first no branch uses the decision right corner');
+  assert.deepEqual(edgePoints(refundHtml, 'e-inspect-reject').at(0), [828, 382], 'multiple no branches may share the same real corner port');
 });
 
 test('business-flow: render, validate, preview, and deliver CLI commands are registered', { timeout: 30000 }, async () => {

@@ -140,7 +140,7 @@ Continue with focused requests such as `add Redis`, `move auth to the left`, or 
 | Type | Best for | Include in your prompt |
 |---|---|---|
 | **Architecture** | Components, services, storage, boundaries | Scope, core components, primary path |
-| **Business Flow** | Product/PRD processes and role lanes | Roles, outcomes, decisions |
+| **Business Flow** | Product/PRD processes and role lanes | Roles, outcomes, decisions (`yes`/`no` ports) |
 | **Workflow** | Technical orchestration, CI/CD, tool calls, runbooks | Participants, order, branches, exceptions |
 | **Sequence** | API calls, cache fallback, auth, async traces | Callers, callees, returns, timing |
 | **Data Flow** | Pipelines, lineage, PII, consumers | Sources, transforms, stores, boundaries |

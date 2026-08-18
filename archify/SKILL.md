@@ -60,6 +60,15 @@ Read Mermaid for topology and meaning, then author fresh Archify JSON; do not me
 - `sequenceDiagram` → `sequence`; participants become semantic participants and arrows become messages.
 - `stateDiagram` → `lifecycle`; states and transitions retain meaning, not Mermaid style.
 
+Business-flow decision ports are semantic and shape-aware: every edge entering a
+`decision` lands on the diamond's top tip. An outgoing edge with `role: "yes"`
+defaults to the bottom tip; `role: "no"` defaults to the left or right corner
+based on its target. Both roles may fan out to multiple edges. Set
+`fromSide: "left"`, `"right"`, or `"bottom"` on an individual edge to exchange
+the yes/no positions for that case; the renderer keeps arrows on the real
+diamond outline and routes around the shape. `toSide` is omitted (or set to
+`"top"`) for decision inputs.
+
 ## Authoring invariants
 
 - One obvious main path; side branches leave the nearest main-path node. Remove low-value edges before adding routing controls.

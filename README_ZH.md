@@ -136,7 +136,7 @@ Redis Session 查询 -> PostgreSQL 回源。把缓存未命中作为次要路径
 | 类型 | 最适合 | Prompt 中应包含 |
 |---|---|---|
 | **Architecture** | 组件、服务、存储和系统边界 | 范围、核心组件、主要路径 |
-| **Business Flow** | 产品/PRD 流程与角色泳道 | 角色、结果、决策 |
+| **Business Flow** | 产品/PRD 流程与角色泳道 | 角色、结果、决策（`yes`/`no` 端口） |
 | **Workflow** | 技术编排、CI/CD、工具调用、Runbook | 参与者、顺序、分支、异常 |
 | **Sequence** | API 调用、缓存回源、鉴权、异步链路 | 调用方、被调用方、返回、时序 |
 | **Data Flow** | 数据管线、血缘、PII、下游消费者 | 来源、转换、存储、边界 |

@@ -29,3 +29,48 @@ Passed node --test test/business-flow.test.mjs, node --test test/gallery.test.mj
 - docs/gallery/artifacts/refund-approval.business-flow.visual-check.json
 - archify.zip
 - docs/development-task-plan.md
+
+## 2026-08-18 12:23:15 - Business-flow decision branch ports
+
+**Bug**
+Decision nodes did not consistently reserve the top tip for input or provide configurable yes/no outputs at the diamond's semantic ports; branch fan-out and swapped yes/no positions could not be expressed reliably.
+
+**Root Cause**
+Decision edges reused rectangular side inference and automatic port spreading, so diamond tips and corners were treated like ordinary box edges and role semantics were not represented in the schema or renderer.
+
+**Changes**
+Added yes/no edge roles, schema and validator diagnostics, top-only decision inputs, role-aware default output ports, explicit fromSide overrides for swapped positions, multi-edge fan-out at real diamond points, and decision-aware orthogonal routing; updated proof examples, tests, docs, and generated package artifacts.
+
+**Validation**
+Passed node --test test/business-flow.test.mjs test/gallery.test.mjs (6/6), npm run check:validators, node test/golden.mjs, release identity, showcase validation and visual-check containment/captures, package smoke without node_modules, and installed-skill doctor/examples/validate/render/preview/deliver/guide checks. The full npm test completed 633 tests with 612 passed, 3 skipped, and 18 environment-related failures (Windows symlink permissions, temporary repository-root/case handling, and a pre-existing README showcase drift check).
+
+**Files Changed**
+- CHANGELOG.md
+- README.md
+- README_EN.md
+- README_ZH.md
+- ROADMAP.md
+- archify.zip
+- archify/SKILL.md
+- archify/examples/refund-approval.business-flow.json
+- archify/examples/standard-business-flow.business-flow.json
+- archify/renderers/business-flow/render-business-flow.mjs
+- archify/renderers/shared/generated-validators.mjs
+- archify/schemas/business-flow.schema.json
+- archify/test/business-flow.test.mjs
+- docs/development-task-plan.md
+- docs/gallery.html
+- docs/gallery/artifacts/refund-approval.business-flow.html
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.1440x900.dark.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.1440x900.light.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.2048x1320.dark.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.2048x1320.light.png
+- docs/gallery/artifacts/refund-approval.business-flow.visual-check.json
+- docs/gallery/manifest.json
+- docs/gallery/sources/refund-approval.business-flow.json
+- examples/business-flow-standard-rendered.html
+- examples/business-flow-standard-rendered.visual-check.1440x900.dark.png
+- examples/business-flow-standard-rendered.visual-check.1440x900.light.png
+- examples/business-flow-standard-rendered.visual-check.2048x1320.dark.png
+- examples/business-flow-standard-rendered.visual-check.2048x1320.light.png
+- examples/business-flow-standard-rendered.visual-check.json

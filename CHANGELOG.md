@@ -12,6 +12,9 @@ All notable changes are documented here. Format loosely follows [Keep a Changelo
 ### Changed
 - **Clearer type routing.** Product/PRD business processes now route to `business-flow`; technical orchestration and Runbooks remain `workflow`; API call timing remains `sequence`; persistent state transitions remain `lifecycle`. The package and public documentation are now version `2.15.0` with six typed diagram modes and twelve Proof Lab scenarios.
 
+### Fixed
+- **Decision branch ports.** Business-flow decision inputs now land on the diamond's top tip. Authored `yes` and `no` roles default to bottom and left/right output corners, respectively; `fromSide` can exchange those positions, and multiple branches remain anchored to the real diamond outline.
+
 ## [2.14.0] — 2026-08-11
 
 ### Added

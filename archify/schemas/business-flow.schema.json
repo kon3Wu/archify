@@ -232,7 +232,9 @@
               "branch",
               "async",
               "return",
-              "error"
+              "error",
+              "yes",
+              "no"
             ]
           },
           "fromSide": {

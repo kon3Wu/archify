@@ -50,19 +50,19 @@
     { "id": "e-submit-receipt", "from": "submit", "to": "receipt", "role": "main" },
     { "id": "e-receipt-receive", "from": "receipt", "to": "receive", "role": "main", "fromSide": "bottom", "toSide": "top", "route": "drop", "bias": 0.5 },
     { "id": "e-receive-inspect", "from": "receive", "to": "inspect", "role": "main" },
-    { "id": "e-inspect-audit", "from": "inspect", "to": "audit", "label": "完整", "role": "main", "fromSide": "bottom", "toSide": "top", "route": "drop", "bias": 0.5 },
+    { "id": "e-inspect-audit", "from": "inspect", "to": "audit", "label": "完整", "role": "yes", "fromSide": "bottom", "toSide": "top", "route": "drop", "bias": 0.5 },
     {
       "id": "e-inspect-info",
       "from": "inspect",
       "to": "need-info",
       "label": "缺资料",
-      "role": "branch",
-      "fromSide": "bottom",
+      "labelAt": [900, 428],
+      "role": "no",
       "toSide": "left",
-      "via": [[760, 450], [820, 450], [820, 470]]
+      "via": [[844, 382], [844, 470]]
     },
-    { "id": "e-info-retry", "from": "need-info", "to": "inspect", "label": "重新提交", "role": "return", "fromSide": "left", "toSide": "bottom", "via": [[220, 470], [220, 450], [760, 450]], "labelSegment": 2 },
-    { "id": "e-inspect-reject", "from": "inspect", "to": "reject", "label": "不符合", "labelAt": [1280, 330], "role": "error", "fromSide": "right", "toSide": "right", "route": "outside-right", "channelX": 1352 },
+    { "id": "e-info-retry", "from": "need-info", "to": "inspect", "label": "重新提交", "role": "return", "fromSide": "left", "toSide": "top", "via": [[844, 470], [844, 334], [760, 334]], "labelSegment": 2 },
+    { "id": "e-inspect-reject", "from": "inspect", "to": "reject", "label": "不符合", "labelAt": [1280, 330], "role": "no", "variant": "security", "fromSide": "right", "toSide": "right", "route": "outside-right", "channelX": 1352 },
     { "id": "e-audit-ledger", "from": "audit", "to": "ledger", "role": "main" },
     { "id": "e-ledger-complete", "from": "ledger", "to": "complete", "role": "main", "fromSide": "right", "toSide": "top", "via": [[1364, 616], [1364, 92], [1240, 92]] }
   ],

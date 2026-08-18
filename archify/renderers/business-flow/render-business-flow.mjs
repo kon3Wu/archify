@@ -82,6 +82,10 @@ const KIND_FILL = {
   external: 'c-external',
 };
 
+const DECISION_OUTPUT_SIDES = new Set(['left', 'right', 'bottom']);
+const DECISION_BRANCH_ROLES = new Set(['yes', 'no']);
+const DECISION_ROUTE_GAP = 16;
+
 const layout = {
   laneX: 48,
   laneY: 70,
@@ -359,6 +363,27 @@ function validateBusinessFlow() {
     } else {
       incoming.get(edge.to).push(edge);
     }
+
+    const from = nodes.get(edge.from);
+    const to = nodes.get(edge.to);
+    if (from?.kind === 'decision' && edge.fromSide === 'top') {
+      problems.push(problem(
+        'business-flow/decision-output-side',
+        `Decision output edge "${edge.id || `${edge.from}->${edge.to}`}" cannot use the top side; the top tip is reserved for input.`,
+        { diagramType: 'business-flow', collection: 'edges', index, id: edge.id || undefined, field: 'fromSide' },
+        { fromSide: edge.fromSide, allowedSides: [...DECISION_OUTPUT_SIDES] },
+        ['use fromSide "bottom", "left", or "right" for a decision output'],
+      ));
+    }
+    if (to?.kind === 'decision' && edge.toSide && edge.toSide !== 'top') {
+      problems.push(problem(
+        'business-flow/decision-input-side',
+        `Edge "${edge.id || `${edge.from}->${edge.to}`}" must enter decision "${to.id}" through its top tip.`,
+        { diagramType: 'business-flow', collection: 'edges', index, id: edge.id || undefined, field: 'toSide' },
+        { toSide: edge.toSide, requiredSide: 'top' },
+        ['remove toSide or set toSide "top"'],
+      ));
+    }
   }
 
   for (const id of startNodes) {
@@ -553,6 +578,31 @@ function validateBusinessFlow() {
   failProblems('Business-flow layout validation failed', problems);
 }
 
+function decisionRole(edge) {
+  return DECISION_BRANCH_ROLES.has(edge?.role) ? edge.role : null;
+}
+
+function defaultDecisionOutputSide(edge, from, to) {
+  const role = decisionRole(edge);
+  if (role === 'yes') return 'bottom';
+  if (to.cx < from.cx) return 'left';
+  if (to.cx > from.cx) return 'right';
+  return role === 'no' || to.cy >= from.cy ? 'right' : 'left';
+}
+
+function fromConnectionSide(edge, from, to) {
+  if (from?.kind === 'decision') {
+    if (DECISION_OUTPUT_SIDES.has(edge.fromSide)) return edge.fromSide;
+    return defaultDecisionOutputSide(edge, from, to);
+  }
+  return chosenSide(edge.fromSide, defaultFromSide(from, to));
+}
+
+function toConnectionSide(edge, from, to) {
+  if (to?.kind === 'decision') return 'top';
+  return chosenSide(edge.toSide, defaultToSide(from, to));
+}
+
 function businessAnchor(node, side) {
   const { x, y, width, height, cx, cy } = node;
   if (node.kind === 'manual-input') {
@@ -565,6 +615,15 @@ function businessAnchor(node, side) {
   }
   if (node.kind === 'data-store' && side === 'bottom') return [cx, y + height - 4];
   if (node.kind === 'document' && side === 'bottom') return [cx, y + height - 4];
+  if (node.kind === 'decision') {
+    switch (side) {
+      case 'left': return [x, cy];
+      case 'right': return [x + width, cy];
+      case 'top': return [cx, y];
+      case 'bottom': return [cx, y + height];
+      default: return [cx, y + height];
+    }
+  }
   switch (side) {
     case 'left': return [x, cy];
     case 'right': return [x + width, cy];
@@ -589,8 +648,8 @@ function businessPortSpread(relations, boxes) {
     const from = boxes.get(relation.from);
     const to = boxes.get(relation.to);
     if (!from || !to) continue;
-    add(relation, 'from', from, chosenSide(relation.fromSide, defaultFromSide(from, to)), to);
-    add(relation, 'to', to, chosenSide(relation.toSide, defaultToSide(from, to)), from);
+    add(relation, 'from', from, fromConnectionSide(relation, from, to), to);
+    add(relation, 'to', to, toConnectionSide(relation, from, to), from);
   }
   for (const list of groups.values()) {
     if (list.length < 2) continue;
@@ -608,8 +667,13 @@ function businessPortSpread(relations, boxes) {
     for (const [index, item] of list.entries()) {
       const offset = (index - (list.length - 1) / 2) * spacing;
       const point = businessAnchor(item.node, item.side);
-      if (verticalSide) point[1] += offset;
-      else point[0] += offset;
+      // Decision ports are diamond tips/corners. Keep every yes/no and input
+      // edge on the real outline instead of shifting a corner onto an
+      // imaginary vertical or horizontal edge.
+      if (item.node.kind !== 'decision') {
+        if (verticalSide) point[1] += offset;
+        else point[0] += offset;
+      }
       const endpoints = spread.get(item.relation) || {};
       endpoints[item.endpoint] = point;
       spread.set(item.relation, endpoints);
@@ -643,6 +707,73 @@ function sameLaneAutoVia(start, end, from, to, fromSide, toSide) {
   return candidates.find((via) => routeHonorsEndpointSides([start, ...via, end], fromSide, toSide)) || candidates[0];
 }
 
+function decisionInputAutoVia(to, start, end, fromSide) {
+  const approachY = to.y - DECISION_ROUTE_GAP;
+  const channels = [to.x - DECISION_ROUTE_GAP, to.x + to.width + DECISION_ROUTE_GAP];
+  const candidates = [];
+  const horizontalSides = new Set(['left', 'right']);
+
+  if (horizontalSides.has(fromSide)) {
+    const orderedChannels = fromSide === 'right' ? channels : channels.slice().reverse();
+    for (const channelX of orderedChannels) {
+      candidates.push([
+        [channelX, start[1]],
+        [channelX, approachY],
+        [end[0], approachY],
+      ]);
+    }
+  } else {
+    const firstY = fromSide === 'top'
+      ? Math.min(start[1] - DECISION_ROUTE_GAP, approachY)
+      : Math.max(start[1] + DECISION_ROUTE_GAP, to.y + to.height + DECISION_ROUTE_GAP);
+    for (const channelX of channels) {
+      candidates.push([
+        [start[0], firstY],
+        [channelX, firstY],
+        [channelX, approachY],
+        [end[0], approachY],
+      ]);
+    }
+  }
+
+  return candidates.find((via) => routeHonorsEndpointSides([start, ...via, end], fromSide, 'top')) || null;
+}
+
+function decisionOutputAutoVia(from, to, start, end, fromSide, toSide) {
+  if (fromSide === 'bottom') {
+    const channelY = Math.max(from.y + from.height, to.y + to.height) + DECISION_ROUTE_GAP;
+    const targetStub = {
+      left: [to.x - DECISION_ROUTE_GAP, end[1]],
+      right: [to.x + to.width + DECISION_ROUTE_GAP, end[1]],
+      top: [end[0], to.y - DECISION_ROUTE_GAP],
+      bottom: [end[0], to.y + to.height + DECISION_ROUTE_GAP],
+    }[toSide];
+    if (targetStub) {
+      const via = [
+        [start[0], channelY],
+        [targetStub[0], channelY],
+        targetStub,
+      ];
+      if (routeHonorsEndpointSides([start, ...via, end], fromSide, toSide)) return via;
+    }
+  }
+
+  return null;
+}
+
+function decisionAutoVia(from, to, start, end, fromSide, toSide) {
+  if (routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
+  if (to.kind === 'decision') {
+    const via = decisionInputAutoVia(to, start, end, fromSide);
+    if (via) return via;
+  }
+  if (from.kind === 'decision') {
+    const via = decisionOutputAutoVia(from, to, start, end, fromSide, toSide);
+    if (via) return via;
+  }
+  return null;
+}
+
 function routeVia(edge, from, to, start, end, fromSide, toSide) {
   if (edge.via) return edge.via;
   switch (edge.route || 'auto') {
@@ -670,6 +801,8 @@ function routeVia(edge, from, to, start, end, fromSide, toSide) {
     }
     case 'auto':
     default: {
+      const decisionVia = decisionAutoVia(from, to, start, end, fromSide, toSide);
+      if (decisionVia) return decisionVia;
       if ((from.lane !== to.lane || from.row === to.row) && routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
       if (from.lane !== to.lane) {
         const y = gapYBetween(from.lane, to.lane, edge.bias ?? 0.5);
@@ -688,8 +821,8 @@ function connectionSides(edge) {
   const from = nodes.get(edge.from);
   const to = nodes.get(edge.to);
   return {
-    fromSide: chosenSide(edge.fromSide, defaultFromSide(from, to)),
-    toSide: chosenSide(edge.toSide, defaultToSide(from, to)),
+    fromSide: fromConnectionSide(edge, from, to),
+    toSide: toConnectionSide(edge, from, to),
   };
 }
 

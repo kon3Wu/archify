@@ -4916,12 +4916,12 @@
         <!-- Business edges -->
         <path data-edge-from="start" data-edge-to="request" data-edge-key="0" data-edge-id="e-start-request" data-composition-points="180,148;221,148" d="M 180 148 L 221 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="request" data-edge-to="capture" data-edge-key="1" data-edge-id="e-request-capture" data-composition-points="339,148;374,148" d="M 339 148 L 374 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="capture" data-edge-to="check" data-edge-key="2" data-edge-id="e-capture-check" data-composition-points="506,148;532,148" d="M 506 148 L 532 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="check" data-edge-to="fulfill" data-edge-label="Eligible" data-edge-key="3" data-edge-id="e-check-fulfill" data-composition-points="668,148;696,148" d="M 668 148 L 696 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="capture" data-edge-to="check" data-edge-key="2" data-edge-id="e-capture-check" data-composition-points="506,148;516,148;516,100;600,100;600,116" d="M 506 148 L 516 148 L 516 100 L 600 100 L 600 116" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="check" data-edge-to="fulfill" data-edge-label="Eligible" data-edge-key="3" data-edge-id="e-check-fulfill" data-composition-points="600,180;600,196;680,196;680,148;696,148" d="M 600 180 L 600 196 L 680 196 L 680 148 L 696 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="fulfill" data-edge-to="ledger" data-edge-key="4" data-edge-id="e-fulfill-ledger" data-composition-points="824,148;854,148" d="M 824 148 L 854 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="ledger" data-edge-to="package" data-edge-key="5" data-edge-id="e-ledger-package" data-composition-points="986,148;1010,148" d="M 986 148 L 1010 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="package" data-edge-to="finish" data-edge-key="6" data-edge-id="e-package-finish" data-composition-points="1150,148;1180,148" d="M 1150 148 L 1180 148" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="check" data-edge-to="exception" data-edge-label="Needs review" data-edge-key="7" data-edge-id="e-check-exception" data-composition-points="600,180;600,194;600,212;670,212;670,236;694,236" d="M 600 180 L 600 194 L 600 212 L 670 212 L 670 236 L 694 236" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="check" data-edge-to="exception" data-edge-label="Needs review" data-edge-key="7" data-edge-id="e-check-exception" data-composition-points="668,148;681,148;681,236;694,236" d="M 668 148 L 681 148 L 681 236 L 694 236" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         <path data-edge-from="exception" data-edge-to="exception-finish" data-edge-key="8" data-edge-id="e-exception-finish" data-composition-points="826,236;1180,236" d="M 826 236 L 1180 236" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
 
         <!-- Business nodes -->
@@ -4966,8 +4966,8 @@
 
         <g id="node-ledger" data-node-id="ledger" data-node-label="Update ledger" tabindex="0" role="button" aria-label="Focus Update ledger, System of record, Business flow" aria-pressed="false" data-node-kind="data-store" data-node-sublabel="System of record" data-node-context="Business flow" data-business-shape="data-store">
           <title>Update ledger · System of record · Business flow</title>
-          <path d="M 854 124 C 854 119 986 119 986 124 V 172 C 986 177 854 177 854 172 Z" class="c-mask" stroke-width="0"/><ellipse cx="920" cy="124" rx="66" ry="8" class="c-mask" fill="none" stroke-width="0"/>
-          <path d="M 854 124 C 854 119 986 119 986 124 V 172 C 986 177 854 177 854 172 Z" class="c-database" stroke-width="1.5"/><ellipse cx="920" cy="124" rx="66" ry="8" class="c-database" fill="none" stroke-width="1.5"/>
+          <path d="M 854 124 C 854 119 986 119 986 124 V 172 C 986 177 854 177 854 172 Z" class="c-mask" stroke-width="0"/><path d="M 854 124 V 172 C 854 177 986 177 986 172 V 124" class="c-mask" fill="none" stroke-width="0"/><ellipse cx="920" cy="124" rx="66" ry="8" class="c-mask" fill="none" stroke-width="0"/>
+          <path d="M 854 124 C 854 119 986 119 986 124 V 172 C 986 177 854 177 854 172 Z" class="c-database" stroke-width="0"/><path d="M 854 124 V 172 C 854 177 986 177 986 172 V 124" class="c-database" fill="none" stroke-width="1.5"/><ellipse cx="920" cy="124" rx="66" ry="8" class="c-database" fill="none" stroke-width="1.5"/>
           <text data-detail-anchor x="920" y="145" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Update ledger</text>
           <text data-detail="context" x="920" y="162" class="t-muted" font-size="8" text-anchor="middle">System of record</text>
         </g>
@@ -5007,15 +5007,15 @@
 
 
         <g data-detail="context" data-edge-from="check" data-edge-to="fulfill" data-edge-label="Eligible" data-edge-key="3" data-edge-id="e-check-fulfill">
-          <rect x="675.8" y="190" width="48.4" height="14" rx="3" class="c-mask"/>
-          <text x="700" y="200" class="t-muted" font-size="8" text-anchor="middle">Eligible</text>
+          <rect x="615.8" y="206" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="640" y="216" class="t-muted" font-size="8" text-anchor="middle">Eligible</text>
         </g>
 
 
 
         <g data-detail="context" data-edge-from="check" data-edge-to="exception" data-edge-label="Needs review" data-edge-key="7" data-edge-id="e-check-exception">
-          <rect x="601.2" y="182" width="67.6" height="14" rx="3" class="c-mask"/>
-          <text x="635" y="192" class="t-muted" font-size="8" text-anchor="middle">Needs review</text>
+          <rect x="650.2" y="102" width="67.6" height="14" rx="3" class="c-mask"/>
+          <text x="684" y="112" class="t-muted" font-size="8" text-anchor="middle">Needs review</text>
         </g>
 
 
@@ -5039,7 +5039,7 @@
             <text x="311" y="344" class="t-muted" font-size="7.5" font-weight="500">Decision</text>
           </g>
           <g data-legend-semantic-kind="data-store" data-legend-kind="data-store" data-legend-label="Data store" data-legend-x="374" data-legend-baseline="344" data-legend-width="93">
-            <g data-legend-shape="data-store"><path d="M 374 342 C 374 337 394 337 394 342 V 338 C 394 343 374 343 374 338 Z" class="c-database" stroke-width="1.1"/><ellipse cx="384" cy="342" rx="10" ry="8" class="c-database" fill="none" stroke-width="1.1"/></g>
+            <g data-legend-shape="data-store"><path d="M 374 342 C 374 337 394 337 394 342 V 338 C 394 343 374 343 374 338 Z" class="c-database" stroke-width="0"/><path d="M 374 342 V 338 C 374 343 394 343 394 338 V 342" class="c-database" fill="none" stroke-width="1.1"/><ellipse cx="384" cy="342" rx="10" ry="8" class="c-database" fill="none" stroke-width="1.1"/></g>
             <text x="402" y="344" class="t-muted" font-size="7.5" font-weight="500">Data store</text>
           </g>
           <g data-legend-semantic-kind="document" data-legend-kind="document" data-legend-label="Document" data-legend-x="474" data-legend-baseline="344" data-legend-width="84">

@@ -39,22 +39,11 @@
     { "id": "e-start-request", "from": "start", "to": "request", "role": "main" },
     { "id": "e-request-capture", "from": "request", "to": "capture", "role": "main" },
     { "id": "e-capture-check", "from": "capture", "to": "check", "role": "main" },
-    { "id": "e-check-fulfill", "from": "check", "to": "fulfill", "label": "Eligible", "labelAt": [700, 200], "role": "main" },
+    { "id": "e-check-fulfill", "from": "check", "to": "fulfill", "label": "Eligible", "labelAt": [640, 216], "role": "yes" },
     { "id": "e-fulfill-ledger", "from": "fulfill", "to": "ledger", "role": "main" },
     { "id": "e-ledger-package", "from": "ledger", "to": "package", "role": "main" },
     { "id": "e-package-finish", "from": "package", "to": "finish", "role": "main" },
-    {
-      "id": "e-check-exception",
-      "from": "check",
-      "to": "exception",
-      "label": "Needs review",
-      "role": "branch",
-      "fromSide": "bottom",
-      "toSide": "left",
-      "via": [[600, 194], [600, 212], [670, 212], [670, 236]],
-      "labelSegment": 2,
-      "labelDy": -10
-    },
+    { "id": "e-check-exception", "from": "check", "to": "exception", "label": "Needs review", "labelAt": [684, 112], "role": "no" },
     { "id": "e-exception-finish", "from": "exception", "to": "exception-finish", "role": "error" }
   ],
   "cards": [
