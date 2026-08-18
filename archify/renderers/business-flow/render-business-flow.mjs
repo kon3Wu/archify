@@ -772,6 +772,14 @@ function cylinderPath(node) {
   return `M ${x} ${top} C ${x} ${y + 3} ${right} ${y + 3} ${right} ${top} V ${bottom} C ${right} ${y + height - 3} ${x} ${y + height - 3} ${x} ${bottom} Z`;
 }
 
+function cylinderOutlinePath(node) {
+  const { x, y, width, height } = node;
+  const right = x + width;
+  const top = y + 8;
+  const bottom = y + height - 8;
+  return `M ${x} ${top} V ${bottom} C ${x} ${y + height - 3} ${right} ${y + height - 3} ${right} ${bottom} V ${top}`;
+}
+
 function shapeMarkup(kind, node, className, strokeWidth = 1.5, animation = '') {
   const { x, y, width, height, cx, cy } = node;
   const attrs = `class="${className}" stroke-width="${strokeWidth}"${animation}`;
@@ -781,8 +789,11 @@ function shapeMarkup(kind, node, className, strokeWidth = 1.5, animation = '') {
       return `<rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${height / 2}" ${attrs}/>`;
     case 'decision':
       return `<polygon points="${polygonPoints(node, [[cx, y], [x + width, cy], [cx, y + height], [x, cy]])}" ${attrs}/>`;
-    case 'data-store':
-      return `<path d="${cylinderPath(node)}" ${attrs}/><ellipse cx="${cx}" cy="${y + 8}" rx="${width / 2}" ry="8" ${attrs.replace(`class="${className}"`, `class="${className}" fill="none"`)}/>`;
+    case 'data-store': {
+      const fillAttrs = attrs.replace(/stroke-width="[^"]+"/, 'stroke-width="0"');
+      const outlineAttrs = attrs.replace(`class="${className}"`, `class="${className}" fill="none"`);
+      return `<path d="${cylinderPath(node)}" ${fillAttrs}/><path d="${cylinderOutlinePath(node)}" ${outlineAttrs}/><ellipse cx="${cx}" cy="${y + 8}" rx="${width / 2}" ry="8" ${outlineAttrs}/>`;
+    }
     case 'document':
       return `<path d="${documentPath(node)}" ${attrs}/>`;
     case 'manual-input': {

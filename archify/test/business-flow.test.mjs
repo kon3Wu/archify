@@ -31,6 +31,12 @@ test('business-flow: standard proof renders all nine semantic shapes and real le
   }
   assert.match(html, /data-node-kind="decision"/);
   assert.match(html, /data-edge-id="e-check-exception"/);
+  const ledger = html.match(/<g id="node-ledger"[\s\S]*?<\/g>/)?.[0];
+  assert.ok(ledger, 'Update ledger node should be rendered');
+  assert.match(ledger, /<path d="M 854 124 C 854 119 986 119 986 124 V 172 C 986 177 854 177 854 172 Z" class="c-database" stroke-width="0"\/>/);
+  assert.match(ledger, /<path d="M 854 124 V 172 C 854 177 986 177 986 172 V 124" class="c-database" fill="none" stroke-width="1\.5"\/>/);
+  assert.equal((ledger.match(/class="c-database"/g) || []).length, 3, 'data-store should have one fill path, one open outline, and one top ellipse');
+  assert.doesNotMatch(ledger, /class="c-database" stroke-width="1\.5"\/>\s*<ellipse/);
 });
 
 test('business-flow: schema and semantic diagnostics reject invalid decisions and unknown fields', () => {
