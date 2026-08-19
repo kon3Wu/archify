@@ -387,6 +387,165 @@ test('lifecycle: automatic routes leave left/right ports horizontally and enter 
   assert.equal(points.at(-2)[0], points.at(-1)[0], 'lower target must receive a vertical top entry');
 });
 
+test('lifecycle: top/bottom source ports leave on their vertical normals', () => {
+  const bottomHtml = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Bottom lifecycle endpoint routing' },
+    lanes: [
+      { id: 'main', label: 'Main' },
+      { id: 'events', label: 'Events' },
+    ],
+    states: [
+      { id: 'bottom-source', type: 'active', label: 'Bottom source', lane: 'main', col: 0 },
+      { id: 'bottom-target', type: 'waiting', label: 'Bottom target', lane: 'events', col: 2 },
+    ],
+    transitions: [{ id: 'bottom-departure', from: 'bottom-source', to: 'bottom-target', fromSide: 'bottom', route: 'straight' }],
+  });
+
+  const bottom = connectionPoints(bottomHtml, 'bottom-departure');
+  assert.equal(bottom[0][0], bottom[1][0]);
+  assert.ok(bottom[1][1] > bottom[0][1]);
+
+  const topHtml = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Top lifecycle endpoint routing' },
+    lanes: [
+      { id: 'main', label: 'Main' },
+      { id: 'events', label: 'Events' },
+    ],
+    states: [
+      { id: 'top-source', type: 'active', label: 'Top source', lane: 'events', col: 2 },
+      { id: 'top-target', type: 'waiting', label: 'Top target', lane: 'main', col: 4 },
+    ],
+    transitions: [{ id: 'top-departure', from: 'top-source', to: 'top-target', fromSide: 'top', toSide: 'bottom', route: 'straight' }],
+  });
+
+  const top = connectionPoints(topHtml, 'top-departure');
+  assert.equal(top[0][0], top[1][0]);
+  assert.ok(top[1][1] < top[0][1]);
+});
+
+test('lifecycle: opposite vertical endpoints use an offset channel without U-turns', () => {
+  const assertClean = (points) => {
+    for (let index = 0; index < points.length - 1; index += 1) {
+      assert.ok(
+        points[index][0] === points[index + 1][0] || points[index][1] === points[index + 1][1],
+        `segment ${points[index]} -> ${points[index + 1]} must stay orthogonal`,
+      );
+    }
+    for (let index = 0; index < points.length - 2; index += 1) {
+      const first = [points[index + 1][0] - points[index][0], points[index + 1][1] - points[index][1]];
+      const second = [points[index + 2][0] - points[index + 1][0], points[index + 2][1] - points[index + 1][1]];
+      const sameAxis = (first[0] === 0 && second[0] === 0) || (first[1] === 0 && second[1] === 0);
+      assert.ok(!sameAxis || first[0] * second[0] + first[1] * second[1] >= 0, `U-turn at ${points[index + 1]}`);
+    }
+  };
+
+  const sourceBelowHtml = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Source below target' },
+    lanes: [{ id: 'main', label: 'Main' }, { id: 'events', label: 'Events' }],
+    states: [
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'events', col: 0 },
+      { id: 'source', type: 'active', label: 'Source', lane: 'events', col: 0, yOffset: 150 },
+    ],
+    transitions: [{ id: 'source-below', from: 'source', to: 'target', fromSide: 'bottom', route: 'straight' }],
+  });
+  const sourceBelow = connectionPoints(sourceBelowHtml, 'source-below');
+  assert.equal(sourceBelow[0][0], sourceBelow[1][0]);
+  assert.ok(sourceBelow[1][1] > sourceBelow[0][1]);
+  assertClean(sourceBelow);
+
+  const targetBelowHtml = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Target below source' },
+    lanes: [{ id: 'main', label: 'Main' }, { id: 'events', label: 'Events' }],
+    states: [
+      { id: 'source', type: 'active', label: 'Source', lane: 'events', col: 0 },
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'events', col: 0, yOffset: 150 },
+    ],
+    transitions: [{ id: 'target-below', from: 'source', to: 'target', fromSide: 'top', toSide: 'top', route: 'straight' }],
+  });
+  const targetBelow = connectionPoints(targetBelowHtml, 'target-below');
+  assert.equal(targetBelow.at(-2)[0], targetBelow.at(-1)[0]);
+  assert.ok(targetBelow.at(-2)[1] < targetBelow.at(-1)[1]);
+  assertClean(targetBelow);
+});
+
+test('lifecycle: actual authored routes honor vertical endpoints without backtracking', () => {
+  const html = render('lifecycle', JSON.parse(fs.readFileSync(path.join(skillRoot, 'examples/agent-run.lifecycle.json'), 'utf8')));
+  const assertNoBacktracking = (points, id) => {
+    for (let index = 0; index < points.length - 2; index += 1) {
+      const first = points[index];
+      const middle = points[index + 1];
+      const last = points[index + 2];
+      const firstVector = [middle[0] - first[0], middle[1] - first[1]];
+      const secondVector = [last[0] - middle[0], last[1] - middle[1]];
+      const sameAxis = (firstVector[0] === 0 && secondVector[0] === 0)
+        || (firstVector[1] === 0 && secondVector[1] === 0);
+      const dot = firstVector[0] * secondVector[0] + firstVector[1] * secondVector[1];
+      assert.ok(!sameAxis || dot >= 0, `${id} route backtracks at ${middle}`);
+    }
+  };
+
+  const executionFailed = connectionPoints(html, 'execution-failed');
+  assertNoBacktracking(executionFailed, 'execution-failed');
+
+  const approvalCancelled = connectionPoints(html, 'approval-cancelled');
+  assert.equal(approvalCancelled[0][0], approvalCancelled[1][0], 'approval-cancelled must leave the bottom port vertically');
+  assert.ok(approvalCancelled[1][1] > approvalCancelled[0][1], 'approval-cancelled must leave downward');
+  assert.equal(approvalCancelled.at(-2)[0], approvalCancelled.at(-1)[0], 'approval-cancelled must enter the target vertically');
+  assert.ok(approvalCancelled.at(-2)[1] < approvalCancelled.at(-1)[1], 'approval-cancelled must enter cancelled from its top');
+  assertNoBacktracking(approvalCancelled, 'approval-cancelled');
+});
+
+test('lifecycle: endpoint correction removes unequal same-axis U-turns', () => {
+  const assertNoBacktracking = (points) => {
+    for (let index = 0; index < points.length - 2; index += 1) {
+      const first = [points[index + 1][0] - points[index][0], points[index + 1][1] - points[index][1]];
+      const second = [points[index + 2][0] - points[index + 1][0], points[index + 2][1] - points[index + 1][1]];
+      const sameAxis = (first[0] === 0 && second[0] === 0) || (first[1] === 0 && second[1] === 0);
+      assert.ok(!sameAxis || first[0] * second[0] + first[1] * second[1] >= 0);
+    }
+  };
+
+  const sourceHtml = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Source endpoint repair' },
+    lanes: [{ id: 'main', label: 'Main' }, { id: 'events', label: 'Events' }],
+    states: [
+      { id: 'source', type: 'active', label: 'Source', lane: 'main', col: 0 },
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'events', col: 2 },
+    ],
+    transitions: [{ id: 'source-reverse', from: 'source', to: 'target', fromSide: 'bottom', via: [[94, 172], [300, 172], [710, 172]] }],
+  });
+  const sourcePoints = connectionPoints(sourceHtml, 'source-reverse');
+  assert.equal(sourcePoints[0][0], sourcePoints[1][0]);
+  assert.ok(sourcePoints[1][1] > sourcePoints[0][1]);
+  assertNoBacktracking(sourcePoints);
+
+  const targetHtml = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Target endpoint repair' },
+    lanes: [{ id: 'main', label: 'Main' }, { id: 'events', label: 'Events' }],
+    states: [
+      { id: 'source', type: 'active', label: 'Source', lane: 'events', col: 0 },
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'main', col: 4 },
+    ],
+    transitions: [{ id: 'target-reverse', from: 'source', to: 'target', fromSide: 'right', toSide: 'bottom', via: [[500, 307], [500, 196], [710, 196], [710, 230]] }],
+  });
+  const targetPoints = connectionPoints(targetHtml, 'target-reverse');
+  assert.equal(targetPoints.at(-2)[0], targetPoints.at(-1)[0]);
+  assert.ok(targetPoints.at(-2)[1] > targetPoints.at(-1)[1]);
+  assertNoBacktracking(targetPoints);
+});
+
 test('lifecycle: lower targets override a conflicting authored toSide', () => {
   const html = render('lifecycle', {
     schema_version: 1,

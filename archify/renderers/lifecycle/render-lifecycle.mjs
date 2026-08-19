@@ -396,26 +396,104 @@ function endpointSegmentHonors(start, end, side, endpoint) {
   return (dx * vector[0] + dy * vector[1]) * direction > 0.0001;
 }
 
+function sameAxisReverse(start, middle, end) {
+  const first = [middle[0] - start[0], middle[1] - start[1]];
+  const second = [end[0] - middle[0], end[1] - middle[1]];
+  const horizontal = Math.abs(first[1]) <= 0.0001 && Math.abs(second[1]) <= 0.0001;
+  const vertical = Math.abs(first[0]) <= 0.0001 && Math.abs(second[0]) <= 0.0001;
+  return (horizontal || vertical) && first[0] * second[0] + first[1] * second[1] < -0.0001;
+}
+
+function endpointAxisReverse(start, end, side, endpoint) {
+  const vector = endpointVectors[side];
+  if (!vector) return false;
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const axisAligned = vector[0] ? Math.abs(dy) <= 0.0001 : Math.abs(dx) <= 0.0001;
+  const direction = endpoint === 'source' ? 1 : -1;
+  return axisAligned && (dx * vector[0] + dy * vector[1]) * direction < -0.0001;
+}
+
+function directOppositeChannel(start, end, fromSide, toSide) {
+  const fromVector = endpointVectors[fromSide];
+  const toVector = endpointVectors[toSide];
+  const fromVertical = fromSide === 'top' || fromSide === 'bottom';
+  const toVertical = toSide === 'top' || toSide === 'bottom';
+  if (!fromVector || !toVector || fromVertical !== toVertical) return null;
+  if (fromVertical && Math.abs(start[0] - end[0]) > 0.0001) return null;
+  if (!fromVertical && Math.abs(start[1] - end[1]) > 0.0001) return null;
+  const sourceStub = [start[0] + fromVector[0] * 16, start[1] + fromVector[1] * 16];
+  const targetStub = [end[0] + toVector[0] * 16, end[1] + toVector[1] * 16];
+  const channelX = fromVertical ? start[0] + 24 : sourceStub[0];
+  const channelY = fromVertical ? sourceStub[1] : start[1] + 24;
+  return fromVertical
+    ? [start, sourceStub, [channelX, sourceStub[1]], [channelX, targetStub[1]], targetStub, end]
+    : [start, sourceStub, [sourceStub[0], channelY], [targetStub[0], channelY], targetStub, end];
+}
+
+function endpointOffset(side) {
+  return side === 'top' || side === 'bottom' ? [24, 0] : [0, 24];
+}
+
 // Keep authored route/via points intact while adding only the endpoint bends
 // needed to satisfy lifecycle direction contracts. This also makes straight
 // and channel routes orthogonal when their anchors are not aligned.
 function correctEndpointRoute(points, fromSide, toSide) {
-  const corrected = normalizeRoutePoints(points);
+  let corrected = normalizeRoutePoints(points);
   if (corrected.length < 2) return corrected;
 
   const start = corrected[0];
   const first = corrected[1];
-  if ((fromSide === 'left' || fromSide === 'right')
-      && !endpointSegmentHonors(start, first, fromSide, 'source')) {
+  if (endpointAxisReverse(start, first, fromSide, 'source')) {
     const vector = endpointVectors[fromSide];
-    const stub = [start[0] + vector[0] * 24, start[1] + vector[1] * 24];
+    const stubLength = fromSide === 'top' || fromSide === 'bottom' ? 16 : 24;
+    const stub = [start[0] + vector[0] * stubLength, start[1] + vector[1] * stubLength];
+    const direct = corrected.length === 2
+      ? directOppositeChannel(start, first, fromSide, toSide)
+      : null;
+    if (direct) return normalizeRoutePoints(direct);
+    let [offsetX, offsetY] = endpointOffset(fromSide);
+    const next = corrected[2];
+    if (fromSide === 'top' || fromSide === 'bottom') {
+      if (next && Math.abs(next[1] - first[1]) <= 0.0001 && Math.abs(next[0] - first[0]) > 0.0001) {
+        offsetX = next[0] > first[0] ? -Math.abs(offsetX) : Math.abs(offsetX);
+      }
+    } else if (next && Math.abs(next[0] - first[0]) <= 0.0001 && Math.abs(next[1] - first[1]) > 0.0001) {
+      offsetY = next[1] > first[1] ? -Math.abs(offsetY) : Math.abs(offsetY);
+    }
+    const channel = [stub[0] + offsetX, stub[1] + offsetY];
+    const cross = vector[0] ? [first[0], channel[1]] : [channel[0], first[1]];
+    corrected.splice(1, 0, stub, channel, cross);
+  } else if (!endpointSegmentHonors(start, first, fromSide, 'source')) {
+    const vector = endpointVectors[fromSide];
+    const stubLength = fromSide === 'top' || fromSide === 'bottom' ? 16 : 24;
+    const stub = [start[0] + vector[0] * stubLength, start[1] + vector[1] * stubLength];
     const connector = vector[0] ? [stub[0], first[1]] : [first[0], stub[1]];
     corrected.splice(1, 0, stub, connector);
   }
 
+  corrected = normalizeRoutePoints(corrected);
+  if (corrected.length >= 3 && sameAxisReverse(corrected[0], corrected[1], corrected[2])) {
+    const [offsetX, offsetY] = endpointOffset(fromSide);
+    const middle = corrected[1];
+    const next = corrected[2];
+    const channel = [middle[0] + offsetX, middle[1] + offsetY];
+    const cross = fromSide === 'top' || fromSide === 'bottom'
+      ? [channel[0], next[1]]
+      : [next[0], channel[1]];
+    corrected.splice(2, 0, channel, cross);
+  }
+
   const end = corrected.at(-1);
   const last = corrected.at(-2);
-  if (!endpointSegmentHonors(last, end, toSide, 'target')) {
+  if (endpointAxisReverse(last, end, toSide, 'target')) {
+    const vector = endpointVectors[toSide];
+    const stub = [end[0] + vector[0] * 16, end[1] + vector[1] * 16];
+    const [offsetX, offsetY] = endpointOffset(toSide);
+    const channelLast = [last[0] + offsetX, last[1] + offsetY];
+    const channelStub = [stub[0] + offsetX, stub[1] + offsetY];
+    corrected.splice(corrected.length - 1, 0, channelLast, channelStub, stub);
+  } else if (!endpointSegmentHonors(last, end, toSide, 'target')) {
     const vector = endpointVectors[toSide];
     const stub = [end[0] + vector[0] * 16, end[1] + vector[1] * 16];
     const bridge = Math.abs(last[0] - stub[0]) <= 0.0001 || Math.abs(last[1] - stub[1]) <= 0.0001
@@ -424,6 +502,16 @@ function correctEndpointRoute(points, fromSide, toSide) {
         ? [[stub[0], last[1]], stub]
         : [[last[0], stub[1]], stub];
     corrected.splice(corrected.length - 1, 0, ...bridge);
+  }
+
+  corrected = normalizeRoutePoints(corrected);
+  if (corrected.length >= 3 && sameAxisReverse(corrected.at(-3), corrected.at(-2), corrected.at(-1))) {
+    const [offsetX, offsetY] = endpointOffset(toSide);
+    const before = corrected.at(-3);
+    const middle = corrected.at(-2);
+    const channelBefore = [before[0] + offsetX, before[1] + offsetY];
+    const channelMiddle = [middle[0] + offsetX, middle[1] + offsetY];
+    corrected.splice(corrected.length - 2, 0, channelBefore, channelMiddle);
   }
 
   return normalizeRoutePoints(corrected);

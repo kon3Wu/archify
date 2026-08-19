@@ -130,3 +130,31 @@ Passed the focused lifecycle, geometry, and v1 compatibility suite (84/84), offi
 - docs/gallery/artifacts/agent-run.lifecycle.html
 - docs/gallery/artifacts/deployment-release.lifecycle.html
 - docs/development-task-plan.md
+
+## 2026-08-19 15:44:59 - BF-007 生命周期四向端口法线与反向同轴路由
+
+**Bug**
+生命周期关系在目标节点位于源节点下方时可能未从目标顶部进入；源节点使用 bottom 端口时，连线也可能未先竖直向下，部分显式路径还会产生未连接视觉短线或同轴折返。
+
+**Root Cause**
+生命周期端点补正只完整约束了左右源端口与部分目标端口；对 top/bottom 源端口和反向同轴端点，补入法线短段后会直接连接反方向路径点，形成 U-turn，且示例 via 未显式保留正确的端点接近段。
+
+**Changes**
+统一校正四向源/目标端口法线；当目标在正后方同轴位置时使用正交水平偏移通道，保留 authored via 的中间语义点并禁止相邻同轴反向；更新 agent-run 生命周期示例、golden 与 Gallery 产物，重建并安装自包含 ZIP。
+
+**Validation**
+BF-007 DELTA 3/3；automatic-port-spread 25/25；v1 compatibility 12/12；lifecycle showcase 9/9 且 0 error/0 warning；完整 npm test 646 项、627 passed、19 Windows symlink skips、0 failed；ZIP 无 node_modules package smoke 通过；安装后 doctor/examples 通过并 deliver lifecycle 9/9。最终路径 execution-failed=343,157→320,157→320,345→402,345→402,356；approval-cancelled=402,336→402,352→480,352→480,432→402,432→402,450。
+
+**Files Changed**
+- archify/examples/agent-run.lifecycle.json
+- archify/examples/lifecycle-agent-run.html
+- archify/renderers/lifecycle/render-lifecycle.mjs
+- archify/test/automatic-port-spread.test.mjs
+- docs/development-task-plan.md
+- docs/gallery.html
+- docs/gallery/artifacts/agent-run.lifecycle.html
+- docs/gallery/manifest.json
+- docs/gallery/sources/agent-run.lifecycle.json
+- examples/lifecycle-agent-run.html
+- tests/e2e/bf007/manifest.json
+- archify.zip

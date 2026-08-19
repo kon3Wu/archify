@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "mode": "DELTA",
+  "workPackage": "BF-007",
+  "surface": "lifecycle standalone HTML",
+  "replayCommand": "node --test --test-name-pattern=\"lifecycle: (top/bottom source ports leave on their vertical normals|opposite vertical endpoints use an offset channel without U-turns|actual authored routes honor vertical endpoints without backtracking)\" archify/test/automatic-port-spread.test.mjs",
+  "cases": [
+    {
+      "id": "BF007-01",
+      "behavior": "A connection entering a lower target uses a vertical final segment into the target top port.",
+      "testFile": "archify/test/automatic-port-spread.test.mjs",
+      "testName": "lifecycle: actual authored routes honor vertical endpoints without backtracking",
+      "evidence": "execution-failed and approval-cancelled data-composition-points"
+    },
+    {
+      "id": "BF007-02",
+      "behavior": "A connection leaving a bottom or top source port first follows that port's vertical normal.",
+      "testFile": "archify/test/automatic-port-spread.test.mjs",
+      "testName": "lifecycle: top/bottom source ports leave on their vertical normals",
+      "evidence": "first two data-composition-points for top and bottom departures"
+    },
+    {
+      "id": "BF007-03",
+      "behavior": "Opposite same-column vertical endpoints use an orthogonal offset channel without reversing either endpoint normal.",
+      "testFile": "archify/test/automatic-port-spread.test.mjs",
+      "testName": "lifecycle: opposite vertical endpoints use an offset channel without U-turns",
+      "evidence": "source-below and target-below data-composition-points"
+    }
+  ],
+  "impactedRegression": [
+    "node --test archify/test/v1-compatibility.test.mjs",
+    "node archify/bin/archify.mjs validate lifecycle archify/examples/agent-run.lifecycle.json --quality showcase --json"
+  ],
+  "boundary": "Local self-contained HTML and renderer geometry only; no browser automation or release-level claim."
+}
