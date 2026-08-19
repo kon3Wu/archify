@@ -1024,6 +1024,60 @@ const PORT_OUTWARD_VECTOR = {
   bottom: [0, 1],
 };
 
+// Build the smallest deterministic automatic orthogonal route that honors
+// both endpoint direction contracts. Authored `via`/non-auto routes remain
+// untouched; renderers use this only for their automatic node-to-node path.
+export function automaticOrthogonalVia(
+  start,
+  end,
+  fromSide,
+  toSide,
+  { endpointStubPx = 24, accept } = {},
+) {
+  if (!Array.isArray(start) || !Array.isArray(end)
+      || start.length !== 2 || end.length !== 2
+      || !isFinitePoint(...start, ...end)) return null;
+  if (!PORT_OUTWARD_VECTOR[fromSide] || !PORT_OUTWARD_VECTOR[toSide]) return null;
+
+  const candidates = [];
+  const add = (via) => {
+    const points = normalizeRoutePoints([start, ...via, end]);
+    if (points.length < 2 || !routeHonorsEndpointSides(points, fromSide, toSide)) return;
+    if (typeof accept === 'function' && !accept(points)) return;
+    const key = routePointsValue(points);
+    if (candidates.some((candidate) => candidate.key === key)) return;
+    candidates.push({ key, via: points.slice(1, -1) });
+  };
+
+  // Preserve the direct horizontal/vertical route whenever it already
+  // honors the inferred or authored ports (including same-row edges).
+  add([]);
+
+  const midX = (start[0] + end[0]) / 2;
+  const midY = (start[1] + end[1]) / 2;
+  add([[midX, start[1]], [midX, end[1]]]);
+  add([[start[0], midY], [end[0], midY]]);
+  add([[end[0], start[1]], [end[0], end[1]]]);
+  add([[start[0], end[1]]]);
+
+  // If the endpoint positions do not face the requested sides, leave each
+  // port first and last through an outward stub, then bridge the stubs.
+  // This is what keeps a left/right source from growing a diagonal tail.
+  const [fromDx, fromDy] = PORT_OUTWARD_VECTOR[fromSide];
+  const [toDx, toDy] = PORT_OUTWARD_VECTOR[toSide];
+  const startStub = [start[0] + fromDx * endpointStubPx, start[1] + fromDy * endpointStubPx];
+  const endStub = [end[0] + toDx * endpointStubPx, end[1] + toDy * endpointStubPx];
+  add([startStub, [endStub[0], startStub[1]], endStub]);
+  add([startStub, [startStub[0], endStub[1]], endStub]);
+
+  // Parallel spread ports can be too close for a midpoint dogleg. Reuse the
+  // existing outside-channel rhythm bridge before accepting a short turn.
+  const rhythm = automaticPortRhythmBridge(start, end, fromSide, toSide);
+  if (rhythm) add(rhythm.slice(1, -1));
+
+  return candidates[0]?.via ?? null;
+}
+
 // Automatic port spreading can put otherwise parallel anchors only a few
 // pixels apart. A conventional midpoint dogleg then violates the renderer's
 // own 8px/16px route-rhythm floors. Return a full outside-channel route when
@@ -1099,7 +1153,11 @@ export function automaticPortRhythmBridge(
 // Keep conservative auto-routed fan-out/fan-in relationships visually
 // distinct without changing authored route controls. The returned map only
 // contains endpoints that belong to a shared automatic midpoint anchor.
-export function automaticPortSpread(relations, boxes, { gutter = 16, maxSpacing = 14 } = {}) {
+export function automaticPortSpread(
+  relations,
+  boxes,
+  { gutter = 16, maxSpacing = 14, fromSideFor, toSideFor } = {},
+) {
   const groups = new Map();
   const spread = new Map();
 
@@ -1116,8 +1174,10 @@ export function automaticPortSpread(relations, boxes, { gutter = 16, maxSpacing 
     const from = boxes.get(relation.from);
     const to = boxes.get(relation.to);
     if (!from || !to) continue;
-    const fromSide = chosenSide(relation.fromSide, defaultFromSide(from, to));
-    const toSide = chosenSide(relation.toSide, defaultToSide(from, to));
+    const fromSide = (typeof fromSideFor === 'function' ? fromSideFor(relation, from, to) : null)
+      ?? chosenSide(relation.fromSide, defaultFromSide(from, to));
+    const toSide = (typeof toSideFor === 'function' ? toSideFor(relation, from, to) : null)
+      ?? chosenSide(relation.toSide, defaultToSide(from, to));
     add(relation, 'from', from, fromSide, to);
     add(relation, 'to', to, toSide, from);
   }

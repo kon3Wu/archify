@@ -33,6 +33,13 @@ function connectionPoints(html, id) {
   return match[1].split(';').map((point) => point.split(',').map(Number));
 }
 
+function railPoints(html, id) {
+  const pattern = new RegExp(`data-rail-id="${id}"[^>]+data-composition-points="([^"]+)"`);
+  const match = html.match(pattern);
+  assert.ok(match, `missing lifecycle rail ${id}`);
+  return match[1].split(';').map((point) => point.split(',').map(Number));
+}
+
 function fanOutArchitecture(connections) {
   return {
     schema_version: 1,
@@ -354,8 +361,146 @@ test('lifecycle: same-band port spread remains orthogonal', () => {
     [153, 150], [248, 150], [248, 107], [343, 107],
   ]);
   assert.deepEqual(connectionPoints(html, 'to-lower'), [
-    [153, 164], [402, 164], [402, 207], [651, 207],
+    [153, 164], [710, 164], [710, 176],
   ]);
+});
+
+test('lifecycle: automatic routes leave left/right ports horizontally and enter lower targets from the top', () => {
+  const html = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Directional lifecycle routing' },
+    lanes: [
+      { id: 'main', label: 'Main' },
+      { id: 'events', label: 'Events' },
+    ],
+    states: [
+      { id: 'source', type: 'active', label: 'Source', lane: 'main', col: 0 },
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'events', col: 0 },
+    ],
+    transitions: [{ id: 'downward', from: 'source', to: 'target' }],
+  });
+
+  const points = connectionPoints(html, 'downward');
+  assert.deepEqual(points, [[153, 157], [402, 157], [402, 278]]);
+  assert.equal(points[1][1], points[0][1], 'left/right departure must be horizontal');
+  assert.equal(points.at(-2)[0], points.at(-1)[0], 'lower target must receive a vertical top entry');
+});
+
+test('lifecycle: lower targets override a conflicting authored toSide', () => {
+  const html = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Lower target side contract' },
+    lanes: [
+      { id: 'main', label: 'Main' },
+      { id: 'events', label: 'Events' },
+    ],
+    states: [
+      { id: 'source', type: 'active', label: 'Source', lane: 'main', col: 0 },
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'events', col: 0 },
+    ],
+    transitions: [{ id: 'conflicting-side', from: 'source', to: 'target', toSide: 'bottom' }],
+  });
+
+  const points = connectionPoints(html, 'conflicting-side');
+  assert.equal(points.at(-1)[1], 278, 'an authored bottom side cannot override lower-target top entry');
+  assert.equal(points.at(-2)[0], points.at(-1)[0]);
+});
+
+test('lifecycle: authored via keeps its middle points while endpoint bends stay orthogonal', () => {
+  const html = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Authored lifecycle via' },
+    lanes: [
+      { id: 'main', label: 'Main' },
+      { id: 'events', label: 'Events' },
+    ],
+    states: [
+      { id: 'source', type: 'active', label: 'Source', lane: 'main', col: 2 },
+      { id: 'target', type: 'waiting', label: 'Target', lane: 'events', col: 0, yOffset: 78 },
+    ],
+    transitions: [{
+      id: 'authored-via',
+      from: 'source',
+      to: 'target',
+      fromSide: 'left',
+      toSide: 'left',
+      via: [[320, 157], [320, 385]],
+    }],
+  });
+
+  const points = connectionPoints(html, 'authored-via');
+  assert.deepEqual(points.slice(1, 3), [[320, 157], [320, 385]], 'authored middle via points must remain intact');
+  assert.equal(points[1][1], points[0][1], 'left source departure must be horizontal');
+  assert.equal(points.at(-2)[0], points.at(-1)[0], 'lower target must receive a vertical top entry');
+  for (let index = 0; index < points.length - 1; index += 1) {
+    assert.ok(
+      points[index][0] === points[index + 1][0] || points[index][1] === points[index + 1][1],
+      `via segment ${points[index]} -> ${points[index + 1]} must stay orthogonal`,
+    );
+  }
+});
+
+test('lifecycle: aligned automatic endpoints keep a direct horizontal connection', () => {
+  const html = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Aligned lifecycle routing' },
+    lanes: [{ id: 'main', label: 'Main' }],
+    states: [
+      { id: 'first', type: 'start', label: 'First', lane: 'main', col: 0 },
+      { id: 'second', type: 'success', label: 'Second', lane: 'main', col: 1 },
+    ],
+    transitions: [{ id: 'aligned', from: 'first', to: 'second' }],
+  });
+
+  assert.deepEqual(connectionPoints(html, 'aligned'), [[153, 157], [189, 157]]);
+});
+
+test('lifecycle: primary rail is anchored and identifiable without becoming a graph relationship', () => {
+  const html = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Lifecycle rail identity' },
+    lanes: [{ id: 'main', label: 'Main' }],
+    states: [
+      { id: 'first', type: 'start', label: 'First', lane: 'main', col: 0 },
+      { id: 'last', type: 'success', label: 'Last', lane: 'main', col: 2 },
+    ],
+    transitions: [],
+  });
+
+  assert.deepEqual(railPoints(html, 'main-first-last'), [[153, 157], [343, 157]]);
+  assert.match(html, /data-graph-role="lifecycle-rail" data-rail-from="first" data-rail-to="last"/);
+  assert.doesNotMatch(html, /data-edge-from="first" data-edge-to="last"/);
+});
+
+test('lifecycle: rail stays orthogonal and v1-compatible with offset or duplicate columns', () => {
+  const html = render('lifecycle', {
+    schema_version: 1,
+    diagram_type: 'lifecycle',
+    meta: { title: 'Legacy lifecycle rail' },
+    lanes: [{ id: 'main', label: 'Main' }],
+    states: [
+      { id: 'first', type: 'start', label: 'First', lane: 'main', col: 0 },
+      { id: 'offset', type: 'active', label: 'Offset', lane: 'main', col: 1, yOffset: 24 },
+      { id: 'last', type: 'success', label: 'Last', lane: 'main', col: 2 },
+    ],
+    transitions: [],
+  });
+
+  assert.deepEqual(railPoints(html, 'main-first-last'), [[153, 157], [343, 157]]);
+  for (const match of html.matchAll(/data-graph-role="lifecycle-rail"[^>]*data-composition-points="([^"]+)"/g)) {
+    const points = match[1].split(';').map((point) => point.split(',').map(Number));
+    for (let index = 0; index < points.length - 1; index += 1) {
+      assert.ok(
+        points[index][0] === points[index + 1][0] || points[index][1] === points[index + 1][1],
+        `rail segment ${points[index]} -> ${points[index + 1]} must stay orthogonal`,
+      );
+    }
+  }
 });
 
 test('skill and READMEs describe automatic port spread as bounded default behavior', () => {

@@ -4917,7 +4917,10 @@
         <text x="72" y="424" class="t-dim" font-size="10" font-weight="600">03 / 终态退出</text>
 
         <!-- Primary lifecycle rail -->
-        <path d="M 154 157 L 748 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-graph-role="lifecycle-rail" data-rail-from="queued" data-rail-to="building" data-rail-key="main-0" data-rail-id="main-queued-building" data-composition-points="153,157;189,157" d="M 153 157 L 189 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-graph-role="lifecycle-rail" data-rail-from="building" data-rail-to="verifying" data-rail-key="main-1" data-rail-id="main-building-verifying" data-composition-points="307,157;343,157" d="M 307 157 L 343 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-graph-role="lifecycle-rail" data-rail-from="verifying" data-rail-to="ready" data-rail-key="main-2" data-rail-id="main-verifying-ready" data-composition-points="461,157;497,157" d="M 461 157 L 497 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-graph-role="lifecycle-rail" data-rail-from="ready" data-rail-to="live" data-rail-key="main-3" data-rail-id="main-ready-live" data-composition-points="615,157;651,157" d="M 615 157 L 651 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>
 
         <!-- Transition paths -->
         <path data-edge-from="verifying" data-edge-to="approval" data-edge-key="0" data-composition-points="402,188;402,278" d="M 402 188 L 402 278" class="a-security" data-animate="edge" style="--step:0" stroke-width="1.1" marker-end="url(#arrowhead-security)"/>

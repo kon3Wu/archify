@@ -104,3 +104,29 @@ Passed node --test test/business-flow.test.mjs test/gallery.test.mjs (6/6), npm 
 - docs/gallery/artifacts/refund-approval.business-flow.visual-check.json
 - docs/gallery/manifest.json
 - docs/gallery/sources/refund-approval.business-flow.json
+
+## 2026-08-19 14:53:16 - Lifecycle directional endpoint routing
+
+**Bug**
+Lifecycle transitions could leave left/right source ports vertically, enter lower targets from the side, or appear as unidentified rail fragments; forcing a lower target to its top port also exposed a diagonal final segment in an authored `via` route.
+
+**Root Cause**
+The lifecycle renderer used a cross-lane midpoint channel without enforcing endpoint direction, kept authored route endpoints unchanged when their target port moved, and rendered the primary lifecycle rail as one anonymous background path.
+
+**Changes**
+Added deterministic orthogonal endpoint routing, lifecycle-specific top entry for every lower target, endpoint bend correction that preserves authored middle `via` points, horizontal direct routing for aligned states, obstacle-aware conservative fallback channels, and identifiable orthogonal rail segments with a v1-compatible fallback.
+
+**Validation**
+Passed the focused lifecycle, geometry, and v1 compatibility suite (84/84), official lifecycle showcase validation (9/9), Gallery source/artifact consistency, Golden renders, and the complete `npm test` suite (642 tests: 623 passed, 19 environment skips, 0 failed). The refreshed Chinese lifecycle deliverable also passed atomic delivery validation (9/9). Ponytail enable/stop commands were attempted but are unavailable in this Windows environment.
+
+**Files Changed**
+- archify/renderers/lifecycle/render-lifecycle.mjs
+- archify/renderers/shared/geometry.mjs
+- archify/test/automatic-port-spread.test.mjs
+- archify/examples/lifecycle-agent-run.html
+- examples/lifecycle-agent-run.html
+- docs/gallery.html
+- docs/gallery/manifest.json
+- docs/gallery/artifacts/agent-run.lifecycle.html
+- docs/gallery/artifacts/deployment-release.lifecycle.html
+- docs/development-task-plan.md

@@ -19,9 +19,13 @@ import {
   suggestLabelPairFix,
   anchor,
   automaticPortSpread,
+  automaticOrthogonalVia,
   defaultFromSide,
   defaultToSide,
   chosenSide,
+  routeHonorsEndpointSides,
+  segmentIntersectsRect,
+  normalizeRoutePoints,
   roundedPath,
   routePointsValue,
   labelPoint,
@@ -315,7 +319,117 @@ function validateLifecycle() {
   }
 }
 
-function routeVia(transition, from, to, start, end) {
+function transitionFromSide(transition, from, to) {
+  return chosenSide(transition.fromSide, defaultFromSide(from, to));
+}
+
+function transitionToSide(transition, from, to) {
+  // A lower state is entered from above. This is a lifecycle invariant, so an
+  // authored side cannot turn a downward transition into a bottom/side entry.
+  if (to.cy > from.cy) return 'top';
+  return chosenSide(transition.toSide, defaultToSide(from, to));
+}
+
+function routeClearsStates(points, fromId, toId) {
+  for (const state of states.values()) {
+    if (state.id === fromId || state.id === toId) continue;
+    for (let index = 0; index < points.length - 1; index += 1) {
+      if (segmentIntersectsRect({ start: points[index], end: points[index + 1] }, state, 2)) return false;
+    }
+  }
+  return true;
+}
+
+function outsideLowerTargetVia(start, end, from, to, fromSide, toSide) {
+  if (toSide !== 'top' || fromSide === 'top' || fromSide === 'bottom' || to.cy <= from.cy) return null;
+  const horizontal = fromSide === 'left' || fromSide === 'right';
+  if (!horizontal) return null;
+  const obstacles = [...states.values()].filter((state) => state.id !== from.id && state.id !== to.id);
+  const sign = fromSide === 'right' ? 1 : -1;
+  const startStub = [start[0] + sign * 24, start[1]];
+  const targetStub = [end[0], end[1] - 24];
+  const obstacleRight = Math.max(start[0], end[0], ...obstacles.map((state) => state.x + state.width));
+  const obstacleLeft = Math.min(start[0], end[0], ...obstacles.map((state) => state.x));
+  const channelX = fromSide === 'right' ? obstacleRight + 36 : obstacleLeft - 36;
+  const channelYs = [
+    ...obstacles.flatMap((state) => [state.y - 24, state.y + state.height + 24]),
+    start[1] - 36,
+    start[1] + 36,
+    targetStub[1] - 24,
+    targetStub[1] + 24,
+  ];
+  let safeFallback = null;
+  for (const channelY of channelYs) {
+    const points = [
+      start,
+      startStub,
+      [startStub[0], channelY],
+      [channelX, channelY],
+      [channelX, targetStub[1]],
+      targetStub,
+      end,
+    ];
+    if (!routeHonorsEndpointSides(points, fromSide, toSide)) continue;
+    if (!safeFallback) safeFallback = points;
+    if (routeClearsStates(points, from.id, to.id)) return points.slice(1, -1);
+  }
+  // Keep the endpoint contract even when every conservative outside channel
+  // is blocked; the normal diagnostic can then report the real obstruction.
+  return safeFallback ? safeFallback.slice(1, -1) : null;
+}
+
+const endpointVectors = {
+  left: [-1, 0],
+  right: [1, 0],
+  top: [0, -1],
+  bottom: [0, 1],
+};
+
+function endpointSegmentHonors(start, end, side, endpoint) {
+  const vector = endpointVectors[side];
+  if (!vector) return true;
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const axisAligned = vector[0] ? Math.abs(dy) <= 0.0001 : Math.abs(dx) <= 0.0001;
+  if (!axisAligned) return false;
+  const direction = endpoint === 'source' ? 1 : -1;
+  return (dx * vector[0] + dy * vector[1]) * direction > 0.0001;
+}
+
+// Keep authored route/via points intact while adding only the endpoint bends
+// needed to satisfy lifecycle direction contracts. This also makes straight
+// and channel routes orthogonal when their anchors are not aligned.
+function correctEndpointRoute(points, fromSide, toSide) {
+  const corrected = normalizeRoutePoints(points);
+  if (corrected.length < 2) return corrected;
+
+  const start = corrected[0];
+  const first = corrected[1];
+  if ((fromSide === 'left' || fromSide === 'right')
+      && !endpointSegmentHonors(start, first, fromSide, 'source')) {
+    const vector = endpointVectors[fromSide];
+    const stub = [start[0] + vector[0] * 24, start[1] + vector[1] * 24];
+    const connector = vector[0] ? [stub[0], first[1]] : [first[0], stub[1]];
+    corrected.splice(1, 0, stub, connector);
+  }
+
+  const end = corrected.at(-1);
+  const last = corrected.at(-2);
+  if (!endpointSegmentHonors(last, end, toSide, 'target')) {
+    const vector = endpointVectors[toSide];
+    const stub = [end[0] + vector[0] * 16, end[1] + vector[1] * 16];
+    const bridge = Math.abs(last[0] - stub[0]) <= 0.0001 || Math.abs(last[1] - stub[1]) <= 0.0001
+      ? [stub]
+      : vector[0]
+        ? [[stub[0], last[1]], stub]
+        : [[last[0], stub[1]], stub];
+    corrected.splice(corrected.length - 1, 0, ...bridge);
+  }
+
+  return normalizeRoutePoints(corrected);
+}
+
+function routeVia(transition, from, to, start, end, fromSide, toSide) {
   if (transition.via) return transition.via;
   switch (transition.route || 'auto') {
     case 'straight':
@@ -342,29 +456,39 @@ function routeVia(transition, from, to, start, end) {
     }
     case 'auto':
     default: {
+      const automatic = automaticOrthogonalVia(start, end, fromSide, toSide, {
+        accept: (points) => routeClearsStates(points, from.id, to.id),
+      });
+      if (automatic !== null) return automatic;
+      const outside = outsideLowerTargetVia(start, end, from, to, fromSide, toSide);
+      if (outside !== null) return outside;
+      const directional = automaticOrthogonalVia(start, end, fromSide, toSide);
+      if (directional !== null) return directional;
       if (from.lane === to.lane) return [];
       const y = transition.channelY ?? (start[1] + end[1]) / 2;
-      return [[start[0], y], [end[0], y]];
+      const channel = [[start[0], y], [end[0], y]];
+      return routeHonorsEndpointSides([start, ...channel, end], fromSide, toSide) ? channel : [];
     }
   }
 }
 
 const pathCache = new Map();
-const automaticPorts = automaticPortSpread(lifecycle.transitions, states);
+const automaticPorts = automaticPortSpread(lifecycle.transitions, states, {
+  fromSideFor: transitionFromSide,
+  toSideFor: transitionToSide,
+});
 
 function pathFor(transition) {
   if (pathCache.has(transition)) return pathCache.get(transition);
   const from = states.get(transition.from);
   const to = states.get(transition.to);
   const ports = automaticPorts.get(transition);
-  const start = ports?.from || anchor(from, chosenSide(transition.fromSide, defaultFromSide(from, to)));
-  const end = ports?.to || anchor(to, chosenSide(transition.toSide, defaultToSide(from, to)));
-  let via = routeVia(transition, from, to, start, end);
-  if (ports && !via.length && Math.abs(start[0] - end[0]) >= 4 && Math.abs(start[1] - end[1]) >= 4) {
-    const midX = (start[0] + end[0]) / 2;
-    via = [[midX, start[1]], [midX, end[1]]];
-  }
-  const points = [start, ...via, end];
+  const fromSide = transitionFromSide(transition, from, to);
+  const toSide = transitionToSide(transition, from, to);
+  const start = ports?.from || anchor(from, fromSide);
+  const end = ports?.to || anchor(to, toSide);
+  const via = routeVia(transition, from, to, start, end, fromSide, toSide);
+  const points = correctEndpointRoute([start, ...via, end], fromSide, toSide);
   const routed = {
     d: roundedPath(points, transition.cornerRadius ?? 10),
     points
@@ -471,12 +595,52 @@ function renderLegend() {
 }
 
 function renderLifecycleRail() {
-  const mainCols = [...states.values()]
+  const phaseStates = [...states.values()]
     .filter((state) => bandFor(state.lane) === 'phase')
-    .map((state) => state.col);
-  if (!mainCols.length) return '';
-  const railEnd = layout.phaseXs[Math.max(...mainCols)] + 38;
-  return `        <path d="M 154 ${layout.phaseY + 31} L ${railEnd} ${layout.phaseY + 31}" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>`;
+    .filter((state) => (state.yOffset || 0) === 0)
+    .sort((left, right) => left.col - right.col || left.id.localeCompare(right.id));
+  const byCol = new Map();
+  for (const state of phaseStates) {
+    const statesAtCol = byCol.get(state.col) || [];
+    statesAtCol.push(state);
+    byCol.set(state.col, statesAtCol);
+  }
+  const segments = [];
+  for (const state of phaseStates) {
+    const next = byCol.get(state.col + 1);
+    if (!next || next.length !== 1 || (byCol.get(state.col)?.length || 0) !== 1) continue;
+    const to = next[0];
+    if (Math.abs(state.cy - to.cy) > 0.0001 || to.x < state.x + state.width) continue;
+    segments.push({ from: state, to });
+  }
+  if (!segments.length) {
+    if (!phaseStates.length) return '';
+    const from = phaseStates[0];
+    const to = phaseStates.at(-1);
+    if (from.id === to.id) {
+      const maxCol = Math.max(...phaseStates.map((state) => state.col));
+      const railEnd = layout.phaseXs[maxCol] + 38;
+      return `        <path data-graph-role="lifecycle-rail" data-rail-key="main-fallback" data-composition-points="154,${layout.phaseY + 31};${railEnd},${layout.phaseY + 31}" d="M 154 ${layout.phaseY + 31} L ${railEnd} ${layout.phaseY + 31}" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>`;
+    }
+    const start = anchor(from, 'right');
+    const end = anchor(to, 'left');
+    const points = Math.abs(start[1] - end[1]) <= 0.0001
+      ? [start, end]
+      : [start, [end[0], start[1]], end];
+    const d = points.map(([x, y], pointIndex) => `${pointIndex ? 'L' : 'M'} ${x} ${y}`).join(' ');
+    const edgeId = `main-${from.id}-${to.id}`;
+    return `        <path data-graph-role="lifecycle-rail" data-rail-from="${esc(from.id)}" data-rail-to="${esc(to.id)}" data-rail-key="main-fallback" data-rail-id="${esc(edgeId)}" data-composition-points="${routePointsValue(points)}" d="${d}" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>`;
+  }
+  return segments.map(({ from, to }, index) => {
+    const start = anchor(from, 'right');
+    const end = anchor(to, 'left');
+    const points = Math.abs(start[1] - end[1]) <= 0.0001
+      ? [start, end]
+      : [start, [end[0], start[1]], end];
+    const edgeId = `main-${from.id}-${to.id}`;
+    const d = points.map(([x, y], pointIndex) => `${pointIndex ? 'L' : 'M'} ${x} ${y}`).join(' ');
+    return `        <path data-graph-role="lifecycle-rail" data-rail-from="${esc(from.id)}" data-rail-to="${esc(to.id)}" data-rail-key="main-${index}" data-rail-id="${esc(edgeId)}" data-composition-points="${routePointsValue(points)}" d="${d}" class="a-emphasis" stroke-width="2.2" marker-end="url(#arrowhead-emphasis)"/>`;
+  }).join('\n');
 }
 
 function renderSvg() {
