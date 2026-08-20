@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "diagram_type": "business-flow",
+  "meta": {
+    "title": "自适应横向业务流程",
+    "layout_direction": "horizontal",
+    "quality_profile": "standard"
+  },
+  "lanes": [
+    { "id": "customer", "label": "客户" },
+    { "id": "operations", "label": "运营" }
+  ],
+  "nodes": [
+    { "id": "start", "kind": "start", "label": "开始", "lane": "customer" },
+    { "id": "request", "kind": "process", "label": "提交请求", "lane": "customer" },
+    { "id": "fulfill", "kind": "process", "label": "处理请求", "lane": "operations" },
+    { "id": "finish", "kind": "end", "label": "完成", "lane": "operations" }
+  ],
+  "edges": [
+    { "id": "e-start-request", "from": "start", "to": "request", "role": "main" },
+    { "id": "e-request-fulfill", "from": "request", "to": "fulfill", "role": "main" },
+    { "id": "e-fulfill-finish", "from": "fulfill", "to": "finish", "role": "main" }
+  ]
+}

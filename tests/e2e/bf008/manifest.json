@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "mode": "DELTA",
+  "workPackage": "BF-008",
+  "surface": "Business Flow CLI to verified standalone HTML",
+  "replayCommand": "node tests/e2e/bf008/run.mjs",
+  "listCommand": "node tests/e2e/bf008/run.mjs --list",
+  "runner": "tests/e2e/bf008/run.mjs",
+  "evidenceDirectory": "artifacts/bf008/e2e",
+  "cases": [
+    {
+      "id": "BF008-E2E-01",
+      "behavior": "A Business Flow without layout_direction remains byte-identical to the committed fixed-grid legacy artifact.",
+      "source": "PRD AC-01 / F-05",
+      "assertions": [
+        "real CLI render exits zero",
+        "generated HTML bytes equal archify/examples/business-flow-standard-rendered.html",
+        "SHA-256 values are identical"
+      ],
+      "evidence": "artifacts/bf008/e2e/legacy.html"
+    },
+    {
+      "id": "BF008-E2E-02",
+      "behavior": "An explicit long horizontal flow is delivered with increasing left-to-right slots, adaptive width, showcase checks, and deterministic bytes.",
+      "source": "PRD AC-07, AC-12, AC-13 / F-01, F-02, F-04",
+      "assertions": [
+        "real CLI deliver exits zero and receipt is ok",
+        "15 node x positions strictly increase",
+        "viewBox width exceeds the legacy 1380px floor",
+        "a repeated delivery produces identical HTML bytes"
+      ],
+      "evidence": "artifacts/bf008/e2e/horizontal.html"
+    },
+    {
+      "id": "BF008-E2E-03",
+      "behavior": "The checked-in vertical sample delivers branch, merge, cross-lane, and return semantics with bottom-to-top forward normals.",
+      "source": "PRD AC-02, AC-03, AC-05, AC-06, AC-12 / F-01–F-04",
+      "assertions": [
+        "real CLI deliver exits zero and all showcase checks pass",
+        "branch, merge, cross-lane, and return relationship identities are present",
+        "the cross-lane forward edge leaves downward and enters the target top from above"
+      ],
+      "evidence": "artifacts/bf008/e2e/vertical.html"
+    },
+    {
+      "id": "BF008-E2E-04",
+      "behavior": "An unmarked forward cycle fails closed with a structured forward-cycle diagnostic and no valid artifact.",
+      "source": "PRD AC-10 / F-02",
+      "assertions": [
+        "real CLI validate exits non-zero",
+        "structured diagnostics include business-flow/forward-cycle"
+      ],
+      "evidence": "artifacts/bf008/e2e/cycle-input.json"
+    }
+  ],
+  "impactedRegression": [
+    "node --test archify/test/business-flow.test.mjs",
+    "node archify/scripts/generate-validators.mjs --check",
+    "node archify/test/golden.mjs"
+  ],
+  "boundary": "Local Node.js CLI and self-contained HTML only; this DELTA suite makes no release-level, browser-matrix, hosted-service, or production claim."
+}

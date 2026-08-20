@@ -11,3 +11,9 @@
 | BF-007 | Enforce four-side lifecycle endpoint normals: bottom/top sources depart vertically, lower targets enter from the top, and authored routes avoid immediate endpoint backtracking | `codex/bf-007-four-side-endpoint-routing` | `codex/bf-006-directional-edge-routing` | `BF-006` | Completed (E2E_PASS) |
 
 Ponytail status: `ponytail` is unavailable in this environment (`Get-Command ponytail` returned no command; the BF-005 `$ponytail full` and `stop ponytail` attempts both returned not found), so Ponytail could not be enabled; implementation proceeded with the required scope and validation gates.
+
+## Active work packages
+
+| Task/WP ID | Outcome | Base | Local branch | Acceptance | Validation | Audit/E2E | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| BF-008 | Add explicit adaptive horizontal/vertical Business Flow layouts while preserving undeclared legacy layout | `ca4b5a0` / `codex/bf-007-four-side-endpoint-routing` | `codex/bf-008-adaptive-directional-layout` | PRD AC-01–AC-13 | Focused Business Flow tests, validator drift check, affected regression and golden compatibility | Independent consistency re-audit + scripted DELTA E2E at `tests/e2e/bf008` | E2E_PASS |

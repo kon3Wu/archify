@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "diagram_type": "business-flow",
+  "meta": {
+    "title": "自适应纵向分支汇合流程",
+    "layout_direction": "vertical",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "customer", "label": "客户" },
+    { "id": "operations", "label": "运营" }
+  ],
+  "nodes": [
+    { "id": "start", "kind": "start", "label": "开始", "lane": "customer" },
+    { "id": "request", "kind": "process", "label": "提交请求", "lane": "customer" },
+    { "id": "decide", "kind": "decision", "label": "是否通过", "lane": "operations" },
+    { "id": "approve", "kind": "process", "label": "通过处理", "lane": "operations" },
+    { "id": "reject", "kind": "process", "label": "补充材料", "lane": "operations" },
+    { "id": "merge", "kind": "process", "label": "汇总结果", "lane": "operations" },
+    { "id": "finish", "kind": "end", "label": "完成", "lane": "operations" }
+  ],
+  "edges": [
+    { "id": "e-start-request", "from": "start", "to": "request", "role": "main" },
+    { "id": "e-request-decide", "from": "request", "to": "decide", "role": "main" },
+    { "id": "e-decide-approve", "from": "decide", "to": "approve", "role": "yes", "label": "通过", "labelAt": [190, 440] },
+    { "id": "e-decide-reject", "from": "decide", "to": "reject", "role": "no", "label": "补充", "via": [[344, 416], [220, 416], [220, 552], [344, 552]] },
+    { "id": "e-approve-merge", "from": "approve", "to": "merge", "role": "main" },
+    { "id": "e-reject-merge", "from": "reject", "to": "merge", "role": "main", "via": [[344, 648], [260, 648], [260, 664], [344, 664]] },
+    { "id": "e-merge-finish", "from": "merge", "to": "finish", "role": "main" },
+    { "id": "e-merge-retry", "from": "merge", "to": "decide", "role": "return", "channelX": 500 }
+  ]
+}

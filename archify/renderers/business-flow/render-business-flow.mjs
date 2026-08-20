@@ -106,6 +106,48 @@ const rawLanes = Array.isArray(businessFlow.lanes) && businessFlow.lanes.length
 const laneIds = new Set(rawLanes.map((lane) => lane.id));
 const sourceNodes = asArray(businessFlow.nodes);
 const sourceEdges = asArray(businessFlow.edges);
+const adaptiveDirection = businessFlow.meta?.layout_direction;
+const adaptive = adaptiveDirection === 'horizontal' || adaptiveDirection === 'vertical';
+
+function adaptiveSlots() {
+  const index = new Map(sourceNodes.map((node, position) => [node.id, position]));
+  const forward = sourceEdges.filter((edge) => edge.role !== 'return' && index.has(edge.from) && index.has(edge.to));
+  const incoming = new Map(sourceNodes.map((node) => [node.id, new Set()]));
+  const outgoing = new Map(sourceNodes.map((node) => [node.id, new Set()]));
+  for (const edge of forward) {
+    incoming.get(edge.to).add(edge.from);
+    outgoing.get(edge.from).add(edge.to);
+  }
+  const ready = sourceNodes.filter((node) => incoming.get(node.id).size === 0).map((node) => node.id);
+  const slots = new Map();
+  const laneNext = new Map();
+  let visited = 0;
+  while (ready.length) {
+    ready.sort((a, b) => index.get(a) - index.get(b));
+    const id = ready.shift();
+    const node = sourceNodes[index.get(id)];
+    const lane = node.lane || rawLanes[0].id;
+    const predecessorSlot = Math.max(-1, ...[...incoming.get(id)].map((from) => slots.get(from) ?? -1));
+    const slot = Math.max(predecessorSlot + 1, laneNext.get(lane) ?? 0);
+    slots.set(id, slot);
+    laneNext.set(lane, slot + 1);
+    visited += 1;
+    for (const target of outgoing.get(id)) {
+      const remains = [...incoming.get(target)].filter((from) => !slots.has(from));
+      if (!remains.length) ready.push(target);
+    }
+  }
+  const cycleNodes = sourceNodes.filter((node) => !slots.has(node.id)).map((node) => node.id);
+  const cycleNodeSet = new Set(cycleNodes);
+  const cycleEdges = forward
+    .filter((edge) => cycleNodeSet.has(edge.from) && cycleNodeSet.has(edge.to))
+    .map((edge) => edge.id || `${edge.from}->${edge.to}`);
+  return { slots, cycle: visited !== sourceNodes.length, cycleNodes, cycleEdges };
+}
+
+const adaptivePlacement = adaptive
+  ? adaptiveSlots()
+  : { slots: new Map(), cycle: false, cycleNodes: [], cycleEdges: [] };
 
 const maxRowsByLane = new Map(rawLanes.map((lane) => [lane.id, 0]));
 for (const node of sourceNodes) {
@@ -125,13 +167,99 @@ function laneHeight(laneId) {
   return layout.laneTitleH + layout.rowPadTop + maxRow * layout.rowGap + maxNodeHeight + layout.rowPadBottom;
 }
 
-const laneMetrics = new Map();
-let laneCursor = layout.laneY;
-for (const lane of rawLanes) {
-  const height = laneHeight(lane.id);
-  laneMetrics.set(lane.id, { ...lane, index: laneMetrics.size, y: laneCursor, height });
-  laneCursor += height + layout.laneGap;
+function createLegacyLaneMetrics() {
+  const metrics = new Map();
+  let laneCursor = layout.laneY;
+  for (const lane of rawLanes) {
+    const height = laneHeight(lane.id);
+    metrics.set(lane.id, { ...lane, index: metrics.size, y: laneCursor, height });
+    laneCursor += height + layout.laneGap;
+  }
+  return metrics;
 }
+
+function createAdaptiveLaneMetrics() {
+  const dimensions = new Map(sourceNodes.map((node) => [node.id, dimensionsFor(node)]));
+  const maxNodeWidth = Math.max(48, ...sourceNodes.map((node) => dimensions.get(node.id)?.width || 48));
+  const maxNodeHeight = Math.max(44, ...sourceNodes.map((node) => dimensions.get(node.id)?.height || 44));
+  const maxSlot = Math.max(-1, ...adaptivePlacement.slots.values());
+  const slotCount = Math.max(1, maxSlot + 1);
+
+  if (adaptiveDirection === 'horizontal') {
+    const slotGap = Math.max(maxNodeWidth + 40, 172);
+    const axisInset = 28;
+    const maxLaneTitleWidth = Math.max(0, ...rawLanes.map((lane, index) => {
+      const prefix = lane.variant === 'exception' ? 'EX' : String(index + 1).padStart(2, '0');
+      return textUnits(`${prefix} / ${lane.label}`) * 6.7 + 28;
+    }));
+    const laneW = Math.max(
+      layout.laneW,
+      axisInset * 2 + maxNodeWidth + Math.max(0, slotCount - 1) * slotGap,
+      maxLaneTitleWidth,
+    );
+    const slotOrigin = layout.laneX + axisInset + maxNodeWidth / 2;
+    const metrics = new Map();
+    let laneCursor = layout.laneY;
+    for (const lane of rawLanes) {
+      const laneMaxHeight = Math.max(44, ...sourceNodes
+        .filter((node) => (node.lane || rawLanes[0].id) === lane.id)
+        .map((node) => dimensions.get(node.id)?.height || 44));
+      const height = layout.laneTitleH + layout.rowPadTop + laneMaxHeight + layout.rowPadBottom;
+      metrics.set(lane.id, {
+        ...lane,
+        index: metrics.size,
+        x: layout.laneX,
+        y: laneCursor,
+        width: laneW,
+        height,
+      });
+      laneCursor += height + layout.laneGap;
+    }
+    return { metrics, laneWidth: laneW, slotGap, slotOrigin, slotCount, totalWidth: laneW + layout.laneX };
+  }
+
+  const slotGap = Math.max(maxNodeHeight + 40, 112);
+  const axisInset = 28;
+  const laneHeight = layout.laneTitleH
+    + layout.rowPadTop
+    + maxNodeHeight
+    + Math.max(0, slotCount - 1) * slotGap
+    + layout.rowPadBottom;
+  const laneWidths = rawLanes.map((lane) => {
+    const laneMaxWidth = Math.max(48, ...sourceNodes
+      .filter((node) => (node.lane || rawLanes[0].id) === lane.id)
+      .map((node) => dimensions.get(node.id)?.width || 48));
+    const labelWidth = textUnits(lane.label) * 6.7 + 40;
+    return Math.max(168, laneMaxWidth + axisInset * 2, labelWidth);
+  });
+  const metrics = new Map();
+  let laneCursor = layout.laneX;
+  for (const [index, lane] of rawLanes.entries()) {
+    const width = laneWidths[index];
+    metrics.set(lane.id, {
+      ...lane,
+      index,
+      x: laneCursor,
+      y: layout.laneY,
+      width,
+      height: laneHeight,
+    });
+    laneCursor += width + layout.laneGap;
+  }
+  return {
+    metrics,
+    laneWidth: Math.max(...laneWidths),
+    slotGap,
+    slotOrigin: layout.laneY + layout.laneTitleH + layout.rowPadTop + maxNodeHeight / 2,
+    slotCount,
+    totalWidth: Math.max(layout.laneX + layout.laneW, laneCursor - layout.laneGap + layout.margin),
+  };
+}
+
+const legacyLaneMetrics = createLegacyLaneMetrics();
+const adaptiveLaneLayout = adaptive ? createAdaptiveLaneMetrics() : null;
+const laneMetrics = adaptive ? adaptiveLaneLayout.metrics : legacyLaneMetrics;
+const laneWidth = adaptive ? adaptiveLaneLayout.laneWidth : layout.laneW;
 
 function laneTop(laneId) {
   return laneMetrics.get(laneId)?.y ?? layout.laneY;
@@ -165,15 +293,20 @@ const legendEntries = resolveLegend(
 );
 
 function autoViewBox() {
-  const width = layout.laneX + layout.laneW + layout.margin;
+  const width = adaptive
+    ? (adaptiveDirection === 'vertical' ? adaptiveLaneLayout.totalWidth : layout.laneX + laneWidth + layout.margin)
+    : layout.laneX + layout.laneW + layout.margin;
   const footprint = legendFootprint(legendEntries, { width: Math.max(1, width - layout.margin * 2) });
   return [
-    Math.max(1380, width),
+    Math.max(adaptive ? width : 1380, width),
     Math.ceil(lastLaneBottom() + 72 + footprint.extraHeight),
   ];
 }
 
-const viewBox = businessFlow.meta?.viewBox || autoViewBox();
+const authoredViewBox = businessFlow.meta?.viewBox;
+let viewBox = adaptive && authoredViewBox
+  ? [Math.max(authoredViewBox[0], autoViewBox()[0]), Math.max(authoredViewBox[1], autoViewBox()[1])]
+  : authoredViewBox || autoViewBox();
 
 function legendY() {
   return viewBox[1] - 16;
@@ -190,6 +323,30 @@ function dimensionsFor(node) {
 function measureNode(node) {
   const { width, height } = dimensionsFor(node);
   const metric = laneMetrics.get(node.lane) || laneMetrics.get(rawLanes[0].id);
+  if (adaptive) {
+    const slot = adaptivePlacement.slots.get(node.id) ?? 0;
+    const lane = node.lane || rawLanes[0].id;
+    const adaptiveMetric = laneMetrics.get(lane) || laneMetrics.get(rawLanes[0].id);
+    const cx = adaptiveDirection === 'horizontal'
+      ? adaptiveLaneLayout.slotOrigin + slot * adaptiveLaneLayout.slotGap
+      : adaptiveMetric.x + adaptiveMetric.width / 2;
+    const cy = adaptiveDirection === 'horizontal'
+      ? adaptiveMetric.y + layout.laneTitleH + layout.rowPadTop + height / 2
+      : adaptiveLaneLayout.slotOrigin + slot * adaptiveLaneLayout.slotGap;
+    const x = cx - width / 2;
+    const y = cy - height / 2;
+    return {
+      ...node,
+      lane,
+      width,
+      height,
+      x,
+      y,
+      cx,
+      cy,
+      slot,
+    };
+  }
   const col = Number.isInteger(node.col) && node.col >= 0 && node.col < layout.colXs.length ? node.col : 0;
   const row = Number.isInteger(node.row) && node.row >= 0 ? node.row : 0;
   const cx = layout.colXs[col];
@@ -327,11 +484,25 @@ function validateBusinessFlow() {
     if (node.lane && !laneIds.has(node.lane)) {
       problems.push(problem('business-flow/unknown-lane', `Node "${node.id}" uses unknown lane "${node.lane}".`, { diagramType: 'business-flow', collection: 'nodes', index, id: node.id }, { lane: node.lane }, ['reference an existing lane id']));
     }
-    if (!Number.isInteger(node.row) || node.row < 0) {
-      problems.push(problem('business-flow/row', `Node "${node.id}" must use a non-negative integer row.`, { diagramType: 'business-flow', collection: 'nodes', index, id: node.id }));
-    }
-    if (!Number.isInteger(node.col) || node.col < 0 || node.col >= layout.colXs.length) {
-      problems.push(problem('business-flow/column', `Node "${node.id}" uses column ${node.col}; valid columns are integers 0..${layout.colXs.length - 1}.`, { diagramType: 'business-flow', collection: 'nodes', index, id: node.id }, { column: node.col }, ['move the node to the fixed left-to-right grid']));
+    if (!adaptive) {
+      if (!Number.isInteger(node.row) || node.row < 0) {
+        problems.push(problem('business-flow/row', `Node "${node.id}" must use a non-negative integer row.`, { diagramType: 'business-flow', collection: 'nodes', index, id: node.id }));
+      }
+      if (!Number.isInteger(node.col) || node.col < 0 || node.col >= layout.colXs.length) {
+        problems.push(problem('business-flow/column', `Node "${node.id}" uses column ${node.col}; valid columns are integers 0..${layout.colXs.length - 1}.`, { diagramType: 'business-flow', collection: 'nodes', index, id: node.id }, { column: node.col }, ['move the node to the fixed left-to-right grid']));
+      }
+    } else {
+      for (const field of ['row', 'col', 'yOffset']) {
+        if (Object.prototype.hasOwnProperty.call(node, field)) {
+          problems.push(problem(
+            'business-flow/adaptive-grid-field',
+            `Adaptive ${adaptiveDirection} layout derives node "${node.id}" placement; remove authored ${field}.`,
+            { diagramType: 'business-flow', collection: 'nodes', index, id: node.id, field },
+            { layoutDirection: adaptiveDirection, field },
+            ['remove row, col, and yOffset from adaptive nodes'],
+          ));
+        }
+      }
     }
     if (!measured || !isFinitePoint(measured.x, measured.y, measured.cx, measured.cy, measured.width, measured.height)) {
       problems.push(problem('business-flow/non-finite-node', `Node "${node.id}" produced non-finite grid coordinates.`, { diagramType: 'business-flow', collection: 'nodes', index, id: node.id }));
@@ -371,6 +542,17 @@ function validateBusinessFlow() {
 
   if (!startNodes.length) problems.push(problem('business-flow/start-required', 'Business-flow diagrams need at least one start node.'));
   if (!endNodes.length) problems.push(problem('business-flow/end-required', 'Business-flow diagrams need at least one end node.'));
+
+  if (adaptive && adaptivePlacement.cycle) {
+    problems.push(problem(
+      'business-flow/forward-cycle',
+      `Adaptive ${adaptiveDirection} layout requires an acyclic forward graph; cycle involves nodes ${adaptivePlacement.cycleNodes.join(', ') || '(unknown)'}`
+        + (adaptivePlacement.cycleEdges.length ? ` and edges ${adaptivePlacement.cycleEdges.join(', ')}` : '.') ,
+      { diagramType: 'business-flow', collection: 'edges' },
+      { layoutDirection: adaptiveDirection, nodes: adaptivePlacement.cycleNodes, edges: adaptivePlacement.cycleEdges },
+      ['mark return, retry, or rework connections with role "return", or remove the forward cycle'],
+    ));
+  }
 
   for (const [index, edge] of sourceEdges.entries()) {
     if (!nodes.has(edge.from)) {
@@ -481,7 +663,7 @@ function validateBusinessFlow() {
   const labelRects = [];
   for (const [index, edge] of sourceEdges.entries()) {
     if (!edge.label || !nodes.has(edge.from) || !nodes.has(edge.to)) continue;
-    const [lx, ly] = labelPoint(edge, pathFor(edge).points);
+    const [lx, ly] = businessLabelPoint(edge, pathFor(edge).points);
     const width = Math.max(30, textUnits(edge.label) * 4.8 + 10);
     labelRects.push({ relation: edge, relationIndex: index, label: edge.label, x: lx - width / 2, y: ly - 10, width, height: 14, lx, ly });
   }
@@ -576,8 +758,15 @@ function validateBusinessFlow() {
   }
   for (const lane of rawLanes) {
     const metric = laneMetrics.get(lane.id);
-    if (metric && (metric.y < 0 || metric.y + metric.height > viewBox[1])) {
-      problems.push(problem('business-flow/viewport-overflow', `Lane "${lane.id}" exceeds the viewBox height.`, { diagramType: 'business-flow', collection: 'lanes', id: lane.id }, { lane: metric, viewBox }, ['increase meta.viewBox[1]']));
+    if (metric && (metric.y < 0 || metric.y + metric.height > viewBox[1]
+      || (adaptive && (metric.x < 0 || metric.x + metric.width > viewBox[0])))) {
+      problems.push(problem(
+        'business-flow/viewport-overflow',
+        `Lane "${lane.id}" exceeds the viewBox bounds.`,
+        { diagramType: 'business-flow', collection: 'lanes', id: lane.id },
+        { lane: metric, viewBox },
+        ['increase the adaptive canvas minimum or remove an out-of-bounds authored route'],
+      ));
     }
   }
   for (const [index, edge] of sourceEdges.entries()) {
@@ -588,8 +777,14 @@ function validateBusinessFlow() {
       problems.push(problem('business-flow/viewport-overflow', `Edge ${edge.id || `${edge.from}->${edge.to}`} leaves the viewBox at [${outside.join(', ')}].`, { diagramType: 'business-flow', collection: 'edges', index, id: edge.id || undefined }, { point: outside, viewBox }, ['move the route channel inside the viewBox or increase meta.viewBox']));
     }
   }
-  if (viewBox[0] < layout.laneX + layout.laneW + 16) {
-    problems.push(problem('business-flow/viewport-overflow', `viewBox width ${viewBox[0]} clips the fixed business-flow lanes; use at least ${layout.laneX + layout.laneW + 16}.`, { diagramType: 'business-flow', path: '/meta/viewBox/0' }, { minimum: layout.laneX + layout.laneW + 16 }, ['increase meta.viewBox[0]']));
+  const minimumLaneWidth = adaptive
+    ? (adaptiveDirection === 'vertical' ? adaptiveLaneLayout.totalWidth : layout.laneX + laneWidth + 16)
+    : layout.laneX + layout.laneW + 16;
+  if (viewBox[0] < minimumLaneWidth) {
+    const widthMessage = adaptive
+      ? `viewBox width ${viewBox[0]} clips the adaptive business-flow lanes; use at least ${minimumLaneWidth}.`
+      : `viewBox width ${viewBox[0]} clips the fixed business-flow lanes; use at least ${minimumLaneWidth}.`;
+    problems.push(problem('business-flow/viewport-overflow', widthMessage, { diagramType: 'business-flow', path: '/meta/viewBox/0' }, { minimum: minimumLaneWidth }, ['increase meta.viewBox[0]']));
   }
   if (legendY() - 30 < lastLaneBottom()) {
     problems.push(problem('business-flow/viewport-overflow', `The business-flow legend does not fit below the lane area in viewBox height ${viewBox[1]}.`, { diagramType: 'business-flow', path: '/meta/viewBox/1' }, { legendY: legendY(), laneBottom: lastLaneBottom() }, ['increase meta.viewBox[1] or shorten/hide legend labels']));
@@ -605,6 +800,7 @@ function decisionRole(edge) {
 function defaultDecisionOutputSide(edge, from, to) {
   const role = decisionRole(edge);
   if (role === 'yes') return 'bottom';
+  if (adaptive && adaptiveDirection === 'vertical' && to.cy > from.cy) return 'bottom';
   if (to.cx < from.cx) return 'left';
   if (to.cx > from.cx) return 'right';
   return role === 'no' || to.cy >= from.cy ? 'right' : 'left';
@@ -615,12 +811,18 @@ function fromConnectionSide(edge, from, to) {
     if (DECISION_OUTPUT_SIDES.has(edge.fromSide)) return edge.fromSide;
     return defaultDecisionOutputSide(edge, from, to);
   }
-  return chosenSide(edge.fromSide, defaultFromSide(from, to));
+  const fallback = adaptive && adaptiveDirection === 'vertical' && edge.role !== 'return'
+    ? 'bottom'
+    : defaultFromSide(from, to);
+  return chosenSide(edge.fromSide, fallback);
 }
 
 function toConnectionSide(edge, from, to) {
   if (to?.kind === 'decision') return 'top';
-  return chosenSide(edge.toSide, defaultToSide(from, to));
+  const fallback = adaptive && adaptiveDirection === 'vertical' && edge.role !== 'return'
+    ? 'top'
+    : defaultToSide(from, to);
+  return chosenSide(edge.toSide, fallback);
 }
 
 function businessAnchor(node, side) {
@@ -709,7 +911,42 @@ function gapYBetween(fromLane, toLane, bias = 0.5) {
   return from + (to - from) * bias;
 }
 
+function adaptiveGapYBetween(fromLane, toLane, bias = 0.5) {
+  const fromMetric = laneMetrics.get(fromLane);
+  const toMetric = laneMetrics.get(toLane);
+  if (!fromMetric || !toMetric || fromLane === toLane) return (fromMetric?.y || layout.laneY) + (fromMetric?.height || 0) + 16;
+  if (fromMetric.y < toMetric.y) {
+    return fromMetric.y + fromMetric.height + (toMetric.y - (fromMetric.y + fromMetric.height)) * bias;
+  }
+  return toMetric.y + toMetric.height + (fromMetric.y - (toMetric.y + toMetric.height)) * (1 - bias);
+}
+
+function adaptiveGapXBetween(fromLane, toLane, bias = 0.5) {
+  const fromMetric = laneMetrics.get(fromLane);
+  const toMetric = laneMetrics.get(toLane);
+  if (!fromMetric || !toMetric || fromLane === toLane) return (fromMetric?.x || layout.laneX) + (fromMetric?.width || 0) + 16;
+  if (fromMetric.x < toMetric.x) {
+    return fromMetric.x + fromMetric.width + (toMetric.x - (fromMetric.x + fromMetric.width)) * bias;
+  }
+  return toMetric.x + toMetric.width + (fromMetric.x - (toMetric.x + toMetric.width)) * (1 - bias);
+}
+
 function sameLaneAutoVia(start, end, from, to, fromSide, toSide) {
+  if (adaptive && from.lane === to.lane && Math.abs((to.slot ?? 0) - (from.slot ?? 0)) > 1) {
+    if (adaptiveDirection === 'horizontal' && ['left', 'right'].includes(fromSide) && ['left', 'right'].includes(toSide)) {
+      const sourceX = fromSide === 'right' ? from.x + from.width + 16 : from.x - 16;
+      const targetX = toSide === 'left' ? to.x - 16 : to.x + to.width + 16;
+      const channelY = laneBottom(from.lane) + 12;
+      return [[sourceX, start[1]], [sourceX, channelY], [targetX, channelY], [targetX, end[1]]];
+    }
+    if (adaptiveDirection === 'vertical' && ['top', 'bottom'].includes(fromSide) && ['top', 'bottom'].includes(toSide)) {
+      const sourceY = fromSide === 'bottom' ? from.y + from.height + 12 : from.y - 12;
+      const targetY = toSide === 'top' ? to.y - 12 : to.y + to.height + 12;
+      const metric = laneMetrics.get(from.lane);
+      const channelX = (metric?.x ?? layout.laneX) + (metric?.width ?? laneWidth) + 12;
+      return [[start[0], sourceY], [channelX, sourceY], [channelX, targetY], [end[0], targetY]];
+    }
+  }
   if (routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
   const horizontalSides = new Set(['left', 'right']);
   const verticalSides = new Set(['top', 'bottom']);
@@ -783,51 +1020,127 @@ function decisionOutputAutoVia(from, to, start, end, fromSide, toSide) {
 }
 
 function decisionAutoVia(edge, from, to, start, end, fromSide, toSide) {
-  if (routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
+  const longAdaptiveEdge = adaptive && from.lane === to.lane
+    && Math.abs((to.slot ?? 0) - (from.slot ?? 0)) > 1;
+  if (!longAdaptiveEdge && routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
   if (to.kind === 'decision') {
     const via = decisionInputAutoVia(edge, to, start, end, fromSide);
     if (via) return via;
   }
-  if (from.kind === 'decision') {
+  if (from.kind === 'decision' && !longAdaptiveEdge) {
     const via = decisionOutputAutoVia(from, to, start, end, fromSide, toSide);
     if (via) return via;
   }
   return null;
 }
 
+function adaptiveReturnVia(from, to, start, end, fromSide, toSide, edge) {
+  if (adaptiveDirection === 'horizontal') {
+    const x = edge.channelX ?? Math.max(18, layout.laneX - 34);
+    if (['left', 'right'].includes(fromSide) && ['left', 'right'].includes(toSide)) {
+      return [[x, start[1]], [x, end[1]]];
+    }
+    const y = edge.channelY ?? Math.max(18, layout.laneY - 34);
+    return [[start[0], y], [end[0], y]];
+  }
+  if (['top', 'bottom'].includes(fromSide) && ['top', 'bottom'].includes(toSide)) {
+    const metric = laneMetrics.get(from.lane);
+    const channelX = edge.channelX ?? (metric?.x ?? layout.laneX) + (metric?.width ?? laneWidth) + 12;
+    const sourceY = fromSide === 'top' ? from.y - 12 : from.y + from.height + 12;
+    const targetY = toSide === 'top' ? to.y - 12 : to.y + to.height + 12;
+    return [[start[0], sourceY], [channelX, sourceY], [channelX, targetY], [end[0], targetY]];
+  }
+  const y = edge.channelY ?? Math.max(18, layout.laneY - 34);
+  const sourceX = fromSide === 'left' ? from.x - 12 : from.x + from.width + 12;
+  const targetX = toSide === 'left' ? to.x - 12 : to.x + to.width + 12;
+  return [[sourceX, start[1]], [sourceX, y], [targetX, y], [targetX, end[1]]];
+}
+
 function routeVia(edge, from, to, start, end, fromSide, toSide) {
   if (edge.via) return edge.via;
+  if (adaptive && edge.role === 'return' && (!edge.route || edge.route === 'auto')) {
+    return adaptiveReturnVia(from, to, start, end, fromSide, toSide, edge);
+  }
   switch (edge.route || 'auto') {
     case 'straight':
       return [];
     case 'drop': {
+      if (adaptive && adaptiveDirection === 'vertical') {
+        const x = edge.channelX ?? adaptiveGapXBetween(from.lane, to.lane, edge.bias ?? 0.5);
+        return [[x, start[1]], [x, end[1]]];
+      }
       const y = gapYBetween(from.lane, to.lane, edge.bias ?? 0.5);
       return [[start[0], y], [end[0], y]];
     }
     case 'outside-right': {
-      const x = edge.channelX ?? layout.laneX + layout.laneW + 20;
+      const x = edge.channelX ?? (adaptive && adaptiveDirection === 'vertical'
+        ? adaptiveLaneLayout.totalWidth - layout.margin / 2
+        : layout.laneX + laneWidth + 20);
       return [[x, start[1]], [x, end[1]]];
     }
     case 'return-left': {
+      if (adaptive) return adaptiveReturnVia(from, to, start, end, fromSide, toSide, edge);
       const x = edge.channelX ?? Math.max(18, Math.min(from.x, to.x) - 34);
       return [[x, start[1]], [x, end[1]]];
     }
     case 'bottom-channel': {
+      if (adaptive && adaptiveDirection === 'vertical') {
+        const x = edge.channelX ?? Math.max(from.x + from.width, to.x + to.width) + 34;
+        return [[x, start[1]], [x, end[1]]];
+      }
       const y = edge.channelY ?? Math.max(from.y + from.height, to.y + to.height) + 34;
       return [[start[0], y], [end[0], y]];
     }
     case 'up-channel': {
+      if (adaptive && adaptiveDirection === 'vertical') {
+        const x = edge.channelX ?? Math.min(from.x, to.x) - 34;
+        return [[x, start[1]], [x, end[1]]];
+      }
       const y = edge.channelY ?? Math.min(from.y, to.y) - 34;
       return [[start[0], y], [end[0], y]];
     }
     case 'auto':
     default: {
+      if (adaptive && edge.role === 'return') {
+        return adaptiveReturnVia(from, to, start, end, fromSide, toSide, edge);
+      }
       const decisionVia = decisionAutoVia(edge, from, to, start, end, fromSide, toSide);
       if (decisionVia) return decisionVia;
-      if ((from.lane !== to.lane || from.row === to.row) && routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
+      if (!adaptive && (from.lane !== to.lane || from.row === to.row)
+        && routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
+      if (adaptive && from.lane === to.lane
+        && Math.abs((to.slot ?? 0) - (from.slot ?? 0)) <= 1
+        && routeHonorsEndpointSides([start, end], fromSide, toSide)) return [];
       if (from.lane !== to.lane) {
-        const y = gapYBetween(from.lane, to.lane, edge.bias ?? 0.5);
-        const drop = [[start[0], y], [end[0], y]];
+        const drop = adaptive && adaptiveDirection === 'horizontal'
+          && ['left', 'right'].includes(fromSide)
+          && ['left', 'right'].includes(toSide)
+          ? (() => {
+            const sourceX = fromSide === 'right' ? from.x + from.width + 12 : from.x - 12;
+            const targetX = toSide === 'left' ? to.x - 12 : to.x + to.width + 12;
+            const y = adaptiveGapYBetween(from.lane, to.lane, edge.bias ?? 0.5);
+            return [[sourceX, start[1]], [sourceX, y], [targetX, y], [targetX, end[1]]];
+          })()
+          : adaptive && adaptiveDirection === 'vertical'
+          && ['left', 'right'].includes(fromSide)
+          && ['left', 'right'].includes(toSide)
+          ? (() => {
+            const sourceX = fromSide === 'right' ? from.x + from.width + 12 : from.x - 12;
+            const targetX = toSide === 'left' ? to.x - 12 : to.x + to.width + 12;
+            const x = adaptiveGapXBetween(from.lane, to.lane, edge.bias ?? 0.5);
+            return [[sourceX, start[1]], [x, start[1]], [x, end[1]], [targetX, end[1]]];
+          })()
+          : adaptive && adaptiveDirection === 'vertical'
+          ? (() => {
+            const x = adaptiveGapXBetween(from.lane, to.lane, edge.bias ?? 0.5);
+            return [[x, start[1]], [x, end[1]]];
+          })()
+          : (() => {
+            const y = adaptive
+              ? adaptiveGapYBetween(from.lane, to.lane, edge.bias ?? 0.5)
+              : gapYBetween(from.lane, to.lane, edge.bias ?? 0.5);
+            return [[start[0], y], [end[0], y]];
+          })();
         if (routeHonorsEndpointSides([start, ...drop, end], fromSide, toSide)) return drop;
       }
       return sameLaneAutoVia(start, end, from, to, fromSide, toSide);
@@ -869,6 +1182,59 @@ function pathFor(edge) {
   return routed;
 }
 
+function businessLabelPoint(edge, points) {
+  const base = labelPoint(edge, points);
+  if (!adaptive || edge.labelAt || !edge.label || points.length < 2) return base;
+  const width = Math.max(30, textUnits(edge.label) * 4.8 + 10);
+  const segmentIndex = points.length === 2
+    ? 0
+    : Math.min(points.length - 2, Math.max(0, edge.labelSegment ?? 1));
+  const [from, to] = [points[segmentIndex], points[segmentIndex + 1]];
+  const horizontal = Math.abs(to[0] - from[0]) >= Math.abs(to[1] - from[1]);
+  const offsets = horizontal
+    ? [[0, 0], [0, 24], [0, -24], [0, 48], [0, -48], [0, 72], [0, -72], [24, 0], [-24, 0]]
+    : [[0, 0], [24, 0], [-24, 0], [48, 0], [-48, 0], [72, 0], [-72, 0], [0, 24], [0, -24]];
+  for (const [dx, dy] of offsets) {
+    const point = [base[0] + dx, base[1] + dy];
+    const rect = { x: point[0] - width / 2, y: point[1] - 10, width, height: 14 };
+    if (![...nodes.values()].some((node) => rectsOverlap(rect, node, -2))) return point;
+  }
+  return base;
+}
+
+function expandAdaptiveViewBox() {
+  if (!adaptive) return;
+  let maxX = 0;
+  let maxY = 0;
+  for (const node of nodes.values()) {
+    maxX = Math.max(maxX, node.x + node.width);
+    maxY = Math.max(maxY, node.y + node.height);
+  }
+  for (const frame of compositionFrames()) {
+    maxX = Math.max(maxX, frame.x + frame.width);
+    maxY = Math.max(maxY, frame.y + frame.height);
+  }
+  for (const edge of sourceEdges) {
+    const points = pathFor(edge).points;
+    for (const [x, y] of points) {
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+    if (edge.label && points.length >= 2) {
+      const [x, y] = businessLabelPoint(edge, points);
+      const width = Math.max(30, textUnits(edge.label) * 4.8 + 10);
+      maxX = Math.max(maxX, x + width / 2);
+      maxY = Math.max(maxY, y + 10);
+    }
+  }
+  const width = Math.max(viewBox[0], Math.ceil(maxX + layout.margin));
+  const footprint = legendFootprint(legendEntries, { width: Math.max(1, width - layout.margin * 2) });
+  viewBox = [
+    width,
+    Math.max(viewBox[1], Math.ceil(maxY + 72 + footprint.extraHeight)),
+  ];
+}
+
 function compositionFrames() {
   return rawLanes.map((lane, index) => {
     const metric = laneMetrics.get(lane.id);
@@ -876,9 +1242,9 @@ function compositionFrames() {
       id: `lane-${index}`,
       label: lane.label,
       kind: 'lane',
-      x: layout.laneX,
+      x: adaptive ? metric.x : layout.laneX,
       y: metric.y,
-      width: layout.laneW,
+      width: adaptive ? metric.width : layout.laneW,
       height: metric.height,
       radius: 10,
     };
@@ -887,13 +1253,15 @@ function compositionFrames() {
 
 function renderLane(lane, index) {
   const metric = laneMetrics.get(lane.id);
+  const x = adaptive ? metric.x : layout.laneX;
+  const width = adaptive ? metric.width : layout.laneW;
   const exception = lane.variant === 'exception'
-    ? `\n        <rect data-graph-role="structural-frame" data-composition-frame-kind="exception-lane" data-composition-frame-id="lane-${index}-exception" x="${layout.laneX + 6}" y="${metric.y + 6}" width="${layout.laneW - 12}" height="${metric.height - 12}" rx="8" class="c-security-group" stroke-width="1"/>`
+    ? `\n        <rect data-graph-role="structural-frame" data-composition-frame-kind="exception-lane" data-composition-frame-id="lane-${index}-exception" x="${x + 6}" y="${metric.y + 6}" width="${width - 12}" height="${metric.height - 12}" rx="8" class="c-security-group" stroke-width="1"/>`
     : '';
   const labelClass = lane.variant === 'exception' ? 't-security' : 't-dim';
   const prefix = lane.variant === 'exception' ? 'EX' : String(index + 1).padStart(2, '0');
-  return `        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-${index}" x="${layout.laneX}" y="${metric.y}" width="${layout.laneW}" height="${metric.height}" rx="10" class="c-lane" stroke-width="1"/>${exception}
-        <text x="${layout.laneX + 14}" y="${metric.y + 22}" class="${labelClass}" font-size="10" font-weight="600">${prefix} / ${esc(lane.label)}</text>`;
+  return `        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-${index}" x="${x}" y="${metric.y}" width="${width}" height="${metric.height}" rx="10" class="c-lane" stroke-width="1"/>${exception}
+        <text x="${x + 14}" y="${metric.y + 22}" class="${labelClass}" font-size="10" font-weight="600">${prefix} / ${esc(lane.label)}</text>`;
 }
 
 function polygonPoints(node, points) {
@@ -994,7 +1362,7 @@ function renderEdgePath(edge, index) {
 
 function renderEdgeLabel(edge, index) {
   if (!edge.label) return '';
-  const [lx, ly] = labelPoint(edge, pathFor(edge).points);
+  const [lx, ly] = businessLabelPoint(edge, pathFor(edge).points);
   const width = Math.max(30, textUnits(edge.label) * 4.8 + 10);
   return `        <g data-detail="context" ${focusEdgeAttrs(edge.from, edge.to, edge.label, index, edge.id)}>
           <rect x="${lx - width / 2}" y="${ly - 10}" width="${width}" height="14" rx="3" class="c-mask"/>
@@ -1017,7 +1385,7 @@ function renderLegend() {
     pointsFor: (edge) => pathFor(edge).points,
     labelRectFor: (edge) => {
       if (!edge.label) return null;
-      const [x, y] = labelPoint(edge, pathFor(edge).points);
+      const [x, y] = businessLabelPoint(edge, pathFor(edge).points);
       const width = Math.max(30, textUnits(edge.label) * 4.8 + 10);
       return { x: x - width / 2, y: y - 10, width, height: 14 };
     },
@@ -1065,6 +1433,7 @@ ${renderLegend()}
       </svg>`;
 }
 
+expandAdaptiveViewBox();
 validateBusinessFlow();
 writeDiagram({
   outPath,

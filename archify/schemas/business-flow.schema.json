@@ -29,6 +29,12 @@
           "type": "string",
           "minLength": 1
         },
+        "layout_direction": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
         "subtitle": {
           "type": "string"
         },
@@ -143,9 +149,7 @@
         "required": [
           "id",
           "kind",
-          "label",
-          "row",
-          "col"
+          "label"
         ],
         "properties": {
           "id": {
@@ -295,6 +299,47 @@
       "$ref": "common.schema.json#/$defs/cards"
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "layout_direction": {
+                "enum": [
+                  "horizontal",
+                  "vertical"
+                ]
+              }
+            },
+            "required": [
+              "layout_direction"
+            ]
+          }
+        }
+      },
+      "then": {},
+      "else": {
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "row": {},
+                "col": {}
+              },
+              "required": [
+                "row",
+                "col"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "side": {
       "enum": [
