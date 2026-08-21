@@ -207,9 +207,9 @@ test('six renderer default legends and representative HTML are Chinese', () => {
   }
 });
 
-test('all 15 canonical examples keep reader-facing fields Chinese with a finite English allowlist', () => {
+test('all 17 canonical examples keep reader-facing fields Chinese with a finite English allowlist', () => {
   const files = fs.readdirSync(examplesRoot).filter((name) => name.endsWith('.json')).sort();
-  assert.equal(files.length, 15, 'the canonical example set must contain exactly 15 JSON files');
+  assert.equal(files.length, 17, 'the canonical example set must contain exactly 17 JSON files');
   for (const name of files) {
     const document = JSON.parse(fs.readFileSync(path.join(examplesRoot, name), 'utf8'));
     const readerStrings = [];
